@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 module.exports = (pool) => {
-    return new Promise(async (res, rej) => {
+    return new Promise((res, rej) => {
         pool.getConnection().then((conn) => {
             fs.readFile("./sql/dbinit.sql", "utf-8", (err, data) => {
                 if (err)

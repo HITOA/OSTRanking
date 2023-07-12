@@ -36,9 +36,13 @@ require("./models/dbinit")(pool).then(() => {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(express.urlencoded({extended: true}));
-    require("./controllers/ostrankingcontroller")(app);
-    require("./controllers/auth")(app);
+    app.use(require("./controllers/layout"));
+    app.use(require("./controllers/ostrankingcontroller"));
+    app.use(require("./controllers/register"));
+    app.use(require("./controllers/login"));
     app.use(express.static("public"));
+
+    require("./auth/passport").initialize(app);
 
     app.listen(process.env.PORT || 8080);
 }, (err) => {

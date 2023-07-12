@@ -39,9 +39,7 @@
                 formmessage.classList.remove("form-message-wrong");
                 formmessage.classList.add("form-message-right");
                 loginbtn.disabled = true;
-                setTimeout(() => {
-                        window.location.replace("/");
-                }, 3000);
+                window.location.replace("/");
             } else {
                 formmessage.classList.remove("form-message-right");
                 formmessage.classList.add("form-message-wrong");
