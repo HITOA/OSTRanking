@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .form {
+        @apply rounded-lg space-y-4 md:space-y-6 backdrop-blur-sm bg-white/10 border-2 border-b-4 border-gray-200/20 p-4 px-8 w-96 drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)];
+    }
+
+    .form-label {
+        @apply block text-lg font-medium text-white;
+    }
+
+    .form-input {
+        @apply bg-gray-50/10 border border-gray-300 text-base rounded-lg block w-full p-2.5 text-white focus:outline-0;
+    }
+
+    .form-btn {
+        @apply bg-gray-50/20 text-lg font-medium border border-gray-300 rounded-lg block w-full p-2.5 text-white hover:bg-gray-50/10 disabled:bg-gray-50/5;
+    }
+
+    .form-message {
+        @apply hidden;
+    }
+}
+
+@layer components {
+    .form-input-wrong {
+        @apply border-red-400 shadow-[0_0px_20px_3px_rgba(1.0,1.0,1.0,0.2)];
+    }
+
+    .form-message-wrong {
+        @apply block bg-red-500/10 w-full border border-red-300 p-4 rounded-lg text-red-300;
+    }
+
+    .form-message-right {
+        @apply block bg-green-500/10 w-full border border-green-300 p-4 rounded-lg text-green-300;
+    }
+}

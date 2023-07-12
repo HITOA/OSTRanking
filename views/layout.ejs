@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%- title %></title>
+    <link rel="stylesheet" href="./stylesheet.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div class="fixed bg-main-background bg-cover bg-center h-screen w-screen"></div>
+    <div class="absolute h-full w-full">
+        <header class="fixed top-0 w-screen backdrop-blur-sm bg-white/10 border-b-2 border-gray-200/20">
+            <div class="w-full h-full flex justify-center">
+                <a class="flex items-center" href="/">
+                    <img class="drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)] w-20" src="/imgs/logo.png"/>
+                    <h1 class="text-4xl font-bold text-white drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)]">OST-Ranking</h1>
+                </a>
+            </div>
+            <div class="w-full h-0.5 bg-gray-200/20 my-2"></div>
+            <nav class="flex justify-between">
+              <div class="ml-10">
+                  <a href="/">Home</a>
+                  <a href="/request">Request</a>
+              </div>
+              <div>
+                  <a>Daily Ranking</a>
+              </div>
+              <div class="mr-10">
+                  <% if (!auth) { %>
+                  <a href="/register">Register</a>
+                  <a href="/login">Login</a>
+                  <% } else { %>
+                  <a href="/profil"><%- username %></a>
+                  <a href="/logout">Logout</a>
+                  <% } %>
+              </div>
+            </nav>
+        </header>
+        <%- include(page); %>
+    </div>
+  </body>
+</html>

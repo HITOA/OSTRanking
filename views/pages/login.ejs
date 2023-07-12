@@ -1,0 +1,53 @@
+<div class="flex flex-col items-center justify-center mx-auto md:h-screen lg:py-0">
+    <form id="login-form" class="form" onsubmit="return false">
+        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Login</h1>
+        <div id="form-message" class="form-message">
+            MESSAGE
+        </div>
+        <div>
+            <label for="username" class="form-label outline-0">Username </label>
+            <input type="text" id="username" class="form-input" name="username" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="password" class="form-label outline-0">Password </label>
+            <input type="password" id="password" class="form-input" name="password" autocomplete="off" required>
+        </div>
+        <button id="login-btn" class="form-btn">Login</button>
+        <p class="text-white">Don't have an account? <a href="/register" class="text-blue-300 text-medium underline">Register here</a></p>
+    </form>
+</div>
+<script>
+    const loginbtn = document.getElementById("login-btn");
+
+    const formmessage = document.getElementById("form-message");
+    
+    loginbtn.addEventListener("click", () => {
+        const data = new URLSearchParams();
+        for (const [key, value] of new FormData(document.getElementById("login-form"), loginbtn)) {
+            data.append(key, value);
+        }
+
+        fetch("/login", {
+            method: "POST",
+            body: data
+        }).then((res) => {
+            res.json().then((v)=>{
+                formmessage.innerHTML = v.message;
+            })
+
+            if (res.status == 200) {
+                formmessage.classList.remove("form-message-wrong");
+                formmessage.classList.add("form-message-right");
+                loginbtn.disabled = true;
+                setTimeout(() => {
+                        window.location.replace("/");
+                }, 3000);
+            } else {
+                formmessage.classList.remove("form-message-right");
+                formmessage.classList.add("form-message-wrong");
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    })
+</script>

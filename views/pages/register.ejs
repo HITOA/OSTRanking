@@ -1,0 +1,126 @@
+<div class="flex flex-col items-center justify-center mx-auto md:h-screen lg:py-0">
+    <form id="register-form" class="form" onsubmit="return false">
+        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Create an account</h1>
+        <div id="form-message" class="form-message">
+            MESSAGE
+        </div>
+        <div>
+            <label for="username" class="form-label outline-0">Username </label>
+            <input type="text" id="username" class="form-input" name="username" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="email" class="form-label">Email </label>
+            <input type="text" id="email" class="form-input" name="email" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="password" class="form-label">Password </label>
+            <input type="password" id="password" class="form-input" name="password" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="confirm" class="form-label">Confirm password </label>
+            <input type="password" id="confirm" class="form-input" name="confirm" autocomplete="off" required>
+        </div>
+        <button id="register-btn" class="form-btn">Register</button>
+        <p class="text-white">Already have an account? <a href="/login" class="text-blue-300 text-medium underline">Login here</a></p>
+    </form>
+</div>
+<script src="/scripts/owasp-password-strength-test.js"></script>
+<script>
+    const registerbtn = document.getElementById("register-btn");
+
+    const usernameValidationRegex = new RegExp("^(?=.{3,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
+    const emailValidationRegex = new RegExp("^[\\w-\\.]+@([\\w-]+\.)+[\\w-]{2,4}$");
+
+    const usernameinput = document.getElementById("username");
+    const emailinput = document.getElementById("email");
+    const passwordinput = document.getElementById("password");
+    const confirminput = document.getElementById("confirm");
+
+    const formmessage = document.getElementById("form-message");
+
+    owaspPasswordStrengthTest.config({
+        allowPassphrases: true,
+        maxLength: 72,
+        minLength: 8,
+        minPhraseLength: 20,
+        minOptionalTestsToPass: 2
+    });
+
+    usernameinput.addEventListener("input", (ev) => {
+        if (!usernameinput.value)
+            return usernameinput.classList.add("form-input-wrong");
+
+        if (!usernameValidationRegex.test(usernameinput.value))
+            return usernameinput.classList.add("form-input-wrong");
+
+        return usernameinput.classList.remove("form-input-wrong");
+    });
+
+    emailinput.addEventListener("input", (ev) => {
+        if (!emailinput.value)
+            return emailinput.classList.add("form-input-wrong");
+
+        if (!emailValidationRegex.test(emailinput.value))
+            return emailinput.classList.add("form-input-wrong");
+
+        return emailinput.classList.remove("form-input-wrong");
+    });
+
+    passwordinput.addEventListener("input", (ev) => {
+        if (!passwordinput.value)
+            return passwordinput.classList.add("form-input-wrong");
+
+        if (confirminput.value !== passwordinput.value)
+            confirminput.classList.add("form-input-wrong");
+        else
+            confirminput.classList.remove("form-input-wrong");
+
+        var passresult = owaspPasswordStrengthTest.test(passwordinput.value);
+        
+        if (!passresult.strong)
+            return passwordinput.classList.add("form-input-wrong");
+
+        return passwordinput.classList.remove("form-input-wrong");
+    });
+
+    confirminput.addEventListener("input", (ev) => {
+        if (!confirminput.value)
+            return confirminput.classList.add("form-input-wrong");
+
+        if (confirminput.value !== passwordinput.value)
+            return confirminput.classList.add("form-input-wrong");
+
+        return confirminput.classList.remove("form-input-wrong");
+    });
+    
+    registerbtn.addEventListener("click", () => {
+
+        const data = new URLSearchParams();
+        for (const [key, value] of new FormData(document.getElementById("register-form"), registerbtn)) {
+            data.append(key, value);
+        }
+
+        fetch("/register", {
+            method: "POST",
+            body: data
+        }).then((res) => {
+            res.json().then((v)=>{
+                formmessage.innerHTML = v.message;
+            })
+            
+            if (res.status == 200) {
+                formmessage.classList.remove("form-message-wrong");
+                formmessage.classList.add("form-message-right");
+                registerbtn.disabled = true;
+                setTimeout(() => {
+                        window.location.replace("/login");
+                }, 3000);
+            } else {
+                formmessage.classList.remove("form-message-right");
+                formmessage.classList.add("form-message-wrong");
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    })
+</script>
