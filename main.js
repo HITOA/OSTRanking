@@ -35,11 +35,17 @@ require("./models/dbinit")(pool).then(() => {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use("/api", express.json());
     app.use(express.urlencoded({extended: true}));
+
     app.use(require("./controllers/layout"));
     app.use(require("./controllers/ostrankingcontroller"));
     app.use(require("./controllers/register"));
     app.use(require("./controllers/login"));
+    app.use(require("./controllers/request"));
+
+    app.use("/api", require("./controllers/ostapi"));
+
     app.use(express.static("public"));
 
     require("./auth/passport").initialize(app);

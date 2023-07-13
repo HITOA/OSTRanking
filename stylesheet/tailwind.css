@@ -4,7 +4,7 @@
 
 @layer base {
     .form {
-        @apply rounded-lg space-y-4 md:space-y-6 backdrop-blur-sm bg-white/10 border-2 border-b-4 border-gray-200/20 p-4 px-8 w-96 drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)];
+        @apply rounded-lg space-y-4 md:space-y-6 backdrop-blur-sm bg-white/10 border-2 border-b-4 border-gray-200/20 p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)];
     }
 
     .form-label {

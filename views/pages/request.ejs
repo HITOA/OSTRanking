@@ -1,0 +1,113 @@
+<div class="flex flex-col items-center justify-center mx-auto lg:py-0">
+    <form id="request-form" class="form" onsubmit="return false">
+        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Request OST</h1>
+        <div id="form-message" class="form-message">
+            MESSAGE
+        </div>
+        <div class="flex">
+            <div class="mr-1 w-full">
+                <label for="name" class="form-label outline-0">Music name</label>
+                <input type="text" id="name" class="form-input" name="name" autocomplete="off">
+            </div>
+            <div class="ml-1 w-full">
+                <label for="alternate-name" class="form-label outline-0">Music alternate name</label>
+                <input type="text" id="alternate-name" class="form-input" name="alternate-name" autocomplete="off">
+            </div>
+        </div>
+        <div>
+            <label for="url" class="form-label outline-0">Music url</label>
+            <input type="text" id="url" class="form-input" name="url" autocomplete="off">
+        </div>
+        <div class="flex">
+            <div class="mr-1 w-full">
+                <label for="length" class="form-label outline-0">Music full length</label>
+                <input type="time" step="1" id="length" class="form-input" name="length" autocomplete="off">
+            </div>
+            <div class="ml-1 w-full">
+                <label for="short-length" class="form-label outline-0">Music short length (optional)</label>
+                <input type="time" step="1" id="short-length" class="form-input" name="short-length" autocomplete="off">
+            </div>
+        </div>
+        <h2 class="text-white text-medium font-bold leading-tight text-2xl">Relation</h2>
+        <div class="flex">
+            <div class="mr-1">
+                <label for="show-id" class="form-label outline-0">Show ID</label>
+                <input type="number" id="show-id" class="form-input" name="show-id" autocomplete="off">
+            </div>
+            <div class="mx-1">
+                <label for="type" class="form-label outline-0">Type</label>
+                <select id="type" class="form-input" name="type" name="">
+                    <option value="0">Opening</option>
+                    <option value="1">Ending</option>
+                    <option value="2">Insert</option>
+                </select>
+            </div>
+            <div class="ml-1">
+                <label for="number" class="form-label outline-0">Number</label>
+                <input type="number" id="number" class="form-input" name="number" value="1" autocomplete="off">
+            </div>
+        </div>
+        <button id="request-btn" class="form-btn">Request</button>
+    </form>
+</div>
+<script>
+    const requestbtn = document.getElementById("request-btn");
+    
+    const nameinput = document.getElementById("name");
+    const altnameinput = document.getElementById("alternate-name");
+    const urlinput = document.getElementById("url");
+    const lengthinput = document.getElementById("length");
+    const slengthinput = document.getElementById("short-length");
+
+    const showidinput = document.getElementById("show-id");
+    const typeinput =  document.getElementById("type");
+    const numberinput = document.getElementById("number");
+
+    const formmessage = document.getElementById("form-message");
+
+    requestbtn.addEventListener("click", () => {
+        var l = lengthinput.value.split(':');
+        l = parseInt(l[0]) * 3600 + parseInt(l[1]) * 60 + parseInt(l[2]);
+
+        let data = {
+            ost: {
+                name: nameinput.value,
+                url: urlinput.value,
+                length: l
+            },
+            show_ost: [
+                {show_id: showidinput.value, type: parseInt(typeinput.value), number: parseInt(numberinput.value)}
+            ]
+        };
+
+        if (altnameinput.value)
+            data.ost.alternate_name = altnameinput.value;
+        if (slengthinput.value) {
+            var sl = slengthinput.value.split(':');
+            sl = parseInt(sl[0]) * 3600 + parseInt(sl[1]) * 60 + parseInt(sl[2]);
+            data.ost.short_length = sl;
+        }
+
+        fetch("/api/ost/add", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            res.json().then((v)=>{
+                formmessage.innerHTML = v.message;
+            })
+
+            if (res.status == 200) {
+                formmessage.classList.remove("form-message-wrong");
+                formmessage.classList.add("form-message-right");
+            } else {
+                formmessage.classList.remove("form-message-right");
+                formmessage.classList.add("form-message-wrong");
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    })
+</script>
