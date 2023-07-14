@@ -1,27 +1,27 @@
 <div class="flex flex-col items-center justify-center mx-auto lg:py-0">
-    <form id="register-form" class="form" onsubmit="return false">
-        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Create an account</h1>
-        <div id="form-message" class="form-message">
+    <form id="register-form" class="base-container" onsubmit="return false">
+        <h1 class="text-black dark:text-white text-medium font-bold leading-tight text-2xl">Create an account</h1>
+        <div id="form-notification" class="base-notification">
             MESSAGE
         </div>
         <div>
-            <label for="username" class="form-label outline-0">Username </label>
-            <input type="text" id="username" class="form-input" name="username" autocomplete="off" required>
+            <label for="username" class="base-label outline-0">Username </label>
+            <input type="text" id="username" class="base-input" name="username" autocomplete="off" required>
         </div>
         <div>
-            <label for="email" class="form-label">Email </label>
-            <input type="text" id="email" class="form-input" name="email" autocomplete="off" required>
+            <label for="email" class="base-label">Email </label>
+            <input type="text" id="email" class="base-input" name="email" autocomplete="off" required>
         </div>
         <div>
-            <label for="password" class="form-label">Password </label>
-            <input type="password" id="password" class="form-input" name="password" autocomplete="off" required>
+            <label for="password" class="base-label">Password </label>
+            <input type="password" id="password" class="base-input" name="password" autocomplete="off" required>
         </div>
         <div>
-            <label for="confirm" class="form-label">Confirm password </label>
-            <input type="password" id="confirm" class="form-input" name="confirm" autocomplete="off" required>
+            <label for="confirm" class="base-label">Confirm password </label>
+            <input type="password" id="confirm" class="base-input" name="confirm" autocomplete="off" required>
         </div>
-        <button id="register-btn" class="form-btn">Register</button>
-        <p class="text-white">Already have an account? <a href="/login" class="text-blue-300 text-medium underline">Login here</a></p>
+        <button id="register-btn" class="base-btn">Register</button>
+        <p class="text-black dark:text-white">Already have an account? <a href="/login" class="text-blue-300 text-medium underline">Login here</a></p>
     </form>
 </div>
 <script src="/scripts/owasp-password-strength-test.js"></script>
@@ -36,7 +36,7 @@
     const passwordinput = document.getElementById("password");
     const confirminput = document.getElementById("confirm");
 
-    const formmessage = document.getElementById("form-message");
+    const formnotif = document.getElementById("form-notification");
 
     owaspPasswordStrengthTest.config({
         allowPassphrases: true,
@@ -48,49 +48,49 @@
 
     usernameinput.addEventListener("input", (ev) => {
         if (!usernameinput.value)
-            return usernameinput.classList.add("form-input-wrong");
+            return usernameinput.classList.add("base-input-wrong");
 
         if (!usernameValidationRegex.test(usernameinput.value))
-            return usernameinput.classList.add("form-input-wrong");
+            return usernameinput.classList.add("base-input-wrong");
 
-        return usernameinput.classList.remove("form-input-wrong");
+        return usernameinput.classList.remove("base-input-wrong");
     });
 
     emailinput.addEventListener("input", (ev) => {
         if (!emailinput.value)
-            return emailinput.classList.add("form-input-wrong");
+            return emailinput.classList.add("base-input-wrong");
 
         if (!emailValidationRegex.test(emailinput.value))
-            return emailinput.classList.add("form-input-wrong");
+            return emailinput.classList.add("base-input-wrong");
 
-        return emailinput.classList.remove("form-input-wrong");
+        return emailinput.classList.remove("base-input-wrong");
     });
 
     passwordinput.addEventListener("input", (ev) => {
         if (!passwordinput.value)
-            return passwordinput.classList.add("form-input-wrong");
+            return passwordinput.classList.add("base-input-wrong");
 
         if (confirminput.value !== passwordinput.value)
-            confirminput.classList.add("form-input-wrong");
+            confirminput.classList.add("base-input-wrong");
         else
-            confirminput.classList.remove("form-input-wrong");
+            confirminput.classList.remove("base-input-wrong");
 
         var passresult = owaspPasswordStrengthTest.test(passwordinput.value);
         
         if (!passresult.strong)
-            return passwordinput.classList.add("form-input-wrong");
+            return passwordinput.classList.add("base-input-wrong");
 
-        return passwordinput.classList.remove("form-input-wrong");
+        return passwordinput.classList.remove("base-input-wrong");
     });
 
     confirminput.addEventListener("input", (ev) => {
         if (!confirminput.value)
-            return confirminput.classList.add("form-input-wrong");
+            return confirminput.classList.add("base-input-wrong");
 
         if (confirminput.value !== passwordinput.value)
-            return confirminput.classList.add("form-input-wrong");
+            return confirminput.classList.add("base-input-wrong");
 
-        return confirminput.classList.remove("form-input-wrong");
+        return confirminput.classList.remove("base-input-wrong");
     });
     
     registerbtn.addEventListener("click", () => {
@@ -105,19 +105,19 @@
             body: data
         }).then((res) => {
             res.json().then((v)=>{
-                formmessage.innerHTML = v.message;
+                formnotif.innerHTML = v.message;
             })
             
             if (res.status == 200) {
-                formmessage.classList.remove("form-message-wrong");
-                formmessage.classList.add("form-message-right");
+                formnotif.classList.remove("base-notification-wrong");
+                formnotif.classList.add("base-notification-right");
                 registerbtn.disabled = true;
                 setTimeout(() => {
                         window.location.replace("/login");
                 }, 3000);
             } else {
-                formmessage.classList.remove("form-message-right");
-                formmessage.classList.add("form-message-wrong");
+                formnotif.classList.remove("base-notification-right");
+                formnotif.classList.add("base-notification-wrong");
             }
         }).catch((err) => {
             console.log(err);

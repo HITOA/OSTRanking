@@ -3,37 +3,42 @@
 @tailwind utilities;
 
 @layer base {
-    .form {
-        @apply rounded-lg space-y-4 md:space-y-6 backdrop-blur-sm bg-white/10 border-2 border-b-4 border-gray-200/20 p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)];
+    .transition-top {
+        top: 0px;
+        transition: top 0.2s ease-in-out;
     }
 
-    .form-label {
-        @apply block text-lg font-medium text-white;
+    .base-container {
+        @apply bg-white dark:bg-main-800 rounded-lg space-y-4 md:space-y-6 p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
     }
 
-    .form-input {
-        @apply bg-gray-50/10 border border-gray-300 text-base rounded-lg block w-full p-2.5 text-white focus:outline-0;
+    .base-label {
+        @apply block text-lg font-medium text-black dark:text-white;
     }
 
-    .form-btn {
-        @apply bg-gray-50/20 text-lg font-medium border border-gray-300 rounded-lg block w-full p-2.5 text-white hover:bg-gray-50/10 disabled:bg-gray-50/5;
+    .base-input {
+        @apply bg-main-50/25 dark:bg-main-700 border dark:border-main-600 shadow-inner text-base text-black dark:text-white rounded-lg block w-full p-2.5 focus:outline-0;
     }
 
-    .form-message {
+    .base-btn {
+        @apply text-lg font-medium border dark:border-main-600 rounded-lg block w-full p-2.5 text-black dark:text-white bg-main-50/75 dark:bg-main-700 hover:bg-main-50/50 dark:hover:bg-main-600 disabled:bg-white;
+    }
+
+    .base-notification {
         @apply hidden;
     }
 }
 
 @layer components {
-    .form-input-wrong {
+    .base-input-wrong {
         @apply border-red-400 shadow-[0_0px_20px_3px_rgba(1.0,1.0,1.0,0.2)];
     }
 
-    .form-message-wrong {
+    .base-notification-wrong {
         @apply block bg-red-500/10 w-full border border-red-300 p-4 rounded-lg text-red-300;
     }
 
-    .form-message-right {
+    .base-notification-right {
         @apply block bg-green-500/10 w-full border border-green-300 p-4 rounded-lg text-green-300;
     }
 }

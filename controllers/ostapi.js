@@ -36,4 +36,8 @@ router.post("/ost/add", (req, res) => {
     })
 });
 
+router.post("/ost/gets", (req, res) => {
+    console.log("pwp");
+})
+
 module.exports = router;

@@ -1,25 +1,25 @@
 <div class="flex flex-col items-center justify-center mx-auto lg:py-0">
-    <form id="login-form" class="form" onsubmit="return false">
-        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Login</h1>
-        <div id="form-message" class="form-message">
+    <form id="login-form" class="base-container" onsubmit="return false">
+        <h1 class="text-black dark:text-white text-medium font-bold leading-tight text-2xl">Login</h1>
+        <div id="form-notification" class="base-notification">
             MESSAGE
         </div>
         <div>
-            <label for="username" class="form-label outline-0">Username </label>
-            <input type="text" id="username" class="form-input" name="username" autocomplete="off" required>
+            <label for="username" class="base-label">Username </label>
+            <input type="text" id="username" class="base-input" name="username" autocomplete="off" required>
         </div>
         <div>
-            <label for="password" class="form-label outline-0">Password </label>
-            <input type="password" id="password" class="form-input" name="password" autocomplete="off" required>
+            <label for="password" class="base-label">Password </label>
+            <input type="password" id="password" class="base-input" name="password" autocomplete="off" required>
         </div>
-        <button id="login-btn" class="form-btn">Login</button>
-        <p class="text-white">Don't have an account? <a href="/register" class="text-blue-300 text-medium underline">Register here</a></p>
+        <button id="login-btn" class="base-btn">Login</button>
+        <p class="text-black dark:text-white">Don't have an account? <a href="/register" class="text-blue-300 text-medium underline">Register here</a></p>
     </form>
 </div>
 <script>
     const loginbtn = document.getElementById("login-btn");
 
-    const formmessage = document.getElementById("form-message");
+    const formnotif = document.getElementById("form-notification");
     
     loginbtn.addEventListener("click", () => {
         const data = new URLSearchParams();
@@ -32,17 +32,17 @@
             body: data
         }).then((res) => {
             res.json().then((v)=>{
-                formmessage.innerHTML = v.message;
+                formnotif.innerHTML = v.message;
             })
 
             if (res.status == 200) {
-                formmessage.classList.remove("form-message-wrong");
-                formmessage.classList.add("form-message-right");
+                formnotif.classList.remove("base-notification-wrong");
+                formnotif.classList.add("base-notification-right");
                 loginbtn.disabled = true;
                 window.location.replace("/");
             } else {
-                formmessage.classList.remove("form-message-right");
-                formmessage.classList.add("form-message-wrong");
+                formnotif.classList.remove("base-notification-wrong");
+                formnotif.classList.add("base-notification-wrong");
             }
         }).catch((err) => {
             console.log(err);

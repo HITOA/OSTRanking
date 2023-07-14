@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,38 +8,91 @@
     <link rel="stylesheet" href="./stylesheet.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
-  <body>
-    <div class="fixed bg-main-background bg-cover bg-center h-screen w-screen"></div>
-    <div class="absolute h-full w-full">
-        <header class="fixed top-0 w-screen backdrop-blur-sm bg-white/10 border-b-2 border-gray-200/20">
-            <div class="w-full h-full flex justify-center">
-                <a class="flex items-center" href="/">
-                    <img class="drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)] w-20" src="/imgs/logo.png"/>
-                    <h1 class="text-4xl font-bold text-white drop-shadow-[0px_0px_10px_rgba(0,0,0,1.0)]">OST-Ranking</h1>
-                </a>
-            </div>
-            <div class="w-full h-0.5 bg-gray-200/20 my-2"></div>
-            <nav class="flex justify-between">
-              <div class="ml-10">
-                  <a href="/">Home</a>
-                  <a href="/request">Request</a>
-              </div>
-              <div>
-                  <a>Daily Ranking</a>
-              </div>
-              <div class="mr-10">
-                  <% if (!auth) { %>
-                  <a href="/register">Register</a>
-                  <a href="/login">Login</a>
-                  <% } else { %>
-                  <a href="/profil"><%- username %></a>
-                  <a href="/logout">Logout</a>
-                  <% } %>
-              </div>
-            </nav>
-        </header>
-        <div class="h-40"></div>
-        <%- include(page); %>
+  <body class="bg-main-50 dark:bg-main-900">
+    <header id="sticky-header" class="transition-top fixed bg-main-600 dark:bg-main-800 flex w-full h-12 items-center">
+      <a class="flex m-2 items-center mr-10" href="/">
+        <img class="w-10 h-10" src="/imgs/logo.png">
+        <h1 class="text-white text-2xl font-semibold">OST-Ranking</h1>
+      </a>
+
+      <button id="header-dropdown-button" class="md:hidden dropdown ml-auto mr-2" type="button" aria-expanded="true" aria-haspopup="true" onclick="openDropDown('header-dropdown')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="dropdown w-12 h-12 stroke-white">
+          <path class="dropdown" stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+
+      <a class="hidden md:flex h-full justify-center items-center text-white text-xl font-medium" href="/Request">Request</a>
+
+      <% if (!auth) { %>
+        <a class="hidden md:flex ml-auto w-24 h-full bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 justify-center items-center text-white text-xl font-medium" href="/Login">Login</a>
+        <a class="hidden md:flex flex w-24 h-full bg-accent-500 hover:bg-accent-400 justify-center items-center text-white text-xl font-medium" href="/Register">Register</a>
+      <% } else { %>
+        <a class="hidden md:flex ml-auto w-24 h-full bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 justify-center items-center text-white text-xl font-medium" href="/Profil"><%- username %></a>
+        <a class="hidden md:flex flex w-24 h-full bg-accent-500 hover:bg-accent-400 justify-center items-center text-white text-xl font-medium" href="/Logout">Logout</a>
+      <% } %>
+
+    </header>
+    <div id="header-dropdown" class="md:hidden dropdown-content fixed top-20 hidden right-0 z-10 bg-main-600 dark:bg-main-800 w-full rounded-lg p-1.5 my-1.5" role="menu" aria-orientation="vertical" aria-labelledby="header-dropdown-button" tabindex="-1">
+      <ul class="divide-y divide-dashed text-center">
+        <li class="my-2">
+          <a class="text-white text-2xl font-medium" href="/">Home</a>
+        </li>
+        <li class="my-2">
+          <a class="text-white text-2xl font-medium" href="/Request">Request</a>
+        </li>
+        <li class="my-2">
+          <a class="text-white text-2xl font-medium" href="/Rating">Daily Rating</a>
+        </li>
+        <% if (!auth) { %>
+          <li class="my-2">
+            <a class="text-white text-2xl font-medium" href="/Login">Login</a>
+          </li>
+          <li class="my-2">
+            <a class="text-white text-2xl font-medium" href="/Register">Register</a>
+          </li>
+        <% } else { %>
+          <li class="my-2">
+            <a class="text-white text-2xl font-medium" href="/Profil"><%- username %></a>
+          </li>
+          <li class="my-2">
+            <a class="text-white text-2xl font-medium" href="/Logout">Logout</a>
+          </li>
+        <% } %>
+      </ul>
     </div>
+    <div class="my-20">
+      <%- include(page); %>
+    </div>
+
+    <script>
+      function openDropDown(menuid) {
+        document.getElementById(menuid).classList.remove("hidden");
+      }
+
+      window.onclick = (e) => {
+        if (!e.target.matches(".dropdown")) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          for (var i = 0; i < dropdowns.length; ++i) {
+            if (!dropdowns[i].classList.contains("hidden"))
+              dropdowns[i].classList.add("hidden");
+          }
+        }
+      }
+
+      var lst = 0;
+      var header = document.getElementById("sticky-header");
+      var headerdropdown = document.getElementById("header-dropdown");
+
+      window.onscroll = (e) => {
+        var st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > lst) {
+          header.style.top = "-100px";
+          headerdropdown.classList.add("hidden");
+        } else if (st < lst) {
+          header.style.top = "0px";
+        }
+        lst = st <= 0 ? 0 : st;
+      }
+    </script>
   </body>
 </html>
