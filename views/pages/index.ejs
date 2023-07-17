@@ -1,24 +1,138 @@
-<div class="mt-12 flex flex-col items-center justify-center mx-auto lg:py-0 container">
-    <table class="w-9/12 my-10">
-        <thead>
-            <tr>
-                <th>Anime</th>
-                <th>Song / Artist</th>
-                <th>Relation</th>
-                <th>Rating</th>
-                <th>Ranking</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for(var i = 0; i < 200; ++i) { %>
-            <tr>
-                <td>Deadman Wonderland</td>
-                <td><span>Shiny Shiny</span><br><span>Nirgilis</span></td>
-                <td>ED 1</td>
-                <td>87.4</td>
-                <td>#34</td>
-            </tr>
+<div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
+    <div class="container base-container text-black dark:text-white p-0 space-y-0">
+        <div class="w-full p-2 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-main-700 pt-4 rounded-xl">
+            <div class="p-2"></div>
+            <div class="p-2"></div>
+            <div class="p-2">Anime</div>
+            <div class="p-2">Song</div>
+            <div class="p-2">Rating</div>
+            <div class="p-2">Type</div>
+        </div>
+        
+        <% for(var i = 0; i < 15; ++i) { %>
+            <% if (i % 2 == 0) { %>
+                <a id="anime-link-<%- i%>" href="">
+                    <div class="w-full grid grid-cols-main-list bg-white hover:bg-main-100 dark:bg-main-800 hover:dark:bg-main-700 mt-0 items-center transition transition-colors">
+                        <div class="p-2 pb-0"></div>
+                        <div class="p-2 pb-0 h-20"><img id="anime-thumbnail-<%- i%>" class="border-lg aspect-square object-cover w-16 rounded-lg hidden p-1" src=""></div>
+                        <div class="p-2 pb-0"><div id="anime-title-<%- i%>">-</div><div id="anime-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
+                        <div class="p-2 pb-0"><div id="song-title-<%- i%>">-</div><div id="song-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
+                        <div id="score-<%- i%>" class="p-2 pb-0">-</div>
+                        <div id="type-<%- i%>" class="p-2 pb-0">-</div>
+                    </div>
+                </a>
+            <% } else { %>
+                <a id="anime-link-<%- i%>" href="">
+                    <div class="w-full grid grid-cols-main-list bg-gray-100 hover:bg-lighter-main-200 dark:bg-lighter-main-800 hover:dark:bg-lighter-main-700 mt-0 items-center transition transition-colors">
+                        <div class="p-2 pb-0"></div>
+                        <div class="p-2 pb-0 h-20"><img id="anime-thumbnail-<%- i%>" class="border-lg aspect-square object-cover w-16 rounded-lg hidden p-1" src=""></div>
+                        <div class="p-2 pb-0"><div id="anime-title-<%- i%>">-</div><div id="anime-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
+                        <div class="p-2 pb-0"><div id="song-title-<%- i%>">-</div><div id="song-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
+                        <div id="score-<%- i%>" class="p-2 pb-0">-</div>
+                        <div id="type-<%- i%>" class="p-2 pb-0">-</div>
+                    </div>
+                </a>
             <% } %>
-        </tbody>
-    </table>
+        <% } %>
+    </div>
 </div>
+<script>
+    function setShowEntryInfo(idx, r) {
+        r.json().then((j) => {
+            console.log(j);
+            document.getElementById(`anime-title-${idx}`).innerHTML = j.data.Media.title.native;
+            document.getElementById(`anime-alt-title-${idx}`).innerHTML = j.data.Media.title.userPreferred;
+            var thumbnail = document.getElementById(`anime-thumbnail-${idx}`);
+            thumbnail.src = j.data.Media.coverImage.medium;
+            thumbnail.classList.remove("hidden");
+        })
+    }
+
+    function setOstEntryInfo(idx, data) {
+        document.getElementById(`anime-link-${idx}`).href = `/ost/${data.id}`;
+        document.getElementById(`song-title-${idx}`).innerHTML = data.name;
+        document.getElementById(`song-alt-title-${idx}`).innerHTML = data.alternate_name;
+
+        if (data.score_count <= 0)
+            document.getElementById(`score-${idx}`).innerHTML = "Not rated.";
+        else
+            document.getElementById(`score-${idx}`).innerHTML = data.score_acc / data.score_count;
+
+        fetch("/api/ost/relation/gets",{
+            method: "POST",
+            body: JSON.stringify({
+                ost_id: data.id
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((r) => {
+            r.json().then((j) => {
+                var d = j[0];
+
+                var type = "";
+
+                switch (d.type) {
+                    case 0:
+                        type = `Opening ${d.num}`;
+                        break;
+                    case 1:
+                        type = `Ending ${d.num}`;
+                        break;
+                    case 2:
+                        type = `Insert ${d.num}`;
+                        break;
+                }
+
+                document.getElementById(`type-${idx}`).innerHTML = type;
+
+                fetch("https://graphql.anilist.co", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: `
+                            query ($id: Int) {
+                                Media (id: $id, type: ANIME) {
+                                    id
+                                    title {
+                                        native
+                                        userPreferred
+                                    }
+                                    coverImage {
+                                        medium
+                                    }
+                                }
+                            }
+                        `,
+                        variables: { id: d.show_id }
+                    })
+                }).then((q) => setShowEntryInfo(idx, q));
+            });
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+    fetch("/api/ost/gets", {
+        method: "POST",
+        body: JSON.stringify({
+            start: 0,
+            count: 15,
+            order: "Top"
+        }),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((r) => {
+        r.json().then((j) => {
+            for (var i = 0; i < j.length; ++i) {
+                setOstEntryInfo(i, j[i]);
+            }
+        });
+    }).catch((err) => {
+        console.log(err);
+    })
+</script>

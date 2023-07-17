@@ -6,7 +6,7 @@ module.exports = {
     extend: {
       colors: {
         "main": {
-          50: "#E8E8E8",
+          50:  "#E8E8E8",
           100: "#DBDBDB",
           200: "#C4C4C4",
           300: "#ABABAB",
@@ -17,6 +17,19 @@ module.exports = {
           800: "#363636",
           900: "#1C1C1C",
           950: "#111111"
+        },
+        "lighter-main": {
+          50:  "#E8E8E8",
+          100: "#DEDEDE",
+          200: "#C7C7C7",
+          300: "#B0B0B0",
+          400: "#999999",
+          500: "#858585",
+          600: "#6E6E6E",
+          700: "#575757",
+          800: "#404040",
+          900: "#2B2B2B",
+          950: "#1F1F1F"
         },
         "accent": {
           50: "#FDF7E7",
@@ -31,6 +44,10 @@ module.exports = {
           900: "#342704",
           950: "#181202"
         }
+      },
+      gridTemplateColumns: {
+        "main-list": "40px 1fr 3fr 3fr 1fr 1fr",
+        "ost-list": "2fr 4fr 1fr"
       }
     }
   },

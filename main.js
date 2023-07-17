@@ -43,8 +43,10 @@ require("./models/dbinit")(pool).then(() => {
     app.use(require("./controllers/register"));
     app.use(require("./controllers/login"));
     app.use(require("./controllers/request"));
+    app.use(require("./controllers/ost"));
 
     app.use("/api", require("./controllers/ostapi"));
+    app.use("/api", require("./controllers/userapi"));
 
     app.use(express.static("public"));
 

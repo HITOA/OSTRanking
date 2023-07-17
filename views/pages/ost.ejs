@@ -1,0 +1,125 @@
+<div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
+    <div class="container base-container grid grid-cols-ost-list p-2 space-y-2">
+        <div class="p-2">
+            <iframe id="youtube-player" class="hidden w-full aspect-square md:aspect-video" loading="lazy" src=""></iframe>
+        </div>
+        <div class="rounded-lg bg-main-700 mx-2 p-2">
+        </div>
+        <div class="rounded-lg bg-main-700 p-2">
+        </div>
+        <div class="flex flex-col rounded-lg bg-main-700 p-2">
+            <div class="flex flex-col divide-y my-2">
+                <h1 class="text-black dark:text-white font-medium text-2xl">Title(s)</h1>
+                <div class="flex flex-col">
+                    <h1 class="text-black dark:text-white text-xl">Native: <a id="song-title" class="hover:underline" href=""></a></h1>
+                    <h1 class="text-black dark:text-white text-xl hidden">Alternative: <a id="song-alternate-title" class="hover:underline" href=""></a></h1>
+                </div>
+            </div>
+            <div class="flex flex-col divide-y my-2">
+                <h1 class="text-black dark:text-white font-medium text-2xl">Infomation</h1>
+                <div class="flex flex-col">
+                    <h1 id="song-length" class="text-black dark:text-white text-xl">Length:</h1>
+                    <h1 id="song-short-length" class="text-black dark:text-white text-xl">Short length:</h1>
+                </div>
+            </div>
+        </div>
+        <div id="relation-container" class="rounded-lg bg-main-700 mx-2 p-2">
+            <div data-type="template" class="hidden w-full grid grid-cols-ost-list items-center bg-main-600 hover:bg-lighter-main-600 transition transition-colors p-2 rounded-lg">
+                <img class="border-lg aspect-square object-cover w-24 rounded-lg p-1" src="">
+                <div>
+                    <h1 id="relation-show-name" class="text-xl font-medium text-black dark:text-white">-</h1>
+                    <h1 id="relation-show-alt-name"  class="text-xl font-medium text-main-300">-</h1>
+                </div>
+                <div>
+                    <h1 id="relation-show-type" class="text-xl font-medium text-black dark:text-white">-</h1>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-lg bg-main-700 p-2">
+        </div>
+    </div>
+</div>
+<script>
+    const ost_id = <%- ost_id %>;
+</script>
+<script>
+    //Source : https://stackoverflow.com/a/8260383
+    function youtubeParser(url){
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        var match = url.match(regExp);
+        return (match&&match[7].length==11)? match[7] : false;
+    }
+
+    function setPlayer(url) {
+        if ((id = youtubeParser(url))) {
+            var ytbPlayer = document.getElementById("youtube-player");
+            ytbPlayer.src = `https://www.youtube.com/embed/${id}`;
+            ytbPlayer.classList.remove("hidden");
+            return;
+        }
+    }
+
+    function setOstInformation(ost) {
+        console.log(ost);
+
+        setPlayer(ost.url);
+
+        const songTitle = document.getElementById("song-title");
+        const songAltTitle = document.getElementById("song-alternate-title");
+        songTitle.href = ost.url;
+        songAltTitle.href = ost.url;
+        
+        songTitle.innerHTML = ost.name;
+        songAltTitle.innerHTML = ost.alternate_name;
+
+        if (ost.alternate_name)
+            songAltTitle.parentElement.classList.remove("hidden");
+
+        document.getElementById("song-length").innerHTML = `Length: ${new Date(ost.length * 1000).toISOString().substr(14, 5)}`;
+        document.getElementById("song-short-length").innerHTML = ost.short_length ? `Short length: ${new Date(ost.short_length * 1000).toISOString().substr(14, 5)}` : "Short length : None";
+    }
+
+    function addOstRelation(relation) {
+        const relationElm = document.querySelector("div[data-type='template']").cloneNode(true);
+        const relationContainer = document.getElementById("relation-container");
+
+        getAnimeInfoById(relation.show_id).then((r) => {
+            relationElm.querySelector("img").src = r.data.Media.coverImage.large;
+            relationElm.querySelector("#relation-show-name").innerHTML = r.data.Media.title.native;
+            relationElm.querySelector("#relation-show-alt-name").innerHTML = r.data.Media.title.userPreferred;
+        })
+
+        var type = "";
+        switch (relation.type) {
+            case 0:
+                type = `Opening ${relation.num}`;
+                break;
+            case 1:
+                type = `Ending ${relation.num}`;
+                break;
+            case 2:
+                type = `Insert ${relation.num}`;
+                break;
+        }
+
+        relationElm.querySelector("#relation-show-type").innerHTML = type;
+
+        relationElm.classList.remove("hidden");
+
+        relationContainer.appendChild(relationElm);
+    }
+
+    getOstById(ost_id).then((ost) => {
+        setOstInformation(ost);
+    }).catch((r) => {
+        console.log(r);
+    })
+
+    getOstRelationsById(ost_id).then((relations) => {
+        for (var i = 0; i < relations.length; ++i) {
+            addOstRelation(relations[i]);
+        }
+    }).catch((r) => {
+        console.log(r);
+    })
+</script>

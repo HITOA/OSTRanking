@@ -1,11 +1,11 @@
 exports.getOrAdd = function (app, data) {
-    return new Promise((res, rej) => {
-        app.get("database pool").getConnection().then((conn) => {
-            if (!data.show_id)
-                return rej("Show id is needed.");
-            if (!data.name)
-                return rej("Show name is needed.");
+    return new Promise((res, rej) => {            
+        if (!data.show_id)
+            return rej("Show id is needed.");
+        if (!data.name)
+            return rej("Show name is needed.");
             
+        app.get("database pool").getConnection().then((conn) => {
             conn.query("SELECT id FROM shows WHERE id=?", [data.show_id]).then((ids) => {
                 if (ids.length > 0)
                     return res(ids[0]);
