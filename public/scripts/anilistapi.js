@@ -4,8 +4,10 @@ function getAnimeInfoById(showid) {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                'Accept': 'application/json'
             },
+            "Cache-Control": "max-age=604800",
+            cache: "force-cache",
             body: JSON.stringify({
                 query: `
                     query ($id: Int) {

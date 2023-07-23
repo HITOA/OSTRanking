@@ -26,7 +26,7 @@ exports.add = function (app, data) {
         }).catch((err) => {
             console.log(err);
             rej("There is a problem with the server.");
-        })
+        });
     });
 }
 
@@ -36,7 +36,7 @@ exports.get = function (app, data) {
             return rej("OST id is needed.");
     
         app.get("database pool").getConnection().then((conn) => {
-            conn.query("SELECT * FROM osts WHERE id=?", [
+            conn.query("SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id WHERE id=?", [
                 data.ost_id
             ]).then((r) => {
                 conn.release();
@@ -68,16 +68,16 @@ exports.gets = function (app, data) {
 
             switch (data.order) {
                 case "New":
-                    query = "SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date DESC LIMIT ?, ?";
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 case "Popular":
-                    query = "SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_count DESC, creation_date DESC LIMIT ?, ?";
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_count ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 case "Top":
-                    query = "SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_acc / NULLIF(score_count, 0) DESC, creation_date DESC LIMIT ?, ?";
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_acc / NULLIF(score_count, 0) ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 default:
-                    query = "SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date DESC LIMIT ?, ?";
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
             }
 
