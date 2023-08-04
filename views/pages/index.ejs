@@ -1,4 +1,10 @@
 <div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
+    <div class="container text-black dark:text-white m-4 flex flex-row">
+        <a class="nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-l-xl mr-0.5 text-center p-2" href="/">1</a>
+        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
+        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
+        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-r-xl text-center p-2" href="/">4</a>
+    </div>
     <div class="container base-container text-black dark:text-white p-0 space-y-0">
         <div class="w-full p-2 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-main-700 pt-4 rounded-xl">
             <div class="p-2"></div>
@@ -35,17 +41,20 @@
             <% } %>
         <% } %>
     </div>
+    <div class="container text-black dark:text-white m-4 flex flex-row">
+        <a class="ml-auto nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-l-xl mr-0.5 text-center p-2" href="/">1</a>
+        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
+        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
+        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-r-xl text-center p-2" href="/">4</a>
+    </div>
 </div>
 <script>
-    function setShowEntryInfo(idx, r) {
-        r.json().then((j) => {
-            console.log(j);
-            document.getElementById(`anime-title-${idx}`).innerHTML = j.data.Media.title.native;
-            document.getElementById(`anime-alt-title-${idx}`).innerHTML = j.data.Media.title.userPreferred;
-            var thumbnail = document.getElementById(`anime-thumbnail-${idx}`);
-            thumbnail.src = j.data.Media.coverImage.medium;
-            thumbnail.classList.remove("hidden");
-        })
+    function setShowEntryInfo(idx, j) {
+        document.getElementById(`anime-title-${idx}`).innerHTML = j.native;
+        document.getElementById(`anime-alt-title-${idx}`).innerHTML = j.preferred;
+        var thumbnail = document.getElementById(`anime-thumbnail-${idx}`);
+        thumbnail.src = j.medium;
+        thumbnail.classList.remove("hidden");
     }
 
     function setOstEntryInfo(idx, data) {
@@ -86,55 +95,42 @@
 
                 document.getElementById(`type-${idx}`).innerHTML = type;
 
-                fetch("https://graphql.anilist.co", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    "Cache-Control": "max-age=604800",
-                    cache: "force-cache",
-                    body: JSON.stringify({
-                        query: `
-                            query ($id: Int) {
-                                Media (id: $id, type: ANIME) {
-                                    id
-                                    title {
-                                        native
-                                        userPreferred
-                                    }
-                                    coverImage {
-                                        medium
-                                    }
-                                }
-                            }
-                        `,
-                        variables: { id: d.show_id }
-                    })
-                }).then((q) => setShowEntryInfo(idx, q));
+                getShowById(d.show_id).then((j) => {
+                    setShowEntryInfo(idx, j);
+                }).catch((err) => {
+                    console.log(err);
+                })
             });
         }).catch((err) => {
             console.log(err);
         })
     }
 
-    fetch("/api/ost/gets", {
-        method: "POST",
-        body: JSON.stringify({
-            start: 0,
-            count: 15,
-            order: "Top"
-        }),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    }).then((r) => {
-        r.json().then((j) => {
-            for (var i = 0; i < j.length; ++i) {
-                setOstEntryInfo(i, j[i]);
-            }
-        });
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const p = urlParams.has("p") ? parseInt(urlParams.get("p")) : 0;
+
+    const count = 15;
+    const start = p * count;
+    const order = urlParams.has("order") ? urlParams.get("order") : "Top";
+
+    getOsts(start, count, order).then((j) => {
+        for (var i = 0; i < j.length; ++i) {
+            setOstEntryInfo(i, j[i]);
+        }
     }).catch((err) => {
         console.log(err);
-    })
+    });
+
+    for (var i = 0; i < 4; ++i) {
+        let arr = document.getElementsByClassName(`nav-p-${i + 1}`);
+        const o = p == 0 ? 1 : 0;
+        for (var j = 0; j < arr.length; ++j) {
+            arr[j].innerHTML = p + i + o;
+            arr[j].href = `/?p=${p - 1 + i + o}&order=${order}`
+
+            if (-1 + i + o == 0)
+                arr[j].classList.add("border-b-4");
+        }
+    }
 </script>

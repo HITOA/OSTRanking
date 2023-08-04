@@ -26,67 +26,77 @@ require("fs").readFile(process.argv[2], "utf8", (err, data) => {
         return;
     }
 
+    var timer = 0;
+
     data.split("\n").forEach((row) => {
-        var cols = row.split(",");
+        setTimeout(() => {
+            var cols = row.split(",");
 
-        anilist.media.anime(parseInt(cols[5])).then((data) => {
-            var length = cols[3].split(":");
-            length = parseInt(length[0]) * 60 + parseInt(length[1]);
-            var shortlength = cols[4].split(":");
-            shortlength = parseInt(shortlength[0]) * 60 + parseInt(shortlength[1]);
+            anilist.media.anime(parseInt(cols[5])).then((data) => {
+                var length = cols[3].split(":");
+                length = parseInt(length[0]) * 60 + parseInt(length[1]);
+                var shortlength = cols[4].split(":");
+                shortlength = parseInt(shortlength[0]) * 60 + parseInt(shortlength[1]);
 
-            pool.getConnection().then((conn) => {
-                conn.query("INSERT INTO osts (name, url, length, creation_date, update_date, published_date, short_length, alternate_name) VALUES (?, ?, ?, NOW(), NOW(), ?, ?, ?) RETURNING id", [
-                    cols[0],
-                    cols[2],
-                    length,
-                    null,
-                    shortlength ? shortlength : null,
-                    cols[1] ? cols[1] : null
-                ]).then((result) => {
-                    
-                    conn.query("SELECT id FROM shows WHERE id=?", [parseInt(cols[5])]).then((ids) => {
-                        if (ids.length > 0) {
-                            conn.query("INSERT INTO show_ost (show_id, ost_id, type, num) VALUES (?, ?, ?, ?)", [
+                pool.getConnection().then((conn) => {
+                    conn.query("INSERT INTO osts (name, url, length, creation_date, update_date, published_date, short_length, alternate_name) VALUES (?, ?, ?, NOW(), NOW(), ?, ?, ?) RETURNING id", [
+                        cols[0],
+                        cols[2],
+                        length,
+                        null,
+                        shortlength ? shortlength : null,
+                        cols[1] ? cols[1] : null
+                    ]).then((result) => {
+                        
+                        conn.query("SELECT id FROM shows WHERE id=?", [parseInt(cols[5])]).then((ids) => {
+                            if (ids.length > 0) {
+                                conn.query("INSERT INTO show_ost (show_id, ost_id, type, num) VALUES (?, ?, ?, ?)", [
+                                    parseInt(cols[5]),
+                                    result[0].id,
+                                    parseInt(cols[6]),
+                                    parseInt(cols[7])
+                                ]);
+                                return;
+                            }
+            
+                            conn.query("INSERT INTO shows (id, native, preferred, english, medium, large) VALUES (?, ?, ?, ?, ?, ?) RETURNING id", [
                                 parseInt(cols[5]),
-                                result[0].id,
-                                parseInt(cols[6]),
-                                parseInt(cols[7])
-                            ]);
-                            return;
-                        }
-        
-                        conn.query("INSERT INTO shows (id, name) VALUES (?, ?) RETURNING id", [
-                            parseInt(cols[5]),
-                            data.title.userPreferred,
-                        ]).then((id) => {
-                            conn.release();
-                            conn.query("INSERT INTO show_ost (show_id, ost_id, type, num) VALUES (?, ?, ?, ?)", [
-                                parseInt(cols[5]),
-                                result[0].id,
-                                parseInt(cols[6]),
-                                parseInt(cols[7])
-                            ]);
+                                data.title.native,
+                                data.title.userPreferred,
+                                data.title.english,
+                                data.coverImage.medium,
+                                data.coverImage.large
+                            ]).then((id) => {
+                                conn.release();
+                                conn.query("INSERT INTO show_ost (show_id, ost_id, type, num) VALUES (?, ?, ?, ?)", [
+                                    parseInt(cols[5]),
+                                    result[0].id,
+                                    parseInt(cols[6]),
+                                    parseInt(cols[7])
+                                ]);
+                            }).catch((err) => {
+                                conn.release();
+                                console.log(err);
+                            });
                         }).catch((err) => {
                             conn.release();
                             console.log(err);
                         });
-                    }).catch((err) => {
-                        conn.release();
-                        console.log(err);
-                    });
 
-                    console.log(result);
-                    conn.release();
+                        console.log(result);
+                        conn.release();
+                    }).catch((err) => {
+                        console.log(err);
+                        conn.release();
+                    });
                 }).catch((err) => {
                     console.log(err);
-                    conn.release();
-                });
-            }).catch((err) => {
-                console.log(err);
-                rej("There is a problem with the server.");
-            })
-        });
+                    rej("There is a problem with the server.");
+                })
+            });
+        }, timer += 500);
+
+        
 
         /*try {
             for (var i = 0; i < req.body.show_ost?.length; ++i) {

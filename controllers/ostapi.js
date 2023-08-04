@@ -19,7 +19,11 @@ router.post("/ost/add", async (req, res) => {
             var data = await anilist.media.anime(parseInt(req.body.show_ost[i].show_id));
             relationData.push({
                 show_id: req.body.show_ost[0].show_id,
-                name: data.title.userPreferred,
+                native: data.title.native,
+                preferred: data.title.userPreferred,
+                english: data.title.english,
+                medium: data.coverImage.medium,
+                large: data.coverImage.large,
                 type: req.body.show_ost[0].type,
                 number: req.body.show_ost[0].number
             })

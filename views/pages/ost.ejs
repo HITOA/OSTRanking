@@ -123,11 +123,11 @@
         const relationElm = document.querySelector("div[data-type='template']").cloneNode(true);
         const relationContainer = document.getElementById("relation-container");
 
-        getAnimeInfoById(relation.show_id).then((r) => {
-            relationElm.querySelector("img").src = r.data.Media.coverImage.large;
-            relationElm.querySelector("#relation-show-name").innerHTML = r.data.Media.title.native;
-            relationElm.querySelector("#relation-show-alt-name").innerHTML = r.data.Media.title.userPreferred;
-        })
+        getShowById(relation.show_id).then((j) => {
+            relationElm.querySelector("img").src = j.large;
+            relationElm.querySelector("#relation-show-name").innerHTML = j.native;
+            relationElm.querySelector("#relation-show-alt-name").innerHTML = j.preferred;
+       });
 
         var type = "";
         switch (relation.type) {

@@ -47,6 +47,7 @@ require("./models/dbinit")(pool).then(() => {
     app.use(require("./controllers/daily"));
 
     app.use("/api", require("./controllers/ostapi"));
+    app.use("/api", require("./controllers/showapi"));
     app.use("/api", require("./controllers/userapi"));
 
     app.use(express.static("public"));
