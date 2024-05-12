@@ -20,6 +20,7 @@ services:
     image: mariadb:10.3.36
     volumes:
       - db:/var/lib/mysql
+      - ./sql/dbinit.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MARIADB_DATABASE=ostranking
       - MARIADB_USER=ostranking
