@@ -11,10 +11,10 @@ if (process.argv[0] < 3)
 
 const dboption = {
     host: process.env.DB_HOST || "127.0.0.1",
-    port: process.env.DB_PORT || 3306,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
+    port: process.env.DB_PORT || 3308,
+    user: "ostranking",
+    password: "secret",
+    database: "ostranking",
     connectionLimit: 8
 };
 
@@ -26,7 +26,7 @@ require("fs").readFile(process.argv[2], "utf8", (err, data) => {
         return;
     }
 
-    var timer = 0;
+    var timer = 1000;
 
     data.split("\n").forEach((row) => {
         setTimeout(() => {

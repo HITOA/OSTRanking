@@ -8,8 +8,8 @@ module.exports = (pool) => {
                     rej(err);
 
                 data.split(';').forEach((q)=>{
-                    if (q)
-                        conn.execute(q);
+                    //if (q)
+                    //    conn.execute(q);
                 });
                 res();
             });
