@@ -1,0 +1,16 @@
+<div class="flex bg-white dark:bg-lighter-main-950 rounded w-full p-0">
+    <img class="aspect-square object-cover w-36 rounded m-0 mr-2" src="<%- show_thumbnail %>">
+    <div class="w-full">
+        <div class="flex">
+            <p class="font-bold text-lg m-2 mr-auto"><%- username %></p>
+            <p class="font-bold text-lg m-2 mr-4"><%- since %></p>
+        </div>
+        <p class="text-lg m-2">Requested to add the song <strong><%- song_name %></strong> to the list. <strong><%- song_show_relation %></strong> of the show <strong><%- show_name %></strong>.</p>
+        
+        <div class="flex mt-5 ml-2">
+            <div class="inline-block mr-auto bg-main-700/50 border border-main-200 p-1 rounded-lg text-main-200">
+                Request is pending...
+            </div>
+        </div>
+    </div>
+</div>

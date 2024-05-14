@@ -1,5 +1,3 @@
-const ost = require("./../models/ost");
-
 const router = require("express").Router();
 
 router.get("/ost/:id", (req, res) => {

@@ -171,3 +171,33 @@ function getShowById(showid) {
         });
     });
 }
+
+function getCommunityActions(start, count) {
+    return new Promise((res, rej) => {
+        fetch("/api/community/gets", {
+            method: "POST",
+            body: JSON.stringify({
+                start: start,
+                count: count
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((r) => {
+            r.json().then((j) => {
+                if (r.status === 200)
+                    return res(j);
+                else
+                    return rej(j);
+            }).catch((err) => {
+                rej({
+                    err: err
+                });
+            })
+        }).catch((err) => {
+            rej({
+                err: err
+            });
+        })
+    })
+}

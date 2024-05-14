@@ -8,7 +8,7 @@ const anilist = new Anilist();
 
 router.post("/ost/add", async (req, res) => {
     if ((req.user?.privilege & 1) != 1)
-        return res.status(403);
+        return res.status(403).send({ message: "Forbidden" });
     
     console.log(req.body);
 

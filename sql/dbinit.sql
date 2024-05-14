@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     name NVARCHAR(32) NOT NULL, password_hash VARCHAR(60) NOT NULL, 
     email VARCHAR(320) NOT NULL, creation_date DATETIME NOT NULL, 
-    privilege SMALLINT NOT NULL DEFAULT 0);
+    privilege SMALLINT NOT NULL DEFAULT 0, trust INT NOT NULL DEFAULT 0);
 
 CREATE TABLE IF NOT EXISTS shows(
     id INT NOT NULL PRIMARY KEY, native NVARCHAR(512), 
@@ -58,6 +58,12 @@ CREATE TABLE IF NOT EXISTS ost_scores_total(
 CREATE TABLE IF NOT EXISTS daily_rating_history(
     day INT NOT NULL, ost_id INT NOT NULL, PRIMARY KEY (day), 
     FOREIGN KEY (ost_id) REFERENCES osts(id));
+
+CREATE TABLE IF NOT EXISTS community_action(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL, creation_date DATETIME NOT NULL,
+    info JSON NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id));
     
 CREATE OR REPLACE TRIGGER insert_ost_scores_total AFTER INSERT ON osts FOR EACH ROW INSERT INTO ost_scores_total (ost_id, score_acc, score_count) VALUES (NEW.id, 0, 0);
 CREATE OR REPLACE TRIGGER add_ost_scores_total AFTER INSERT ON scores FOR EACH ROW UPDATE ost_scores_total SET score_acc=score_acc+NEW.score,score_count=score_count+1 WHERE ost_id = NEW.ost_id;

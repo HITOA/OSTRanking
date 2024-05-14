@@ -26,6 +26,8 @@ services:
       - MARIADB_USER=ostranking
       - MARIADB_PASSWORD=secret
       - MARIADB_ROOT_PASSWORD=secret
+      - MARIADB_AUTO_UPGRADE=1
+      - MARIADB_INITDB_SKIP_TZINFO=1
     ports:
       - "3308:3306"
 
