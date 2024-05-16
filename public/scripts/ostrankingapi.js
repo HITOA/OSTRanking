@@ -201,3 +201,33 @@ function getCommunityActions(start, count) {
         })
     })
 }
+
+function editCommunityAction(action_id, info) {
+    return new Promise((res, rej) => {
+        fetch("/api/community/edit", {
+            method: "POST",
+            body: JSON.stringify({
+                action_id: action_id,
+                info: info
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((r) => {
+            r.json().then((j) => {
+                if (r.status === 200)
+                    return res(j);
+                else
+                    return rej(j);
+            }).catch((err) => {
+                rej({
+                    err: err
+                });
+            })
+        }).catch((err) => {
+            rej({
+                err: err
+            });
+        })
+    })
+}

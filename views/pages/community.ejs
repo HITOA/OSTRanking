@@ -7,14 +7,18 @@
 </div>
 <script src="/scripts/moment.min.js"></script>
 <script>
+    var privilege = <%- privilege %>;
     var request_list_container = document.getElementById("request_list_container");
 
     var request_template = ""
 
+    var actions_by_id = {}
+
     function addCommunityActionEntry(start, count) {
         getCommunityActions(start, count).then(actions => {
             for (action of actions) {
-                console.log(action);
+                actions_by_id[action.id] = action;
+                console.log(action)
                 switch (action.info.type) {
                     case "request": {
                         let relation_type_name = ["Opening", "Ending", "Insert"];
@@ -24,13 +28,58 @@
                             since: moment(action.creation_date).fromNow(),
                             song_name: action.info.content.ost.name,
                             song_show_relation: `${relation_type_name[action.info.content.relations[0].type]} ${action.info.content.relations[0].number}`,
-                            show_name: action.info.content.relations[0].preferred
+                            show_name: action.info.content.relations[0].preferred,
+                            action_id: action.id,
+                            action_status: action.info.status,
+                            user_privilege: privilege
                         }
                         request_list_container.innerHTML += ejs.render(request_template, template_data)
                         break;
                     }
                 }
             }
+        })
+    }
+
+    function acceptCommunitySongRequest(id) {
+        if (actions_by_id[id].info.status) {
+            alert(`Action has already been ${actions_by_id[id].info.status}`);
+            return;
+        }
+        let data = {
+            ost: actions_by_id[id].info.content.ost,
+            show_ost: actions_by_id[id].info.content.relations
+        };
+
+        fetch("/api/ost/add", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                actions_by_id[id].info.status = "accepted";
+                editCommunityAction(id, actions_by_id[id].info).then(() => {
+                    document.getElementById(`action-${id}-notification-pending`).classList.add("hidden");
+                    document.getElementById(`action-${id}-notification-accepted`).classList.remove("hidden");
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+    function declineCommunitySongRequest(id) {
+        if (actions_by_id[id].info.status) {
+            alert(`Action has already been ${actions_by_id[id].info.status}`);
+            return;
+        }
+        actions_by_id[id].info.status = "declined";
+        editCommunityAction(id, actions_by_id[id].info).then(() => {
+            document.getElementById(`action-${id}-notification-pending`).classList.add("hidden");
+            document.getElementById(`action-${id}-notification-declined`).classList.remove("hidden");
         })
     }
 

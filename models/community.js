@@ -24,6 +24,32 @@ exports.add = function (app, data) {
     });
 }
 
+exports.edit = function(app, data) {
+    return new Promise((res, rej) => {
+        if (!data.action_id)
+            return rej("Action id is needed.");
+        if (!data.info)
+            return rej("Info is needed.");
+
+        app.get("database pool").getConnection().then((conn) => {
+            conn.query("UPDATE community_action SET info=? WHERE id=?", [
+                data.info,
+                data.action_id
+            ]).then((result) => {
+                conn.release();
+                res();
+            }).catch((err) => {
+                console.log(err);
+                conn.release();
+                rej("There is a problem with the server.");
+            });
+        }).catch((err) => {
+            console.log(err);
+            rej("There is a problem with the server.");
+        });
+    });
+}
+
 exports.gets = function (app, data) {
     return new Promise((res, rej) => {
         if (typeof(data.start) != "number")

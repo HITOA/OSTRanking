@@ -64,6 +64,25 @@ router.post("/community/request/add", async (req, res) => {
     });
 });
 
+router.post("/community/edit", async (req, res) => {
+    if ((req.user?.privilege & 1) != 1)
+        return res.status(403).send({ message: "Forbidden" });
+
+    if (typeof(req.body.action_id) != "number")
+        return res.status(400).send({ message: "Action ID argument not provided." });
+
+    if (!req.body.info)
+        return res.status(400).send({ message: "Info argument not provided." });
+
+    community.edit(req.app, req.body).then(() => {
+        res.send({ message: "Success." });
+    }).catch((msg) => {
+        res.status(400).send({
+            message: msg
+        });
+    });
+});
+
 router.post("/community/gets", async (req, res) => {
     if (typeof(req.body.start) != "number")
         return res.status(400).send({ message: "Start argument not provided." });
