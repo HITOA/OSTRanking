@@ -76,7 +76,7 @@
                         preferred: ost.relations[0]?.show?.preferred,
                         name: ost.name,
                         alternate_name: ost.alternate_name,
-                        rating: ost.rating ? ost.rating : "Not Rated",
+                        rating: ost.rating ? (ost.rating / 10.0).toFixed(2) : "Not Rated",
                         type: `${ost.relations[0]?.type} ${ost.relations[0]?.number}`
                     });
                 }

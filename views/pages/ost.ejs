@@ -39,6 +39,19 @@
                     <h1 class="flex p-2 font-bold text-lg">Members</h1>
                     <h1 id="members-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
                 </div>
+                <select <% if (!is_auth) { %> disabled <% } %> id="score-selection" class="flex bg-main-800 hover:bg-lighter-main-800 rounded px-2 m-2 flex font-bold text-lg">
+                    <option value="Not Rated" selected>Select</option>
+                    <option value="10">(10) Masterpiece</option>
+                    <option value="9">(9) Great</option>
+                    <option value="8">(8) Very Good</option>
+                    <option value="7">(7) Good</option>
+                    <option value="6">(6) Fine</option>
+                    <option value="5">(5) Average</option>
+                    <option value="4">(4) Bad</option>
+                    <option value="3">(3) Very Bad</option>
+                    <option value="2">(2) Horrible</option>
+                    <option value="1">(1) Appalling</option>
+                </select>
             </div>
         </div>
         <div id="relations" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
@@ -59,12 +72,26 @@
                 </button>
             </h1>
         </div>
-        
     </div>
 </div>
 <script src="/scripts/moment.min.js"></script>
 <script>
     const ost_id = <%- ost_id %>;
+
+    let score_selection = document.getElementById("score-selection");
+    score_selection.onclick = () => {
+        if (score_selection.value === "Not Rated")
+            return;
+
+        let score = parseInt(score_selection.value);
+        
+        graphqlQuery(`mutation {
+                set_user_rating(input: {
+                    ost_id: ${ost_id},
+                    rating: ${score * 10}
+                })
+            }`);
+    }
 
     function loadEjsTemplateFromFile(uri) {
         return new Promise((res, rej) => {
@@ -111,6 +138,9 @@
         loadEjsTemplateFromFile("/templates/ost-relations-anime-entry.ejs"),
         loadEjsTemplateFromFile("/templates/ost-external-link-entry.ejs")
     ]).then((res) => {
+        if (res[0].value.data.ost?.user_rating)
+            score_selection.value = res[0].value.data.ost.user_rating / 10;
+
         let song_information = document.getElementById("song-information");
 
         if (res[0].value.data.ost?.name)
@@ -140,7 +170,7 @@
         console.log(res[0].value)
 
         if (res[0].value.data.ost?.rating !== null)
-            document.getElementById("score-value").innerHTML = res[0].value.data.ost.rating;
+            document.getElementById("score-value").innerHTML = (res[0].value.data.ost.rating / 10.0).toFixed(2);
 
         if (res[0].value.data.ost?.top_rank !== null)
             document.getElementById("top-rank-value").innerHTML = res[0].value.data.ost.top_rank;

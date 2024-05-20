@@ -5,6 +5,7 @@ router.get("/ost/:id", (req, res) => {
         title: "OSTRanking",
         page: "./pages/ost",
         ost_id: req.params.id,
+        is_auth: req.isAuthenticated(),
         ...req.info
     });
 });

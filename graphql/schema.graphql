@@ -52,7 +52,7 @@ type Ost {
     short_length: Int
     top_rank: Int
     popular_rank: Int
-    rating: Int
+    rating: Float
     user_rating: Int
     rating_count: Int
     relations: [Relation!]!
@@ -101,5 +101,5 @@ type Mutation {
     edit_relation(input: RelationInput): Relation
     remove_ost(id: ID): Ost
     remove_show(id: ID): Show
-    set_user_rating(input: RatingInput): Ost
+    set_user_rating(input: RatingInput): ID
 }

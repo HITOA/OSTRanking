@@ -320,6 +320,29 @@ module.exports = {
                     })
                 })
             })
+        },
+        set_user_rating(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if (!context.req.isAuthenticated())
+                    throw new Error("Forbidden.");
+
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`INSERT INTO scores (user_id, ost_id, score) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ?`, [
+                    context.req.user?.id,
+                    args.input.ost_id,
+                    args.input.rating,
+                    args.input.rating
+                    ]).then((r) => {
+                        conn.release();
+                        res(args.input.ost_id);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
         }
     }
 }
