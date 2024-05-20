@@ -4,6 +4,7 @@ const express = require("express");
 const session = require("express-session")
 const passport = require("passport")
 const MySQLStore = require("express-mysql-session")(session)
+const { ruruHTML } = require("ruru/server")
 
 const dboption = {
     host: process.env.DB_HOST || "127.0.0.1",
@@ -16,48 +17,51 @@ const dboption = {
 
 const pool = require("mariadb").createPool(dboption)
 
-require("./models/dbinit")(pool).then(() => {
-    console.log("Server starting...");
+console.log("Server starting...");
 
-    const app = express();
+const app = express();
 
-    app.set("view engine", "ejs");
-    app.set("database pool", pool);
+app.set("view engine", "ejs");
+app.set("database pool", pool);
 
-    app.use(session({
-        secret: process.env.SESSION_SECRET.split(' '),
-        store: new MySQLStore(dboption),
-        resave: false,
-        saveUninitialized: false,
-        cookie:{
-            maxAge: 1000 * 60 * 60 * 24
-        }
-    }));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use("/api", express.json());
-    app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret: process.env.SESSION_SECRET.split(' '),
+    store: new MySQLStore(dboption),
+    resave: false,
+    saveUninitialized: false,
+    cookie:{
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use("/api", express.json());
+app.use(express.urlencoded({extended: true}));
 
-    app.use(require("./controllers/layout"));
-    app.use(require("./controllers/ostrankingcontroller"));
-    app.use(require("./controllers/register"));
-    app.use(require("./controllers/login"));
-    app.use(require("./controllers/request"));
-    app.use(require("./controllers/ost"));
-    app.use(require("./controllers/daily"));
-    app.use(require("./controllers/faq"));
-    app.use(require("./controllers/community"));
+app.use(require("./controllers/layout"));
+app.use(require("./controllers/ostrankingcontroller"));
+app.use(require("./controllers/register"));
+app.use(require("./controllers/login"));
+app.use(require("./controllers/request"));
+app.use(require("./controllers/ost"));
+app.use(require("./controllers/daily"));
+app.use(require("./controllers/faq"));
+app.use(require("./controllers/community"));
 
-    app.use("/api", require("./controllers/ostapi"));
-    app.use("/api", require("./controllers/showapi"));
-    app.use("/api", require("./controllers/userapi"));
-    app.use("/api", require("./controllers/communityapi"));
+app.all("/api", require("./controllers/api")(app));
 
-    app.use(express.static("public"));
+app.use("/api", require("./controllers/ostapi"));
+app.use("/api", require("./controllers/showapi"));
+app.use("/api", require("./controllers/userapi"));
+app.use("/api", require("./controllers/communityapi"));
 
-    require("./auth/passport").initialize(app);
+app.use(express.static("public"));
 
-    app.listen(process.env.PORT || 8080);
-}, (err) => {
-    console.log(`Could not initialize DB : ${err}`);
-})
+app.get("/ruru", (req, res) => {
+    res.type("html");
+    res.end(ruruHTML({ endpoint: "/api" }));
+});
+
+require("./auth/passport").initialize(app);
+
+app.listen(process.env.PORT || 8080);

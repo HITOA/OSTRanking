@@ -1,133 +1,95 @@
 <div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
     <div class="container text-black dark:text-white m-4 flex flex-row">
-        <a class="nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-l-xl mr-0.5 text-center p-2" href="/">1</a>
-        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
-        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
-        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-r-xl text-center p-2" href="/">4</a>
+        <a class="nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">1</a>
+        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
+        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
+        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 text-center p-2" href="/">4</a>
     </div>
-    <div class="container base-container text-black dark:text-white p-0 space-y-0">
-        <div class="w-full p-2 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-main-700 pt-4">
-            <div class="p-2"></div>
-            <div class="p-2"></div>
-            <div class="p-2">Anime</div>
-            <div class="p-2">Song</div>
-            <div class="p-2">Rating</div>
-            <div class="p-2">Type</div>
+    <div id="song-table" class="container base-container text-black dark:text-white p-0 space-y-0">
+        <div class="w-full p-1 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-lighter-main-900">
+            <div class="p-1"></div>
+            <div class="p-1"></div>
+            <div class="p-1">Anime</div>
+            <div class="p-1">Song</div>
+            <div class="p-1">Rating</div>
+            <div class="p-1">Type</div>
         </div>
-        
-        <% for(var i = 0; i < 15; ++i) { %>
-            <% if (i % 2 == 0) { %>
-                <a id="anime-link-<%- i%>" href="">
-                    <div class="w-full grid grid-cols-main-list bg-white hover:bg-main-100 dark:bg-main-800 hover:dark:bg-main-700 mt-0 items-center transition transition-colors">
-                        <div class="p-2 pb-0"></div>
-                        <div class="p-2 pb-0 h-20"><img id="anime-thumbnail-<%- i%>" class="border-lg aspect-square object-cover w-16 rounded-lg hidden p-1" src=""></div>
-                        <div class="p-2 pb-0"><div id="anime-title-<%- i%>">-</div><div id="anime-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
-                        <div class="p-2 pb-0"><div id="song-title-<%- i%>">-</div><div id="song-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
-                        <div id="score-<%- i%>" class="p-2 pb-0">-</div>
-                        <div id="type-<%- i%>" class="p-2 pb-0">-</div>
-                    </div>
-                </a>
-            <% } else { %>
-                <a id="anime-link-<%- i%>" href="">
-                    <div class="w-full grid grid-cols-main-list bg-gray-100 hover:bg-lighter-main-200 dark:bg-lighter-main-800 hover:dark:bg-lighter-main-700 mt-0 items-center transition transition-colors">
-                        <div class="p-2 pb-0"></div>
-                        <div class="p-2 pb-0 h-20"><img id="anime-thumbnail-<%- i%>" class="border-lg aspect-square object-cover w-16 rounded-lg hidden p-1" src=""></div>
-                        <div class="p-2 pb-0"><div id="anime-title-<%- i%>">-</div><div id="anime-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
-                        <div class="p-2 pb-0"><div id="song-title-<%- i%>">-</div><div id="song-alt-title-<%- i%>" class="text-main-300 hidden md:block">-</div></div>
-                        <div id="score-<%- i%>" class="p-2 pb-0">-</div>
-                        <div id="type-<%- i%>" class="p-2 pb-0">-</div>
-                    </div>
-                </a>
-            <% } %>
-        <% } %>
     </div>
     <div class="container text-black dark:text-white m-4 flex flex-row">
-        <a class="ml-auto nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-l-xl mr-0.5 text-center p-2" href="/">1</a>
-        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
-        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
-        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-600 rounded-r-xl text-center p-2" href="/">4</a>
+        <a class="ml-auto nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">1</a>
+        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
+        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
+        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 text-center p-2" href="/">4</a>
     </div>
 </div>
 <script>
-    function setShowEntryInfo(idx, j) {
-        document.getElementById(`anime-title-${idx}`).innerHTML = j.native;
-        document.getElementById(`anime-alt-title-${idx}`).innerHTML = j.preferred;
-        var thumbnail = document.getElementById(`anime-thumbnail-${idx}`);
-        thumbnail.src = j.medium;
-        thumbnail.classList.remove("hidden");
-    }
-
-    function setOstEntryInfo(idx, data) {
-        document.getElementById(`anime-link-${idx}`).href = `/ost/${data.id}`;
-        document.getElementById(`song-title-${idx}`).innerHTML = data.name;
-        document.getElementById(`song-alt-title-${idx}`).innerHTML = data.alternate_name;
-
-        if (data.score_count <= 0)
-            document.getElementById(`score-${idx}`).innerHTML = "Not rated.";
-        else
-            document.getElementById(`score-${idx}`).innerHTML = data.score_acc / data.score_count;
-
-        fetch("/api/ost/relation/gets",{
-            method: "POST",
-            body: JSON.stringify({
-                ost_id: data.id
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((r) => {
-            r.json().then((j) => {
-                var d = j[0];
-
-                var type = "";
-
-                switch (d.type) {
-                    case 0:
-                        type = `Opening ${d.num}`;
-                        break;
-                    case 1:
-                        type = `Ending ${d.num}`;
-                        break;
-                    case 2:
-                        type = `Insert ${d.num}`;
-                        break;
-                }
-
-                document.getElementById(`type-${idx}`).innerHTML = type;
-
-                getShowById(d.show_id).then((j) => {
-                    setShowEntryInfo(idx, j);
-                }).catch((err) => {
-                    console.log(err);
-                })
-            });
-        }).catch((err) => {
-            console.log(err);
-        })
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
 
-    const p = urlParams.has("p") ? parseInt(urlParams.get("p")) : 0;
+    const page = urlParams.has("p") ? parseInt(urlParams.get("p")) : 0;
+    const count = 50;
+    const start = page * count;
 
-    const count = 15;
-    const start = p * count;
-    const order = urlParams.has("order") ? urlParams.get("order") : "Top";
+    fetch("/templates/song-table-row.ejs").then((res) => {
+        let ost_search_input = `{
+                        count: ${count}
+                        start: ${start}
+                    }`;
 
-    getOsts(start, count, order).then((j) => {
-        for (var i = 0; i < j.length; ++i) {
-            setOstEntryInfo(i, j[i]);
+        if (urlParams.has("expression")) {
+            ost_search_input = `{
+                        count: ${count}
+                        start: ${start}
+                        expression: "${urlParams.get("expression")}"
+                    }`;
         }
-    }).catch((err) => {
-        console.log(err);
-    });
+
+
+        res.text().then((template) => {
+            graphqlQuery(`
+                {
+                    osts(input: ${ost_search_input}) {
+                        id
+                        name
+                        alternate_name
+                        rating
+                        relations {
+                            show {
+                                native
+                                preferred
+                                medium
+                            }
+                            type
+                            number
+                        }
+                    }
+                }
+            `).then((r) => {
+                let index = start + 1;
+                let table = document.getElementById("song-table");
+                for (ost of r.data.osts) {
+                    let medium = ost.relations[0]?.show?.medium
+                    table.innerHTML += ejs.render(template, {
+                        id: ost.id,
+                        index: index++,
+                        medium: medium,
+                        native: ost.relations[0]?.show?.native,
+                        preferred: ost.relations[0]?.show?.preferred,
+                        name: ost.name,
+                        alternate_name: ost.alternate_name,
+                        rating: ost.rating ? ost.rating : "Not Rated",
+                        type: `${ost.relations[0]?.type} ${ost.relations[0]?.number}`
+                    });
+                }
+            })
+        })
+    })
 
     for (var i = 0; i < 4; ++i) {
         let arr = document.getElementsByClassName(`nav-p-${i + 1}`);
-        const o = p == 0 ? 1 : 0;
+        const o = page == 0 ? 1 : 0;
         for (var j = 0; j < arr.length; ++j) {
-            arr[j].innerHTML = p + i + o;
-            arr[j].href = `/?p=${p - 1 + i + o}&order=${order}`
+            arr[j].innerHTML = page + i + o;
+            arr[j].href = `/?p=${page - 1 + i + o}`
 
             if (-1 + i + o == 0)
                 arr[j].classList.add("border-b-4");

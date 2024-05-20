@@ -1,170 +1,174 @@
-<div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
-    <div class="container base-container grid grid-cols-ost-list p-2 space-y-2">
-        <div class="p-2">
-            <iframe id="youtube-player" class="hidden w-full aspect-square md:aspect-video" loading="lazy" src=""></iframe>
-        </div>
-        <div class="rounded-lg bg-main-700 mx-2 p-2 flex flex-col">
-            <div class="h-full"></div>
-            <h1 id="anime-score" class="text-black dark:text-white font-medium text-2xl">Score: 50</h1>
-            <div class="flex">
-                <% for(var i = 0; i < 10; ++i) { %>
-                    <div onclick="setScore(<%- (i + 1) * 10 %>)" class="pointer-cursor flex stroke-main-950 fill-main-600 hover:scale-125 transition transition-scale">
-                        <svg id="halfheart-<%- i %>" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-10 h-10">
-                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
-                        </svg>     
-                    </div>
-                <% } %>
-            </div>
-        </div>
-        <div class="rounded-lg bg-main-700 p-2 flex flex-col">
-            <div class="h-full"></div>
-            <h1 id="anime-average" class="text-black dark:text-white font-medium text-2xl">Score: 50</h1>
-            <h1 id="anime-count" class="text-black dark:text-white font-medium text-xl">50 users.</h1>
-        </div>
-        <div class="flex flex-col rounded-lg bg-main-700 p-2">
-            <div class="flex flex-col divide-y my-2">
-                <h1 class="text-black dark:text-white font-medium text-2xl">Title(s)</h1>
-                <div class="flex flex-col">
-                    <h1 class="text-black dark:text-white text-xl">Native: <a id="song-title" class="hover:underline" href=""></a></h1>
-                    <h1 class="text-black dark:text-white text-xl hidden">Alternative: <a id="song-alternate-title" class="hover:underline" href=""></a></h1>
-                </div>
-            </div>
-            <div class="flex flex-col divide-y my-2">
-                <h1 class="text-black dark:text-white font-medium text-2xl">Infomation</h1>
-                <div class="flex flex-col">
-                    <h1 id="song-length" class="text-black dark:text-white text-xl">Length:</h1>
-                    <h1 id="song-short-length" class="text-black dark:text-white text-xl">Short length:</h1>
-                </div>
-            </div>
-        </div>
-        <div id="relation-container" class="rounded-lg bg-main-700 mx-2 p-2">
-            <div data-type="template" class="hidden w-full grid grid-cols-ost-list items-center bg-main-600 hover:bg-lighter-main-600 transition transition-colors p-2 rounded-lg">
-                <img class="border-lg aspect-square object-cover w-24 rounded-lg p-1" src="">
-                <div>
-                    <h1 id="relation-show-name" class="text-xl font-medium text-black dark:text-white">-</h1>
-                    <h1 id="relation-show-alt-name"  class="text-xl font-medium text-main-300">-</h1>
-                </div>
-                <div>
-                    <h1 id="relation-show-type" class="text-xl font-medium text-black dark:text-white">-</h1>
-                </div>
-            </div>
-        </div>
-        <div class="rounded-lg bg-main-700 p-2">
+<div class="flex gap-x-8 mx-auto lg:py-0 container text-black dark:text-white">
+    <div class="mt-20 w-1/4 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div class="flex justify-center bg-white dark:bg-lighter-main-950 rounded w-full p-0">
+            <audio controls class="p-2 m-2">
+                <source src="/sample test/out.opus" type="audio/ogg; codecs=opus"/>
+            </audio>
         </div>
     </div>
+    <div class="mt-20 w-3/4 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div id="song-information" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 110c23.2 0 42 18.8 42 42s-18.8 42-42 42-42-18.8-42-42 18.8-42 42-42zm56 254c0 6.6-5.4 12-12 12h-88c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h12v-64h-12c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h64c6.6 0 12 5.4 12 12v100h12c6.6 0 12 5.4 12 12v24z"/></svg>
+                SONG INFORMATION
+                <button class="ml-auto invisible group-hover:visible">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                </button>
+            </h1>
+        </div>
+        <div class="bg-white dark:bg-lighter-main-950 rounded w-full p-0">
+            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+                SONG RATING
+            </h1>
+            <div class="flex justify-center">
+                <div class="flex bg-main-800 rounded px-2 m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 376.4l.1-.1 26.4 14.1 85.2 45.5-16.5-97.6-4.8-28.7 20.7-20.5 70.1-69.3-96.1-14.2-29.3-4.3-12.9-26.6L288.1 86.9l-.1 .3V376.4zm175.1 98.3c2 12-3 24.2-12.9 31.3s-23 8-33.8 2.3L288.1 439.8 159.8 508.3C149 514 135.9 513.1 126 506s-14.9-19.3-12.9-31.3L137.8 329 33.6 225.9c-8.6-8.5-11.7-21.2-7.9-32.7s13.7-19.9 25.7-21.7L195 150.3 259.4 18c5.4-11 16.5-18 28.8-18s23.4 7 28.8 18l64.3 132.3 143.6 21.2c12 1.8 22 10.2 25.7 21.7s.7 24.2-7.9 32.7L438.5 329l24.6 145.7z"/></svg>
+                    <h1 class="flex p-2 font-bold text-lg">Score</h1>
+                    <h1 id="score-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
+                </div>
+                <div class="flex bg-main-800 rounded px-2 m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"/></svg><h1 class="flex p-2 font-bold text-lg">Top rank</h1>
+                    <h1 id="top-rank-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
+                </div>
+                <div class="flex bg-main-800 rounded px-2 m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg><h1 class="flex p-2 font-bold text-lg">Popularity rank</h1>
+                    <h1 id="popular-rank-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
+                </div>
+                <div class="flex bg-main-800 rounded px-2 m-2">
+                    <h1 class="flex p-2 font-bold text-lg">Members</h1>
+                    <h1 id="members-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
+                </div>
+            </div>
+        </div>
+        <div id="relations" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>
+                RELATIONS
+                <button class="ml-auto invisible group-hover:visible">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                </button>
+            </h1>
+        </div>
+        <div id="external-link" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M326.6 185.4c59.7 59.8 58.9 155.7 .4 214.6-.1 .1-.2 .3-.4 .4l-67.2 67.2c-59.3 59.3-155.7 59.3-215 0-59.3-59.3-59.3-155.7 0-215l37.1-37.1c9.8-9.8 26.8-3.3 27.3 10.6 .6 17.7 3.8 35.5 9.7 52.7 2 5.8 .6 12.3-3.8 16.6l-13.1 13.1c-28 28-28.9 73.7-1.2 102 28 28.6 74.1 28.7 102.3 .5l67.2-67.2c28.2-28.2 28.1-73.8 0-101.8-3.7-3.7-7.4-6.6-10.3-8.6a16 16 0 0 1 -6.9-12.6c-.4-10.6 3.3-21.5 11.7-29.8l21.1-21.1c5.5-5.5 14.2-6.2 20.6-1.7a152.5 152.5 0 0 1 20.5 17.2zM467.5 44.4c-59.3-59.3-155.7-59.3-215 0l-67.2 67.2c-.1 .1-.3 .3-.4 .4-58.6 58.9-59.4 154.8 .4 214.6a152.5 152.5 0 0 0 20.5 17.2c6.4 4.5 15.1 3.8 20.6-1.7l21.1-21.1c8.4-8.4 12.1-19.2 11.7-29.8a16 16 0 0 0 -6.9-12.6c-2.9-2-6.6-4.9-10.3-8.6-28.1-28.1-28.2-73.6 0-101.8l67.2-67.2c28.2-28.2 74.3-28.1 102.3 .5 27.8 28.3 26.9 73.9-1.2 102l-13.1 13.1c-4.4 4.4-5.8 10.8-3.8 16.6 5.9 17.2 9 35 9.7 52.7 .5 13.9 17.5 20.4 27.3 10.6l37.1-37.1c59.3-59.3 59.3-155.7 0-215z"/></svg>
+                EXTERNAL LINK
+                <button class="ml-auto invisible group-hover:visible">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                </button>
+            </h1>
+        </div>
+        
+    </div>
 </div>
+<script src="/scripts/moment.min.js"></script>
 <script>
     const ost_id = <%- ost_id %>;
-</script>
-<script>
-    function setHeartsColor(idx) {
-        for (var i = 0; i < 10; ++i) {
-            const halfheartElm = document.getElementById(`halfheart-${i}`);
 
-            if (i < idx) {
-                halfheartElm.classList.add("fill-red-500");
-            } else {
-                halfheartElm.classList.remove("fill-red-500");
+    function loadEjsTemplateFromFile(uri) {
+        return new Promise((res, rej) => {
+            fetch(uri).then((r) => {
+                r.text().then((t) => {
+                    res(t);
+                })
+            }).catch((err) => {
+                rej(err);
+            })
+        })
+    }
+
+    Promise.allSettled([
+        graphqlQuery(`
+        {
+            ost(id: ${ost_id}) {
+                name
+                alternate_name
+                length
+                short_length
+                rating
+                user_rating
+                rating_count
+                top_rank
+                popular_rank
+                relations {
+                show {
+                    native
+                    preferred
+                    medium
+                }
+                type
+                number
+                }
+                links {
+                type
+                url
+                }
             }
         }
-    }
+        `),
+        loadEjsTemplateFromFile("/templates/ost-song-info-row.ejs"),
+        loadEjsTemplateFromFile("/templates/ost-relations-anime-entry.ejs"),
+        loadEjsTemplateFromFile("/templates/ost-external-link-entry.ejs")
+    ]).then((res) => {
+        let song_information = document.getElementById("song-information");
 
-    function setScore(score, send = true) {
-        setHeartsColor(Math.floor(score / 10));
-        document.getElementById("anime-score").innerHTML = score ? score : "Not rated.";
+        if (res[0].value.data.ost?.name)
+            song_information.innerHTML += ejs.render(res[1].value, {
+                name: "Name",
+                value: res[0].value.data.ost.name
+            });
 
-        if (!send)
-            return;
+        if (res[0].value.data.ost?.alternate_name)
+            song_information.innerHTML += ejs.render(res[1].value, {
+                name: "Alternate name",
+                value: res[0].value.data.ost.alternate_name
+            });
 
-        setOstScore(ost_id, score);
-    }
-</script>
-<script>
-    //Source : https://stackoverflow.com/a/8260383
-    function youtubeParser(url){
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-        var match = url.match(regExp);
-        return (match&&match[7].length==11)? match[7] : false;
-    }
+        if (res[0].value.data.ost?.length)
+            song_information.innerHTML += ejs.render(res[1].value, {
+                name: "Length",
+                value: moment.utc(res[0].value.data.ost.length * 1000).format("mm:ss")
+            });
 
-    function setPlayer(url) {
-        if ((id = youtubeParser(url))) {
-            var ytbPlayer = document.getElementById("youtube-player");
-            ytbPlayer.src = `https://www.youtube.com/embed/${id}`;
-            ytbPlayer.classList.remove("hidden");
-            return;
-        }
-    }
+        if (res[0].value.data.ost?.short_length)
+            song_information.innerHTML += ejs.render(res[1].value, {
+                name: "Short length (TV size)",
+                value: moment.utc(res[0].value.data.ost.short_length * 1000).format("mm:ss")
+            });
 
-    function setOstInformation(ost) {
-        console.log(ost);
+        console.log(res[0].value)
 
-        setPlayer(ost.url);
+        if (res[0].value.data.ost?.rating !== null)
+            document.getElementById("score-value").innerHTML = res[0].value.data.ost.rating;
 
-        const songTitle = document.getElementById("song-title");
-        const songAltTitle = document.getElementById("song-alternate-title");
-        songTitle.href = ost.url;
-        songAltTitle.href = ost.url;
-        
-        songTitle.innerHTML = ost.name;
-        songAltTitle.innerHTML = ost.alternate_name;
+        if (res[0].value.data.ost?.top_rank !== null)
+            document.getElementById("top-rank-value").innerHTML = res[0].value.data.ost.top_rank;
 
-        if (ost.alternate_name)
-            songAltTitle.parentElement.classList.remove("hidden");
+        if (res[0].value.data.ost?.popular_rank !== null)
+            document.getElementById("popular-rank-value").innerHTML = res[0].value.data.ost.popular_rank;
 
-        document.getElementById("song-length").innerHTML = `Length: ${new Date(ost.length * 1000).toISOString().substr(14, 5)}`;
-        document.getElementById("song-short-length").innerHTML = ost.short_length ? `Short length: ${new Date(ost.short_length * 1000).toISOString().substr(14, 5)}` : "Short length : None";
-        
-        document.getElementById("anime-average").innerHTML = `Rating: ${ost.score_count ? ost.score_acc / ost.score_count : "Not rated."}`;
-        document.getElementById("anime-count").innerHTML = `${ost.score_count} users.`;
-    }
+        if (res[0].value.data.ost?.rating_count !== null)
+            document.getElementById("members-value").innerHTML = res[0].value.data.ost.rating_count;
 
-    function addOstRelation(relation) {
-        const relationElm = document.querySelector("div[data-type='template']").cloneNode(true);
-        const relationContainer = document.getElementById("relation-container");
+        let relations = document.getElementById("relations");
 
-        getShowById(relation.show_id).then((j) => {
-            relationElm.querySelector("img").src = j.large;
-            relationElm.querySelector("#relation-show-name").innerHTML = j.native;
-            relationElm.querySelector("#relation-show-alt-name").innerHTML = j.preferred;
-       });
-
-        var type = "";
-        switch (relation.type) {
-            case 0:
-                type = `Opening ${relation.num}`;
-                break;
-            case 1:
-                type = `Ending ${relation.num}`;
-                break;
-            case 2:
-                type = `Insert ${relation.num}`;
-                break;
+        for (relation of res[0].value.data.ost.relations) {
+            relations.innerHTML += ejs.render(res[2].value, {
+                native: relation.show.native,
+                preferred: relation.show.preferred,
+                medium: relation.show.medium,
+                type: `${relation.type} ${relation.number}`
+            })
         }
 
-        relationElm.querySelector("#relation-show-type").innerHTML = type;
+        let external_link = document.getElementById("external-link");
 
-        relationElm.classList.remove("hidden");
-
-        relationContainer.appendChild(relationElm);
-    }
-
-    getOstById(ost_id).then((ost) => {
-        setOstInformation(ost);
-        getOstScore(ost.id).then((score) => {
-            setScore(score.score ? score.score : 50, false);
-        }).catch((r) => {
-            console.log(r);
-        })
-    }).catch((r) => {
-        console.log(r);
-    })
-
-    getOstRelationsById(ost_id).then((relations) => {
-        for (var i = 0; i < relations.length; ++i) {
-            addOstRelation(relations[i]);
+        for (link of res[0].value.data.ost.links) {
+            external_link.innerHTML += ejs.render(res[3].value, {
+                url: link.url,
+                type: link.type
+            });
         }
-    }).catch((r) => {
-        console.log(r);
     })
 </script>

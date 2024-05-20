@@ -39,14 +39,22 @@ require("fs").readFile(process.argv[2], "utf8", (err, data) => {
                 shortlength = parseInt(shortlength[0]) * 60 + parseInt(shortlength[1]);
 
                 pool.getConnection().then((conn) => {
-                    conn.query("INSERT INTO osts (name, url, length, creation_date, update_date, published_date, short_length, alternate_name) VALUES (?, ?, ?, NOW(), NOW(), ?, ?, ?) RETURNING id", [
+                    conn.query("INSERT INTO osts (name, length, creation_date, update_date, published_date, short_length, alternate_name) VALUES (?, ?, NOW(), NOW(), ?, ?, ?) RETURNING id", [
                         cols[0],
-                        cols[2],
                         length,
                         null,
                         shortlength ? shortlength : null,
                         cols[1] ? cols[1] : null
                     ]).then((result) => {
+                        conn.query("INSERT INTO links (type, url) VALUES (?, ?) RETURNING id", [
+                            0,
+                            cols[2]
+                        ]).then((r) => {
+                            conn.query("INSERT INTO link_ost (link_id, ost_id) VALUES (?, ?)", [
+                                r[0].id,
+                                result[0].id
+                            ])
+                        });
                         
                         conn.query("SELECT id FROM shows WHERE id=?", [parseInt(cols[5])]).then((ids) => {
                             if (ids.length > 0) {

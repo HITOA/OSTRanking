@@ -1,0 +1,10 @@
+<a href="/ost/<%- id %>">
+    <div class="w-full grid grid-cols-main-list bg-white hover:bg-main-100 dark:bg-lighter-main-950 hover:dark:bg-main-800 mt-0 items-center transition transition-colors">
+        <div class="p-2 pb-0"><strong>#<%- index %></strong></div>
+        <div class="p-2 pb-0 h-20"><img class="border-lg aspect-square object-cover w-16 rounded p-0" src="<%- medium %>"></div>
+        <div class="p-2 pb-0"><div id="anime-title-<%- i%>"><%- native %></div><div id="anime-alt-title-<%- i%>" class="text-main-300 hidden md:block"><%- preferred %></div></div>
+        <div class="p-2 pb-0"><div id="song-title-<%- i%>"><%- name %></div><div id="song-alt-title-<%- i%>" class="text-main-300 hidden md:block"><%- alternate_name %></div></div>
+        <div id="score-<%- i%>" class="p-2 pb-0"><%- rating %></div>
+        <div id="type-<%- i%>" class="p-2 pb-0"><%- type %></div>
+    </div>
+</a>

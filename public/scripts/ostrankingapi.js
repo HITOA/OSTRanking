@@ -1,11 +1,69 @@
-function getOsts(start, count, order) {
+function graphqlQuery(query) {
+    return new Promise((res, rej) => {
+        fetch("/api", {
+            method: "POST",
+            body: JSON.stringify({
+                query: query
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((r) => {
+            r.json().then((j) => {
+                res(j);
+            }).catch((err) => {
+                rej({
+                    err: err
+                });
+            })
+        }).catch((err) => {
+            rej({
+                err: err
+            });
+        })
+    })
+}
+
+function getOsts(start, count, order, ascendant) {
     return new Promise((res, rej) => {
         fetch("/api/ost/gets", {
             method: "POST",
             body: JSON.stringify({
                 start: start,
                 count: count,
-                order: order
+                order: order,
+                ascendant: ascendant
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((r) => {
+            r.json().then((j) => {
+                if (r.status === 200)
+                    return res(j);
+                else
+                    return rej(j);
+            }).catch((err) => {
+                rej({
+                    err: err
+                });
+            })
+        }).catch((err) => {
+            rej({
+                err: err
+            });
+        })
+    })
+}
+
+function matchOsts(start, count, expression) {
+    return new Promise((res, rej) => {
+        fetch("/api/ost/match", {
+            method: "POST",
+            body: JSON.stringify({
+                start: start,
+                count: count,
+                expression: expression
             }),
             headers: {
                 "Content-Type": "application/json",

@@ -71,10 +71,10 @@ exports.gets = function (app, data) {
                     query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 case "Popular":
-                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_count ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY popular_rank ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 case "Top":
-                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY score_acc / NULLIF(score_count, 0) ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
+                    query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY top_rank ${data.ascendant ? "ASC" : "DESC"}, creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
                     break;
                 default:
                     query = `SELECT * FROM osts INNER JOIN ost_scores_total ON ost_id = osts.id ORDER BY creation_date ${data.ascendant ? "ASC" : "DESC"} LIMIT ?, ?`;
@@ -82,6 +82,36 @@ exports.gets = function (app, data) {
             }
 
             conn.query(query, [
+                data.start,
+                data.count
+            ]).then((r) => {
+                conn.release();
+                res(r);
+            }).catch((err) => {
+                conn.release();
+                console.log(err);
+                rej("There is a problem with the server.")
+            });
+        }).catch((err) => {
+            console.log(err);
+            rej("There is a problem with the server.");
+        })
+    });
+}
+
+exports.match = function (app, data) {
+    return new Promise((res, rej) => {
+        if (typeof(data.start) != "number")
+            return rej("Start is needed.");
+        if (typeof(data.count) != "number")
+            return rej("Count is needed");
+        if (!data.expression)
+            return rej("Expression is needed");
+    
+        app.get("database pool").getConnection().then((conn) => {
+            conn.query(`SELECT *, MATCH(name,alternate_name) AGAINST(? IN BOOLEAN MODE) + MATCH(native,preferred,english) AGAINST(? IN BOOLEAN MODE) AS relevance FROM show_ost INNER JOIN osts ON osts.id = ost_id INNER JOIN shows ON shows.id = show_id ORDER BY relevance DESC LIMIT ?, ?`, [
+                data.expression,
+                data.expression,
                 data.start,
                 data.count
             ]).then((r) => {

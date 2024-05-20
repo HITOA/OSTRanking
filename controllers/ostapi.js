@@ -89,6 +89,26 @@ router.post("/ost/gets", (req, res) => {
     });
 });
 
+router.post("/ost/match", (req, res) => {
+    if (typeof(req.body.start) != "number")
+        return res.status(400).send({ message: "Start argument not provided." });
+
+    if (typeof(req.body.count) != "number")
+        return res.status(400).send({ message: "Count argument not provided." });
+
+    if (!req.body?.expression)
+        return res.status(400).send({ message: "Expression argument not provided." });
+
+    ost.match(req.app, req.body).then((r) => {
+        res.send(r);
+    }).catch((msg) => {
+        res.status(400).send({
+            message: msg
+        });
+    });
+});
+
+
 router.post("/ost/relation/gets", (req, res) => {
     if (typeof(req.body.ost_id) != "number")
         return res.status(400).send({ message: "OST id not provided." });

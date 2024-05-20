@@ -4,7 +4,7 @@ router.get("/community", (req, res) => {
     res.render("layout", {
         title: "OSTRanking - Community",
         page: "./pages/community",
-        privilege: req.user?.privilege,
+        privilege: req.user?.privilege ? req.user?.privilege : 0,
         ...req.info
     });
 });

@@ -1,0 +1,105 @@
+enum OstType {
+    Opening
+    Ending
+    Insert
+}
+
+enum OrderDirection {
+    Ascendant
+    Descendant
+}
+
+enum OrderType {
+    Top
+    Popular
+    New
+}
+
+enum LinkType {
+    Youtube,
+    SoundCloud,
+    Spotify
+}
+
+type Relation {
+    show: Show!
+    ost: Ost!
+    type: OstType!
+    number: Int!
+}
+
+type Link {
+    type: LinkType!
+    url: String!
+}
+
+type Show {
+    id: ID!
+    native: String!
+    preferred: String!
+    english: String!
+    medium: String!
+    large: String!
+    relations: [Relation!]!
+}
+
+type Ost {
+    id: ID!
+    name: String!
+    alternate_name: String
+    sample_audio_url: String
+    length: Int!
+    short_length: Int
+    top_rank: Int
+    popular_rank: Int
+    rating: Int
+    user_rating: Int
+    rating_count: Int
+    relations: [Relation!]!
+    links: [Link!]!
+}
+
+input OstSearchInput {
+    expression: String
+    order_direction: OrderDirection
+    order_type: OrderType
+    start: Int
+    count: Int
+}
+
+input OstInput {
+    name: String!
+    alternate_name: String
+    sample_audio_url: String
+    length: Int!
+    short_length: Int
+}
+
+input RelationInput {
+    ost_id: ID
+    show_id: ID
+    type: OstType
+    number: Int
+}
+
+input RatingInput {
+    ost_id: ID
+    rating: Int
+}
+
+type Query {
+    ost(id: ID): Ost
+    osts(input: OstSearchInput): [Ost!]!
+    show(id: ID): Show
+}
+
+type Mutation {
+    add_ost(input: OstInput): Ost
+    add_show(id: ID): Show
+    add_relation(input: RelationInput): Relation
+    edit_ost(input: OstInput): Ost
+    edit_relation(input: RelationInput): Relation
+    remove_ost(id: ID): Ost
+    remove_show(id: ID): Show
+    set_user_rating(input: RatingInput): Ost
+}
