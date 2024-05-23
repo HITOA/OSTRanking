@@ -62,13 +62,13 @@ CREATE TABLE IF NOT EXISTS scores(
 
 CREATE TABLE IF NOT EXISTS ost_scores_total(
     ost_id INT NOT NULL, score_acc INT NOT NULL, 
-    score_count INT NOT NULL, PRIMARY KEY (ost_id), 
+    score_count INT NOT NULL, PRIMARY KEY (ost_id),
     FOREIGN KEY (ost_id) REFERENCES osts(id));
 
 CREATE TABLE IF NOT EXISTS community_action(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, creation_date DATETIME NOT NULL,
-    action_type SMALLINT NOT NULL, info JSON NOT NULL,
+    action_type SMALLINT NOT NULL, action_status SMALLINT NOT NULL DEFAULT 0, info JSON NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id));
     
 CREATE OR REPLACE TRIGGER insert_ost_scores_total AFTER INSERT ON osts FOR EACH ROW INSERT INTO ost_scores_total (ost_id, score_acc, score_count) VALUES (NEW.id, 0, 0);

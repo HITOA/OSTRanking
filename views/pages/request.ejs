@@ -1,113 +1,202 @@
-<div class="grid place-content-center h-screen">
-    <form id="request-form" class="base-container" onsubmit="return false">
-        <h1 class="text-black dark:text-white text-medium font-bold leading-tight text-2xl">Request OST</h1>
-        <div id="form-notification" class="base-notification">
+<div class="grid place-content-center h-screen w-full">
+    <div class="base-container text-white max-w-3xl">
+        <h1 class="text-black dark:text-white text-medium font-bold leading-tight text-2xl">Request Song</h1>
+        <div id="notification" class="base-notification my-4">
             MESSAGE
         </div>
-        <div class="flex">
+        <div class="flex mt-2">
             <div class="mr-1 w-full">
-                <label for="name" class="base-label">Music name</label>
-                <input type="text" id="name" class="base-input" name="name" autocomplete="off">
+                <label class="base-label flex">Name<p class="text-red-500">&nbsp;*</p></label>
+                <input id="name" type="text" class="base-input" autocomplete="off">
             </div>
             <div class="ml-1 w-full">
-                <label for="alternate-name" class="base-label">Music alternate name (optional)</label>
-                <input type="text" id="alternate-name" class="base-input" name="alternate-name" autocomplete="off">
+                <label class="base-label">Alternate name</label>
+                <input id="alternate-name" type="text" class="base-input" autocomplete="off">
             </div>
-        </div>
-        <div>
-            <label for="url" class="base-label outline-0">Music url</label>
-            <input type="text" id="url" class="base-input" name="url" autocomplete="off">
         </div>
         <div class="flex">
             <div class="mr-1 w-full">
-                <label for="length" class="base-label outline-0">Music full length</label>
-                <input type="time" step="1" id="length" class="base-input" name="length" autocomplete="off">
+                <label class="base-label flex">Length (mm:ss)<p class="text-red-500">&nbsp;*</p></label>
+                <input id="length" type="text" class="base-input" autocomplete="off">
             </div>
             <div class="ml-1 w-full">
-                <label for="short-length" class="base-label outline-0">Music short length (optional)</label>
-                <input type="time" step="1" id="short-length" class="base-input" name="short-length" autocomplete="off">
+                <label class="base-label">Short length (TV size)</label>
+                <input id="short-length" type="text" class="base-input" autocomplete="off">
             </div>
         </div>
-        <h2 class="text-black dark:text-white text-medium font-bold leading-tight text-2xl">Relation</h2>
-        <div class="flex">
-            <div class="mr-1">
-                <label for="show-id" class="base-label outline-0">Show ID</label>
-                <input type="number" id="show-id" class="base-input" name="show-id" autocomplete="off">
-            </div>
-            <div class="mx-1">
-                <label for="type" class="base-label outline-0">Type</label>
-                <select id="type" class="base-input" name="type" name="">
-                    <option value="0">Opening</option>
-                    <option value="1">Ending</option>
-                    <option value="2">Insert</option>
-                </select>
-            </div>
-            <div class="ml-1">
-                <label for="number" class="base-label outline-0">Number</label>
-                <input type="number" id="number" class="base-input" name="number" value="1" autocomplete="off">
-            </div>
+        <h1 class="text-black dark:text-white text-medium font-bold leading-tight text-xl mt-4">Relations</h1>
+        <div id="relation-container">
+
         </div>
-        <button id="request-btn" class="base-btn">Request</button>
-    </form>
+        <div class="flex m-1 mx-2 p-1 md:p-2 mt-2 border-t border-main-200 rounded-b dark:border-main-600">
+            <h1 class="w-3/6 p-2 font-bold">Show ID</h1>
+            <input id="show-id" class="base-input mr-2" value="" autocomplete="off">
+            <button onclick="addRelation()" class="base-btn mx-2">Add Show</button>
+        </div>
+        <button onclick="submitSongRequest()" class="base-btn p-1">Submit</button>
+    </div>
 </div>
 <script>
-    const requestbtn = document.getElementById("request-btn");
-    
-    const nameinput = document.getElementById("name");
-    const altnameinput = document.getElementById("alternate-name");
-    const urlinput = document.getElementById("url");
-    const lengthinput = document.getElementById("length");
-    const slengthinput = document.getElementById("short-length");
+    let relations = {};
+    let c = 0;
 
-    const showidinput = document.getElementById("show-id");
-    const typeinput =  document.getElementById("type");
-    const numberinput = document.getElementById("number");
+    function loadEjsTemplateFromFile(uri) {
+        return new Promise((res, rej) => {
+            fetch(uri).then((r) => {
+                r.text().then((t) => {
+                    res(t);
+                })
+            }).catch((err) => {
+                rej(err);
+            })
+        })
+    }
 
-    const formnotif = document.getElementById("form-notification");
+    function addRelation() {
+        let show_id = parseInt(document.getElementById("show-id").value);
+        if (!show_id)
+            return;
 
-    requestbtn.addEventListener("click", () => {
-        var l = lengthinput.value.split(':');
-        l = parseInt(l[0]) * 3600 + parseInt(l[1]) * 60 + parseInt(l[2]);
+        let id = c++;
 
+        let relation_container = document.getElementById("relation-container");
+        getAnimeInfoById(show_id).then((show_data) => {
+            loadEjsTemplateFromFile("/templates/editable-relation.ejs").then((r)=>{
+                if (!show_data.data)
+                    return;
+
+                relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
+                    id: id,
+                    show_id: show_id,
+                    medium: show_data.data.Media.coverImage.medium,
+                    native: show_data.data.Media.title.native,
+                    preferred: show_data.data.Media.title.userPreferred
+                }));
+
+                relations[id] = {
+                    show: {
+                        id: show_id,
+                        large: show_data.data.Media.coverImage.large,
+                        medium: show_data.data.Media.coverImage.medium,
+                        native: show_data.data.Media.title.native,
+                        preferred: show_data.data.Media.title.userPreferred,
+                        english: show_data.data.Media.title.english
+                    },
+                    type: "Opening",
+                    number: 1
+                };
+            });
+        });
+    }
+
+    function removeRelation(id) {
+        if (!relations[id])
+            return
+
+        let element = document.getElementById(`relation-${id}`);
+        element.parentElement.removeChild(element);
+        delete relations[id];
+    }
+
+    function updateRelationType(id, element) {
+        if (!relations[id])
+            return
+        
+        relations[id].type = element.value;
+    }
+
+    function updateRelationNumber(id, element) {
+        if (!relations[id])
+            return
+        
+        relations[id].number = parseInt(element.value);
+    }
+
+    function notify(msg, success) {
+        const notification = document.getElementById("notification");
+        notification.innerHTML = msg;
+
+        if (success === true) {
+            notification.classList.remove("base-notification-wrong");
+            notification.classList.add("base-notification-right");
+        } else {
+            notification.classList.remove("base-notification-right");
+            notification.classList.add("base-notification-wrong");
+        }
+    }
+
+    function nullIfEvaluateToFalse(f) {
+        return f ? f : null;
+    }
+
+    function mmssToDate(mmss) {
+        if (typeof(mmss) !== "string")
+            return null;
+
+        let v = mmss.split(':');
+        if (v.length != 2)
+            return null;
+        
+        let mm = parseInt(v[0]);
+        let ss = parseInt(v[1]);
+        if (!mm || !ss)
+            return null;
+
+        return new Date(null, null, null, null, mm, ss);
+    }
+
+    function submitSongRequest() {
         let data = {
-            ost: {
-                name: nameinput.value,
-                url: urlinput.value,
-                length: l
-            },
-            show_ost: [
-                {show_id: showidinput.value, type: parseInt(typeinput.value), number: parseInt(numberinput.value)}
-            ]
+            name: document.getElementById("name").value,
+            alternate_name: nullIfEvaluateToFalse(document.getElementById("alternate-name").value),
+            length: document.getElementById("length").value,
+            short_length: nullIfEvaluateToFalse(document.getElementById("short-length").value)
         };
 
-        if (altnameinput.value)
-            data.ost.alternate_name = altnameinput.value;
-        if (slengthinput.value) {
-            var sl = slengthinput.value.split(':');
-            sl = parseInt(sl[0]) * 3600 + parseInt(sl[1]) * 60 + parseInt(sl[2]);
-            data.ost.short_length = sl;
+        if (!data.name) {
+            notify("Song name isn't optional!", false);
+            return;
+        }
+        if (!data.length) {
+            notify("Song length isn't optional!", false);
+            return;
         }
 
-        fetch("/api/community/request/add", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((res) => {
-            res.json().then((v)=>{
-                formnotif.innerHTML = v.message;
-            })
+        data.length = mmssToDate(data.length);
+        data.short_length = mmssToDate(data.short_length);
 
-            if (res.status == 200) {
-                formnotif.classList.remove("base-notification-wrong");
-                formnotif.classList.add("base-notification-right");
-            } else {
-                formnotif.classList.remove("base-notification-right");
-                formnotif.classList.add("base-notification-wrong");
+        if (data.length === null) {
+            notify("Song length isn't valid.", false);
+            return;
+        }
+        if (data.short_length)
+            data.short_length = data.short_length.getMinutes() * 60 + data.short_length.getSeconds();
+
+        data.length = data.length.getMinutes() * 60 + data.length.getSeconds();
+
+        data.relations = [];
+
+        for (const [key, value] of Object.entries(relations)) {
+            data.relations.push(value);
+        }
+
+        if (!data.relations.length) {
+            notify("There should be at least one relation.", false);
+            return;
+        }
+
+        graphqlQuery(`
+        mutation($data: String!) {
+            add_community_action(input: {
+                type: OstAdd
+                data: $data
+            }) {
+                id
             }
-        }).catch((err) => {
-            console.log(err);
+        }`, {
+            data: JSON.stringify(data)
+        }).then((r) => {
+            notify("Song request submited successfully", true);
         })
-    })
+    }
 </script>

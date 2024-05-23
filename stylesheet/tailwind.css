@@ -9,7 +9,7 @@
     }
 
     .base-container {
-        @apply bg-white dark:bg-lighter-main-950 rounded space-y-4 md:space-y-6 p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
+        @apply bg-white dark:bg-lighter-main-950 rounded p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
     }
 
     .base-label {

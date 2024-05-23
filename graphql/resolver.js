@@ -1,6 +1,34 @@
 const Anilist = require("anilist-node");
 
 module.exports = {
+    Action: {
+        user(obj, args, context, info ) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT id, name, privilege, trust FROM users WHERE id = ?`, [
+                        obj.user_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        type(obj, args, context, info) {
+            return ["OstAdd"][obj.action_type];
+        },
+        status(obj, args, context, info) {
+            return ["Pending", "Accepted", "Declined"][obj.action_status];
+        },
+        data(obj, args, context, info) {
+            return JSON.stringify(obj.info);
+        }
+    },
     Relation: {
         show(obj, args, context, info) {
             return new Promise((res, rej) => {
@@ -259,7 +287,24 @@ module.exports = {
                 }).catch((err) => {
                     res(undefined);
                 })
-            })
+            });
+        },
+        action(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM community_action WHERE id = ?`, [
+                        args.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0]);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            });
         }
     },
     Mutation: {
@@ -335,6 +380,31 @@ module.exports = {
                     ]).then((r) => {
                         conn.release();
                         res(args.input.ost_id);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        add_community_action(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if (!context.req.isAuthenticated())
+                    throw new Error("Forbidden.");
+                
+                let type = ["OstAdd"].indexOf(args.input.type);
+
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`INSERT INTO community_action (user_id, action_type, action_status, info, creation_date) VALUES (?, ?, ?, ?, NOW()) RETURNING *`, [
+                    context.req.user?.id,
+                    type,
+                    0,
+                    args.input.data
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0]);
                     }).catch((err) => {
                         conn.release();
                         res(undefined);

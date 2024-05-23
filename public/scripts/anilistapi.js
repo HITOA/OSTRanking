@@ -16,6 +16,7 @@ function getAnimeInfoById(showid) {
                             title {
                                 native
                                 userPreferred
+                                english
                             }
                             coverImage {
                                 medium

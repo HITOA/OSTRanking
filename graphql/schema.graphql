@@ -21,6 +21,32 @@ enum LinkType {
     Spotify
 }
 
+enum ActionType {
+    OstAdd
+}
+
+enum ActionStatus {
+    Pending,
+    Accepted,
+    Declined
+}
+
+type User {
+    id: ID!
+    name: String!
+    privilege: Int!
+    trust: Int!
+}
+
+type Action {
+    id: ID!
+    user: User!
+    type: ActionType!
+    status: ActionStatus!
+    data: String!
+    creation_date: String!
+}
+
 type Relation {
     show: Show!
     ost: Ost!
@@ -87,10 +113,16 @@ input RatingInput {
     rating: Int
 }
 
+input ActionInput {
+    type: ActionType!
+    data: String!
+}
+
 type Query {
     ost(id: ID): Ost
     osts(input: OstSearchInput): [Ost!]!
     show(id: ID): Show
+    action(id: ID): Action
 }
 
 type Mutation {
@@ -102,4 +134,5 @@ type Mutation {
     remove_ost(id: ID): Ost
     remove_show(id: ID): Show
     set_user_rating(input: RatingInput): ID
+    add_community_action(input: ActionInput): Action
 }

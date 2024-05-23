@@ -1,9 +1,10 @@
-function graphqlQuery(query) {
+function graphqlQuery(query, variables = {}) {
     return new Promise((res, rej) => {
         fetch("/api", {
             method: "POST",
             body: JSON.stringify({
-                query: query
+                query: query,
+                variables: variables
             }),
             headers: {
                 "Content-Type": "application/json",

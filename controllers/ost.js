@@ -5,19 +5,8 @@ router.get("/ost/:id", (req, res) => {
         title: "OSTRanking",
         page: "./pages/ost",
         ost_id: req.params.id,
+        action_id: -1,
         is_auth: req.isAuthenticated(),
-        ...req.info
-    });
-});
-
-router.get("/ost/:id/rating", (req, res) => {
-    if (!req.isAuthenticated())
-        return res.redirect("/");
-
-    res.render("layout", {
-        title: "OSTRanking - Rating",
-        page: "./pages/rating",
-        ost_id: req.params.id,
         ...req.info
     });
 });
