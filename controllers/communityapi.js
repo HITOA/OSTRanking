@@ -66,7 +66,7 @@ router.post("/community/request/add", async (req, res) => {
 
 router.post("/community/edit", async (req, res) => {
     if ((req.user?.privilege & 1) != 1)
-        return res.status(403).send({ message: "Forbidden" });
+        return res.redirect("/");
 
     if (typeof(req.body.action_id) != "number")
         return res.status(400).send({ message: "Action ID argument not provided." });

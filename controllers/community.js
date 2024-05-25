@@ -10,7 +10,7 @@ router.get("/community", (req, res) => {
 });
 
 router.get("/community/preview/:id", (req, res) => {
-    if ((req.user?.privilege & 1) != 1)
+    if (!req.isAuthenticated())
         return res.status(403).send({ message: "Forbidden" });
     
     res.render("layout", {

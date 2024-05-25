@@ -93,24 +93,29 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
+        <div class="m-4">
+            <div id="ost-edit-song-information-notification" class="base-notification my-4">
+                MESSAGE
+            </div>
+        </div>
         <div class="flex m-1 mx-2">
             <h1 class="w-3/6 p-2 font-bold">Name</h1>
-            <input class="base-input mr-2" value="" autocomplete="off">
+            <input id="ost-edit-song-information-name" class="base-input mr-2" value="" autocomplete="off">
         </div>
         <div class="flex m-1 mx-2">
             <h1 class="w-3/6 p-2 font-bold">Alternate name</h1>
-            <input class="base-input mr-2" value="" autocomplete="off">
+            <input id="ost-edit-song-information-alternate-name" class="base-input mr-2" value="" autocomplete="off">
         </div>
         <div class="flex m-1 mx-2">
             <h1 class="w-3/6 p-2 font-bold">Length</h1>
-            <input class="base-input mr-2" value="" autocomplete="off">
+            <input id="ost-edit-song-information-length" class="base-input mr-2" value="" autocomplete="off">
         </div>
         <div class="flex m-1 mx-2">
             <h1 class="w-3/6 p-2 font-bold">Short length (TV size)</h1>
-            <input class="base-input mr-2" value="" autocomplete="off">
+            <input id="ost-edit-song-information-short-length" class="base-input mr-2" value="" autocomplete="off">
         </div>
         <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
-            <button class="base-btn mx-2">Accept</button>
+            <button onclick="updateEditedSongInfo()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('song-information')"  class="base-btn mx-2">Cancel</button>
         </div>
     </div>
@@ -125,31 +130,21 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
-        <div class="grid grid-cols-ost-list items-center bg-main-800 hover:bg-lighter-main-800 transition transition-colors p-1 m-2 rounded">
-            <img class="border-lg aspect-square object-cover w-20 rounded-lg p-1" src="/imgs/default_thumbnail.png">
-            <div>
-                <h1 id="relation-show-name" class="text-xl font-medium text-black dark:text-white">Anime_Native</h1>
-                <h1 id="relation-show-alt-name"  class="text-xl font-medium text-main-300">Anime_Preferred</h1>
+        <div class="m-4">
+            <div id="ost-edit-relations-notification" class="base-notification my-4">
+                MESSAGE
             </div>
-            <div class="flex">
-                <select class="flex bg-main-800 hover:bg-lighter-main-800 rounded px-2 m-2 flex font-bold text-lg">
-                    <option selected>Opening</option>
-                    <option>Ending</option>
-                    <option>Insert</option>
-                </select>
-                <input type="number" class="base-input mr-2 w-20" value="1" autocomplete="off">
-                <button onclick="" class="ml-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-red-500 mr-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
-                </button>
-            </div>
+        </div>
+        <div id="ost-edit-relations-container">
+            
         </div>
         <div class="flex m-1 mx-2 p-1 md:p-2 mt-2 border-t border-main-200 rounded-b dark:border-main-600">
             <h1 class="w-3/6 p-2 font-bold">Show ID</h1>
-            <input class="base-input mr-2" value="" autocomplete="off">
-            <button class="base-btn mx-2">Add Show</button>
+            <input id="ost-edit-relations-show-id" class="base-input mr-2" value="" autocomplete="off">
+            <button onclick="addRelation()" class="base-btn mx-2">Add Show</button>
         </div>
         <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
-            <button class="base-btn mx-2">Accept</button>
+            <button onclick="updateEditedRelations()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('relations')"  class="base-btn mx-2">Cancel</button>
         </div>
     </div>
@@ -164,6 +159,11 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
+        <div class="m-4">
+            <div id="ost-edit-external-link-notification" class="base-notification my-4">
+                MESSAGE
+            </div>
+        </div>
         <div class="flex m-2">
             <select class="flex bg-main-800 hover:bg-lighter-main-800 rounded px-2 m-2 flex font-bold text-lg">
                 <option selected>Youtube</option>
@@ -184,10 +184,15 @@
         </div>
     </div>
 </div>
-<script src="/scripts/moment.min.js"></script>
+<script src="/scripts/time-utils.js"></script>
 <script>
     const ost_id = <%- ost_id %>;
     const action_id = <%- action_id %>;
+
+    let ost_data = {};
+    let relations = {};
+    let new_relations = {};
+    let c = 0;
 
     let score_selection = document.getElementById("score-selection");
     if (action_id === -1) {
@@ -203,6 +208,19 @@
                         rating: ${score * 10}
                     })
                 }`);
+        }
+    }
+
+    function notify(id, msg, success) {
+        const notification = document.getElementById(`ost-edit-${id}-notification`);
+        notification.innerHTML = msg;
+
+        if (success === true) {
+            notification.classList.remove("base-notification-wrong");
+            notification.classList.add("base-notification-right");
+        } else {
+            notification.classList.remove("base-notification-right");
+            notification.classList.add("base-notification-wrong");
         }
     }
 
@@ -284,58 +302,238 @@
         ostDataPromise = getActionOstData(action_id);
     }
 
+    function setEditModalInfo() {
+        if (ost_data.name)
+            document.getElementById("ost-edit-song-information-name").value = ost_data.name;
+
+        if (ost_data.alternate_name)
+            document.getElementById("ost-edit-song-information-alternate-name").value = ost_data.alternate_name;
+
+        if (ost_data.length)
+            document.getElementById("ost-edit-song-information-length").value = mmssFromSeconds(ost_data.length);
+
+        if (ost_data.short_length)
+            document.getElementById("ost-edit-song-information-short-length").value = mmssFromSeconds(ost_data.short_length);
+
+        let relation_container = document.getElementById("ost-edit-relations-container");
+        loadEjsTemplateFromFile("/templates/editable-relation.ejs").then((r)=>{
+            for (relation of ost_data.relations) {
+                let id = c++;
+                relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
+                    id: id,
+                    show_id: relation.show.id,
+                    medium: relation.show.medium,
+                    native: relation.show.native,
+                    preferred: relation.show.preferred
+                }));
+
+                document.getElementById(`relation-${id}-type`).value = relation.type;
+                document.getElementById(`relation-${id}-number`).value = relation.number;
+
+                relations[id] = relation;
+            }
+
+            new_relations = structuredClone(relations);
+        });
+    }
+
+    function updateEditedSongInfo() {
+        let edited_song_info = {};
+        
+        let name = document.getElementById("ost-edit-song-information-name").value;
+        let alternate_name = document.getElementById("ost-edit-song-information-alternate-name").value;
+        let length = mmssToDate(document.getElementById("ost-edit-song-information-length").value);
+        let short_length = mmssToDate(document.getElementById("ost-edit-song-information-short-length").value);
+
+        if (name === "") {
+            notify("song-information", "Name can't be empty.", false);
+            return;
+        }
+        if (alternate_name === "")
+            alternate_name = null;
+
+        if (length !== null)
+            length = length.getMinutes() * 60 + length.getSeconds();
+        if (short_length !== null)
+            short_length = short_length.getMinutes() * 60 + short_length.getSeconds();
+
+        if (length === null) {
+            notify("song-information", "Length is not valid.", false);
+            return;
+        }
+
+        if (name !== ost_data.name)
+            edited_song_info.name = name;
+        if (alternate_name !== ost_data.alternate_name)
+            edited_song_info.alternate_name = alternate_name;
+        if (length !== ost_data.length)
+            edited_song_info.length = length;
+        if (short_length !== ost_data.short_length)
+            edited_song_info.short_length = short_length;
+
+        if (Object.entries(edited_song_info).length <= 0)
+            return;
+
+        if (action_id === -1) {
+            //Make Request
+        } else {
+            for (const [key, value] of Object.entries(edited_song_info))
+                ost_data[key] = value;
+            
+            graphqlQuery(`
+            mutation($id: ID, $data: String!) {
+                edit_community_action(id: $id, data: $data)
+            }`, {
+                id: action_id,
+                data: JSON.stringify(ost_data)
+            }).then((r) => {
+                location.reload();
+            })
+        }
+    }
+
+    function updateEditedRelations() {
+        if (Object.entries(new_relations).length <= 0) {
+            notify("relations", "At least 1 relation is required.", false);
+            return;
+        }
+
+        if (action_id === -1) {
+            //Make Request
+        } else {
+            let r = [];
+
+            for (const [key, value] of Object.entries(new_relations)) {
+                r.push(value);
+            }
+
+            ost_data.relations = r;
+
+            graphqlQuery(`
+            mutation($id: ID, $data: String!) {
+                edit_community_action(id: $id, data: $data)
+            }`, {
+                id: action_id,
+                data: JSON.stringify(ost_data)
+            }).then((r) => {
+                location.reload();
+            })
+        }
+    }
+
+    function addRelation() {
+        let show_id = parseInt(document.getElementById("ost-edit-relations-show-id").value);
+        if (!show_id)
+            return;
+
+        let id = c++;
+
+        let relation_container = document.getElementById("ost-edit-relations-container");
+        getAnimeInfoById(show_id).then((show_data) => {
+            loadEjsTemplateFromFile("/templates/editable-relation.ejs").then((r)=>{
+                if (!show_data.data)
+                    return;
+
+                relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
+                    id: id,
+                    show_id: show_id,
+                    medium: show_data.data.Media.coverImage.medium,
+                    native: show_data.data.Media.title.native,
+                    preferred: show_data.data.Media.title.userPreferred
+                }));
+
+                new_relations[id] = {
+                    show: {
+                        id: show_id,
+                        large: show_data.data.Media.coverImage.large,
+                        medium: show_data.data.Media.coverImage.medium,
+                        native: show_data.data.Media.title.native,
+                        preferred: show_data.data.Media.title.userPreferred,
+                        english: show_data.data.Media.title.english
+                    },
+                    type: "Opening",
+                    number: 1
+                };
+            });
+        });
+    }
+
+    function removeRelation(id) {
+        if (!new_relations[id])
+            return
+
+        let element = document.getElementById(`relation-${id}`);
+        element.parentElement.removeChild(element);
+        delete new_relations[id];
+    }
+
+    function updateRelationType(id, element) {
+        if (!new_relations[id])
+            return
+        
+            new_relations[id].type = element.value;
+    }
+
+    function updateRelationNumber(id, element) {
+        if (!new_relations[id])
+            return
+        
+            new_relations[id].number = parseInt(element.value);
+    }
+
+
     Promise.allSettled([
         ostDataPromise,
         loadEjsTemplateFromFile("/templates/ost-song-info-row.ejs"),
         loadEjsTemplateFromFile("/templates/ost-relations-anime-entry.ejs"),
         loadEjsTemplateFromFile("/templates/ost-external-link-entry.ejs")
     ]).then((res) => {
-        if (res[0].value.data.ost?.user_rating)
-            score_selection.value = res[0].value.data.ost.user_rating / 10;
+        ost_data = res[0].value.data.ost;
+
+        if (ost_data.user_rating)
+            score_selection.value = ost_data.user_rating / 10;
 
         let song_information = document.getElementById("song-information");
 
-        if (res[0].value.data.ost?.name)
+        if (ost_data.name)
             song_information.innerHTML += ejs.render(res[1].value, {
                 name: "Name",
-                value: res[0].value.data.ost.name
+                value: ost_data.name
             });
 
-        if (res[0].value.data.ost?.alternate_name)
+        if (ost_data.alternate_name)
             song_information.innerHTML += ejs.render(res[1].value, {
                 name: "Alternate name",
-                value: res[0].value.data.ost.alternate_name
+                value: ost_data.alternate_name
             });
 
-        if (res[0].value.data.ost?.length)
+        if (ost_data.length)
             song_information.innerHTML += ejs.render(res[1].value, {
                 name: "Length",
-                value: moment.utc(res[0].value.data.ost.length * 1000).format("mm:ss")
+                value: mmssFromSeconds(ost_data.length)
             });
 
-        if (res[0].value.data.ost?.short_length)
+        if (ost_data.short_length)
             song_information.innerHTML += ejs.render(res[1].value, {
                 name: "Short length (TV size)",
-                value: moment.utc(res[0].value.data.ost.short_length * 1000).format("mm:ss")
+                value: mmssFromSeconds(ost_data.short_length)
             });
 
-        console.log(res[0].value)
+        if (ost_data.rating !== null && action_id === -1)
+            document.getElementById("score-value").innerHTML = (ost_data.rating / 10.0).toFixed(2);
 
-        if (res[0].value.data.ost?.rating !== null && action_id === -1)
-            document.getElementById("score-value").innerHTML = (res[0].value.data.ost.rating / 10.0).toFixed(2);
+        if (ost_data.top_rank !== null && action_id === -1)
+            document.getElementById("top-rank-value").innerHTML = ost_data.top_rank;
 
-        if (res[0].value.data.ost?.top_rank !== null && action_id === -1)
-            document.getElementById("top-rank-value").innerHTML = res[0].value.data.ost.top_rank;
+        if (ost_data.popular_rank !== null && action_id === -1)
+            document.getElementById("popular-rank-value").innerHTML = ost_data.popular_rank;
 
-        if (res[0].value.data.ost?.popular_rank !== null && action_id === -1)
-            document.getElementById("popular-rank-value").innerHTML = res[0].value.data.ost.popular_rank;
-
-        if (res[0].value.data.ost?.rating_count !== null && action_id === -1)
-            document.getElementById("members-value").innerHTML = res[0].value.data.ost.rating_count;
+        if (ost_data.rating_count !== null && action_id === -1)
+            document.getElementById("members-value").innerHTML = ost_data.rating_count;
 
         let relations = document.getElementById("relations");
 
-        for (relation of res[0].value.data.ost.relations) {
+        for (relation of ost_data.relations) {
             relations.innerHTML += ejs.render(res[2].value, {
                 native: relation.show.native,
                 preferred: relation.show.preferred,
@@ -346,11 +544,15 @@
 
         let external_link = document.getElementById("external-link");
 
-        for (link of res[0].value.data.ost.links) {
-            external_link.innerHTML += ejs.render(res[3].value, {
-                url: link.url,
-                type: link.type
-            });
+        if (ost_data.links) {
+            for (link of ost_data.links) {
+                external_link.innerHTML += ejs.render(res[3].value, {
+                    url: link.url,
+                    type: link.type
+                });
+            }
         }
+
+        setEditModalInfo();
     })
 </script>

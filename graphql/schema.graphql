@@ -129,10 +129,7 @@ type Mutation {
     add_ost(input: OstInput): Ost
     add_show(id: ID): Show
     add_relation(input: RelationInput): Relation
-    edit_ost(input: OstInput): Ost
-    edit_relation(input: RelationInput): Relation
-    remove_ost(id: ID): Ost
-    remove_show(id: ID): Show
-    set_user_rating(input: RatingInput): ID
     add_community_action(input: ActionInput): Action
+    edit_community_action(id: ID, data: String!): ID
+    set_user_rating(input: RatingInput): ID
 }

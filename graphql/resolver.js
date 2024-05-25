@@ -366,29 +366,6 @@ module.exports = {
                 })
             })
         },
-        set_user_rating(obj, args, context, info) {
-            return new Promise((res, rej) => {
-                if (!context.req.isAuthenticated())
-                    throw new Error("Forbidden.");
-
-                context.app.get("database pool").getConnection().then((conn) => {
-                    conn.query(`INSERT INTO scores (user_id, ost_id, score) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ?`, [
-                    context.req.user?.id,
-                    args.input.ost_id,
-                    args.input.rating,
-                    args.input.rating
-                    ]).then((r) => {
-                        conn.release();
-                        res(args.input.ost_id);
-                    }).catch((err) => {
-                        conn.release();
-                        res(undefined);
-                    });
-                }).catch((err) => {
-                    res(undefined);
-                })
-            })
-        },
         add_community_action(obj, args, context, info) {
             return new Promise((res, rej) => {
                 if (!context.req.isAuthenticated())
@@ -405,6 +382,50 @@ module.exports = {
                     ]).then((r) => {
                         conn.release();
                         res(r[0]);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        edit_community_action(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if ((context.req.user?.privilege & 1) != 1)
+                    throw new Error("Forbidden.");
+                
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`UPDATE community_action SET info=? WHERE id=?`, [
+                    args.data,
+                    args.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(args.id);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    })
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        set_user_rating(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if (!context.req.isAuthenticated())
+                    throw new Error("Forbidden.");
+
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`INSERT INTO scores (user_id, ost_id, score) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ?`, [
+                    context.req.user?.id,
+                    args.input.ost_id,
+                    args.input.rating,
+                    args.input.rating
+                    ]).then((r) => {
+                        conn.release();
+                        res(args.input.ost_id);
                     }).catch((err) => {
                         conn.release();
                         res(undefined);
