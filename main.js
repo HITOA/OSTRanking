@@ -40,21 +40,15 @@ app.use("/api", express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(require("./controllers/layout"));
-app.use(require("./controllers/ostrankingcontroller"));
+app.use(require("./controllers/index"));
 app.use(require("./controllers/register"));
 app.use(require("./controllers/login"));
 app.use(require("./controllers/request"));
 app.use(require("./controllers/ost"));
-app.use(require("./controllers/daily"));
 app.use(require("./controllers/faq"));
 app.use(require("./controllers/community"));
 
 app.all("/api", require("./controllers/api")(app));
-
-app.use("/api", require("./controllers/ostapi"));
-app.use("/api", require("./controllers/showapi"));
-app.use("/api", require("./controllers/userapi"));
-app.use("/api", require("./controllers/communityapi"));
 
 app.use(express.static("public"));
 

@@ -1,0 +1,22 @@
+<a href="/community/preview/<%- id %>" id="add-action-<%- id %>" class="flex bg-white dark:bg-lighter-main-950 hover:dark:bg-lighter-main-900 rounded w-full p-0">
+    <img class="aspect-square object-cover w-36 rounded m-0 mr-2" src="<%- show_thumbnail %>">
+    <div class="w-full">
+        <div class="flex">
+            <p class="font-bold text-lg m-2 mr-auto"><%- username %></p>
+            <p class="font-bold text-lg m-2 mr-4"><%- since %></p>
+        </div>
+        <p class="m-2">Requested to add <strong><%- song_name %></strong>. <strong><%- song_show_relation %></strong> of <strong><%- show_name %></strong>.</p>
+        
+        <div class="flex ml-2">
+            <div id="add-action-<%- id %>-notification-pending" class="<% if (action_status!=="Pending") { %>hidden<% } %> inline-block mr-auto bg-main-700/50 border border-main-200 p-1 rounded-lg text-main-200">
+                Request is pending...
+            </div>
+            <div id="add-action-<%- id %>-notification-accepted" class="<% if (action_status!=="Accepted") { %>hidden<% } %> inline-block mr-auto bg-green-500/10 border border-green-300 p-1 rounded-lg text-green-300">
+                Request has been accepted.
+            </div>
+            <div id="add-action-<%- id %>-notification-declined" class="<% if (action_status!=="Declined") { %>hidden<% } %> inline-block mr-auto bg-red-500/10 border border-red-300 p-1 rounded-lg text-red-300">
+                Request has been declined.
+            </div>
+        </div>
+    </div>
+</a>

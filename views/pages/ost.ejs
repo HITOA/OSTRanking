@@ -1,17 +1,22 @@
 <!-- Main Content -->
+<div class="gap-x-8 mx-auto lg:py-0 container text-black dark:text-white justify-center items-center">
+    <div class="mt-16 w-full p-1"></div>
+    <h1 id="page-warning" class="hidden w-full bg-orange-500/10 border border-orange-300 p-4 rounded-lg text-orange-300 text-center">
+    </h1>
+</div>
 <div class="flex gap-x-8 mx-auto lg:py-0 container text-black dark:text-white">
-    <div class="mt-20 w-1/4 flex flex-col gap-y-4 items-center lg:py-0 container">
+    <div class="mt-4 w-1/4 flex flex-col gap-y-4 items-center lg:py-0 container">
         <div class="flex justify-center bg-white dark:bg-lighter-main-950 rounded w-full p-0">
             <audio controls class="p-2 m-2">
                 <source src="" type="audio/ogg; codecs=opus"/>
             </audio>
         </div>
     </div>
-    <div class="mt-20 w-3/4 flex flex-col gap-y-4 items-center lg:py-0 container">
+    <div class="mt-4 w-3/4 flex flex-col gap-y-4 items-center lg:py-0 container">
         <div id="song-information" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
             <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 110c23.2 0 42 18.8 42 42s-18.8 42-42 42-42-18.8-42-42 18.8-42 42-42zm56 254c0 6.6-5.4 12-12 12h-88c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h12v-64h-12c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h64c6.6 0 12 5.4 12 12v100h12c6.6 0 12 5.4 12 12v24z"/></svg>
-                SONG INFORMATION
+                SONG INFORMATION &nbsp; <strong id="song-information-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('song-information')" class="ml-auto invisible group-hover:visible">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
@@ -62,7 +67,7 @@
         <div id="relations" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
             <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>
-                RELATIONS
+                RELATIONS &nbsp; <strong id="relations-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('relations')" class="ml-auto invisible group-hover:visible">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
@@ -73,7 +78,7 @@
         <div id="external-link" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
             <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M326.6 185.4c59.7 59.8 58.9 155.7 .4 214.6-.1 .1-.2 .3-.4 .4l-67.2 67.2c-59.3 59.3-155.7 59.3-215 0-59.3-59.3-59.3-155.7 0-215l37.1-37.1c9.8-9.8 26.8-3.3 27.3 10.6 .6 17.7 3.8 35.5 9.7 52.7 2 5.8 .6 12.3-3.8 16.6l-13.1 13.1c-28 28-28.9 73.7-1.2 102 28 28.6 74.1 28.7 102.3 .5l67.2-67.2c28.2-28.2 28.1-73.8 0-101.8-3.7-3.7-7.4-6.6-10.3-8.6a16 16 0 0 1 -6.9-12.6c-.4-10.6 3.3-21.5 11.7-29.8l21.1-21.1c5.5-5.5 14.2-6.2 20.6-1.7a152.5 152.5 0 0 1 20.5 17.2zM467.5 44.4c-59.3-59.3-155.7-59.3-215 0l-67.2 67.2c-.1 .1-.3 .3-.4 .4-58.6 58.9-59.4 154.8 .4 214.6a152.5 152.5 0 0 0 20.5 17.2c6.4 4.5 15.1 3.8 20.6-1.7l21.1-21.1c8.4-8.4 12.1-19.2 11.7-29.8a16 16 0 0 0 -6.9-12.6c-2.9-2-6.6-4.9-10.3-8.6-28.1-28.1-28.2-73.6 0-101.8l67.2-67.2c28.2-28.2 74.3-28.1 102.3 .5 27.8 28.3 26.9 73.9-1.2 102l-13.1 13.1c-4.4 4.4-5.8 10.8-3.8 16.6 5.9 17.2 9 35 9.7 52.7 .5 13.9 17.5 20.4 27.3 10.6l37.1-37.1c59.3-59.3 59.3-155.7 0-215z"/></svg>
-                EXTERNAL LINK
+                EXTERNAL LINK &nbsp; <strong id="external-link-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('external-link')" class="ml-auto invisible group-hover:visible">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
@@ -83,6 +88,13 @@
         </div>
     </div>
 </div>
+<% if (privilege && action_id != -1) { %>
+<div class="gap-x-8 mx-auto lg:py-0 container text-black dark:text-white justify-center items-center">
+    <h1 id="accept-decline-msg" class="mt-4 mx-auto w-96 bg-gray-500/10 border border-gray-300 p-4 rounded-lg text-gray-300 text-center">
+         You can <strong onclick="acceptRequest()" class="hover:underline">Accept</strong> or <strong onclick="declineRequest()" class="hover:underline">Decline</strong> this request.
+    </h1>
+</div>
+<% } %>
 <!-- Edit SongInfo Modal -->
 <div id="ost-edit-song-information-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-main-950/50">
     <div class="justify-center bg-white dark:bg-lighter-main-950 rounded max-w-screen-lg w-1/3 p-0 dark:text-white">
@@ -160,38 +172,34 @@
             </button>
         </h1>
         <div class="m-4">
-            <div id="ost-edit-external-link-notification" class="base-notification my-4">
+            <div id="ost-edit-external-links-notification" class="base-notification my-4">
                 MESSAGE
             </div>
         </div>
-        <div class="flex m-2">
-            <select class="flex bg-main-800 hover:bg-lighter-main-800 rounded px-2 m-2 flex font-bold text-lg">
-                <option selected>Youtube</option>
-                <option>Spotify</option>
-                <option>SoundCloud</option>
-            </select>
-            <input class="base-input mr-2 w-full" autocomplete="off">
-            <button onclick="" class="ml-auto mr-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-red-500 mr-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
-            </button>
+        <div id="ost-edit-external-link-container">
         </div>
         <div class="flex items-center p-1 md:p-2 my-2">
-            <button class="base-btn p-0">Add new link</button>
+            <button onclick="addExternalLink()" class="base-btn p-0">Add new link</button>
         </div>
         <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
-            <button class="base-btn mx-2">Accept</button>
+            <button onclick="updateEditedExternalLink()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('external-link')"  class="base-btn mx-2">Cancel</button>
         </div>
     </div>
 </div>
 <script src="/scripts/time-utils.js"></script>
+<script src="/scripts/fxp.min.js"></script>
+<script src="/scripts/annapi.js"></script>
 <script>
     const ost_id = <%- ost_id %>;
     const action_id = <%- action_id %>;
 
+    let editable = true;
     let ost_data = {};
     let relations = {};
     let new_relations = {};
+    let external_links = {};
+    let new_external_links = {};
     let c = 0;
 
     let score_selection = document.getElementById("score-selection");
@@ -209,6 +217,10 @@
                     })
                 }`);
         }
+    }
+
+    function setEditedLabel(id) {
+        document.getElementById(`${id}-edit-label`).innerText = "(EDITED)";
     }
 
     function notify(id, msg, success) {
@@ -231,6 +243,7 @@
                 action(id: $id) {
                     id
                     data
+                    type
                     creation_date
                     user {
                     name
@@ -240,17 +253,75 @@
             `, {
                 id: action_id
             }).then((r) => {
-                res({ data: { ost:JSON.parse(r.data.action?.data) }});
+                document.getElementById("page-warning").innerHTML = 
+                    `This page is a preview of a request made by <strong>${r.data.action?.user?.name}</strong>. It is temporary and will be deleted once the request is accepted or declined. Only you and other admins/moderators can see it. You can edit this page.`;
+                    document.getElementById("page-warning").classList.remove("hidden");
+
+                if (r.data.action.type === "OstAdd")
+                    return res({ data: { ost:JSON.parse(r.data.action?.data) }});
+
+                let data = JSON.parse(r.data.action.data);
+                editable = false;
+                
+                graphqlQuery(`
+                query($id: ID) {
+                    ost(id: $id) {
+                        name
+                        alternate_name
+                        length
+                        short_length
+                        relations {
+                        show {
+                            id
+                            main_title
+                            alternative_title
+                            medium
+                        }
+                        type
+                        number
+                        }
+                        links {
+                            type
+                            url
+                        }
+                    }
+                }
+                `, {
+                    id: data.ost_id
+                }).then((d) => {
+                    switch (r.data.action.type) {
+                        case "EditSongInformation": {
+                            setEditedLabel("song-information");
+                            for (let [key, value] of Object.entries(data.edit)) {
+                                d.data.ost[key] = value;
+                            }
+                            break;
+                        }
+                        case "EditRelations": {
+                            setEditedLabel("relations");
+                            d.data.ost.relations = data.edit;
+                            break;
+                        }
+                        case "EditExternalLinks": {
+                            setEditedLabel("external-link");
+                            d.data.ost.links = data.edit;
+                            break;
+                        }
+                    }
+                    return res(d);
+                })
             })
         });
     }
 
     function openOstEditModal(modal_name) {
-        document.getElementById(`ost-edit-${modal_name}-modal`).classList.remove("hidden");
+        if (editable)
+            document.getElementById(`ost-edit-${modal_name}-modal`).classList.remove("hidden");
     }
 
     function closeOstEditModal(modal_name) {
-        document.getElementById(`ost-edit-${modal_name}-modal`).classList.add("hidden");
+        if (editable)
+            document.getElementById(`ost-edit-${modal_name}-modal`).classList.add("hidden");
     }
 
     function loadEjsTemplateFromFile(uri) {
@@ -282,8 +353,9 @@
                 popular_rank
                 relations {
                 show {
-                    native
-                    preferred
+                    id
+                    main_title
+                    alternative_title
                     medium
                 }
                 type
@@ -323,8 +395,8 @@
                     id: id,
                     show_id: relation.show.id,
                     medium: relation.show.medium,
-                    native: relation.show.native,
-                    preferred: relation.show.preferred
+                    main_title: relation.show.main_title,
+                    alternative_title: relation.show.alternative_title.split("|;|")[0]
                 }));
 
                 document.getElementById(`relation-${id}-type`).value = relation.type;
@@ -334,6 +406,23 @@
             }
 
             new_relations = structuredClone(relations);
+        });
+
+        let external_link_container = document.getElementById("ost-edit-external-link-container");
+        loadEjsTemplateFromFile("/templates/editable-external-link.ejs").then((r)=>{
+            for (link of ost_data.links) {
+                let id = c++;
+                external_link_container.insertAdjacentHTML("beforeend", ejs.render(r, {
+                    id: id
+                }));
+
+                document.getElementById(`external-link-${id}-type`).value = link.type;
+                document.getElementById(`external-link-${id}-url`).value = link.url;
+
+                external_links[id] = link;
+            }
+
+            new_external_links = structuredClone(external_links);
         });
     }
 
@@ -375,7 +464,25 @@
             return;
 
         if (action_id === -1) {
-            //Make Request
+            let data = {
+                ost_id: ost_id,
+                edit: edited_song_info
+            };
+
+            graphqlQuery(`
+            mutation($data: String!) {
+                add_community_action(input: {
+                    type: EditSongInformation
+                    data: $data
+                }) {
+                    id
+                }
+            }`, {
+                data: JSON.stringify(data)
+            }).then((r) => {
+                notify("song-information", "Edit request submitted successfully.", true);
+            });
+
         } else {
             for (const [key, value] of Object.entries(edited_song_info))
                 ost_data[key] = value;
@@ -399,7 +506,30 @@
         }
 
         if (action_id === -1) {
-            //Make Request
+            let r = [];
+
+            for (const [key, value] of Object.entries(new_relations)) {
+                r.push(value);
+            }
+
+            let data = {
+                ost_id: ost_id,
+                edit: r
+            };
+
+            graphqlQuery(`
+            mutation($data: String!) {
+                add_community_action(input: {
+                    type: EditRelations
+                    data: $data
+                }) {
+                    id
+                }
+            }`, {
+                data: JSON.stringify(data)
+            }).then((r) => {
+                notify("relations", "Edit request submitted successfully.", true);
+            });
         } else {
             let r = [];
 
@@ -421,6 +551,53 @@
         }
     }
 
+    function updateEditedExternalLink() {
+        if (action_id === -1) {
+            let l = [];
+
+            for (const [key, value] of Object.entries(new_external_links)) {
+                l.push(value);
+            }
+
+            let data = {
+                ost_id: ost_id,
+                edit: l
+            };
+
+            graphqlQuery(`
+            mutation($data: String!) {
+                add_community_action(input: {
+                    type: EditExternalLinks
+                    data: $data
+                }) {
+                    id
+                }
+            }`, {
+                data: JSON.stringify(data)
+            }).then((r) => {
+                notify("external-links", "Edit request submitted successfully.", true);
+            });
+        } else {
+            let l = [];
+
+            for (const [key, value] of Object.entries(new_external_links)) {
+                l.push(value);
+            }
+
+            ost_data.links = l;
+
+            graphqlQuery(`
+            mutation($id: ID, $data: String!) {
+                edit_community_action(id: $id, data: $data)
+            }`, {
+                id: action_id,
+                data: JSON.stringify(ost_data)
+            }).then((r) => {
+                location.reload();
+            })
+        }
+    }
+
     function addRelation() {
         let show_id = parseInt(document.getElementById("ost-edit-relations-show-id").value);
         if (!show_id)
@@ -429,33 +606,29 @@
         let id = c++;
 
         let relation_container = document.getElementById("ost-edit-relations-container");
-        getAnimeInfoById(show_id).then((show_data) => {
+        ann.getAnimeData(show_id).then((show_data) => {
             loadEjsTemplateFromFile("/templates/editable-relation.ejs").then((r)=>{
-                if (!show_data.data)
-                    return;
-
                 relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
                     id: id,
                     show_id: show_id,
-                    medium: show_data.data.Media.coverImage.medium,
-                    native: show_data.data.Media.title.native,
-                    preferred: show_data.data.Media.title.userPreferred
+                    medium: show_data.medium,
+                    main_title: show_data.main_title,
+                    alternative_title: show_data.alternative_title.split("|;|")[0]
                 }));
 
                 new_relations[id] = {
                     show: {
                         id: show_id,
-                        large: show_data.data.Media.coverImage.large,
-                        medium: show_data.data.Media.coverImage.medium,
-                        native: show_data.data.Media.title.native,
-                        preferred: show_data.data.Media.title.userPreferred,
-                        english: show_data.data.Media.title.english
+                        large: show_data.large,
+                        medium: show_data.medium,
+                        main_title: show_data.main_title,
+                        alternative_title: show_data.alternative_title
                     },
                     type: "Opening",
                     number: 1
                 };
             });
-        });
+        })
     }
 
     function removeRelation(id) {
@@ -471,14 +644,52 @@
         if (!new_relations[id])
             return
         
-            new_relations[id].type = element.value;
+        new_relations[id].type = element.value;
     }
 
     function updateRelationNumber(id, element) {
         if (!new_relations[id])
             return
         
-            new_relations[id].number = parseInt(element.value);
+        new_relations[id].number = parseInt(element.value);
+    }
+
+    function addExternalLink() {
+        let id = c++;
+        let external_link_container = document.getElementById("ost-edit-external-link-container");
+        loadEjsTemplateFromFile("/templates/editable-external-link.ejs").then((r)=>{
+            external_link_container.insertAdjacentHTML("beforeend", ejs.render(r, {
+                id: id
+            }));
+
+            new_external_links[id] = {
+                type: "Youtube",
+                url: ""
+            };
+        });
+    }
+
+    function removeExternalLink(id) {
+        if (!new_external_links[id])
+            return;
+
+        let element = document.getElementById(`external-link-${id}`);
+        element.parentElement.removeChild(element);
+        delete new_external_links[id];
+    }
+
+    function updateExternalLinkType(id, element) {
+        if (!new_external_links[id])
+            return;
+
+        new_external_links[id].type = element.value;
+    }
+
+    function updateExternalLinkUrl(id, element) {
+        if (!new_external_links[id])
+            return;
+
+        new_external_links[id].url = element.value;
     }
 
 
@@ -534,9 +745,10 @@
         let relations = document.getElementById("relations");
 
         for (relation of ost_data.relations) {
+            console.log(relation.show);
             relations.innerHTML += ejs.render(res[2].value, {
-                native: relation.show.native,
-                preferred: relation.show.preferred,
+                main_title: relation.show.main_title,
+                alternative_title: relation.show.alternative_title.split("|;|")[0],
                 medium: relation.show.medium,
                 type: `${relation.type} ${relation.number}`
             })
@@ -545,7 +757,7 @@
         let external_link = document.getElementById("external-link");
 
         if (ost_data.links) {
-            for (link of ost_data.links) {
+            for (let link of ost_data.links) {
                 external_link.innerHTML += ejs.render(res[3].value, {
                     url: link.url,
                     type: link.type
@@ -555,4 +767,30 @@
 
         setEditModalInfo();
     })
+
+    function acceptRequest() {
+        document.getElementById("accept-decline-msg").innerText = "Accepting request...";
+
+        graphqlQuery(`
+        mutation($id: ID) {
+            accept_community_action(id: $id)
+        }`, {
+            id: action_id
+        }).then((r) => {
+            location.href = `/ost/${r.data.accept_community_action}`;
+        });
+    }
+
+    function declineRequest() {
+        document.getElementById("accept-decline-msg").innerText = "Declining request...";
+
+        graphqlQuery(`
+        mutation($id: ID) {
+            decline_community_action(id: $id)
+        }`, {
+            id: action_id
+        }).then((r) => {
+            location.href = `/`;
+        });
+    }
 </script>

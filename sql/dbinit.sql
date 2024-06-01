@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS users(
     privilege SMALLINT NOT NULL DEFAULT 0, trust INT NOT NULL DEFAULT 0);
 
 CREATE TABLE IF NOT EXISTS shows(
-    id INT NOT NULL PRIMARY KEY, native NVARCHAR(512), 
-    preferred NVARCHAR(512), english NVARCHAR(512), 
-    medium VARCHAR(512), large VARCHAR(512),
-    FULLTEXT(native, preferred, english));
+    id INT NOT NULL PRIMARY KEY, 
+    main_title NVARCHAR(256), alternative_title NVARCHAR(512), 
+    medium VARCHAR(512), large VARCHAR(512), vintage VARCHAR(64),
+    episode_count SMALLINT, FULLTEXT(main_title, alternative_title));
 
 CREATE TABLE IF NOT EXISTS authors(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(64));
@@ -18,9 +18,6 @@ CREATE TABLE IF NOT EXISTS tags(
 
 CREATE TABLE IF NOT EXISTS sources(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name NVARCHAR(128));
-
-CREATE TABLE IF NOT EXISTS links(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, type SMALLINT NOT NULL, url VARCHAR(256));
 
 CREATE TABLE IF NOT EXISTS osts(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name NVARCHAR(256) NOT NULL, 
@@ -51,8 +48,8 @@ CREATE TABLE IF NOT EXISTS source_ost(
     FOREIGN KEY (ost_id) REFERENCES osts(id));
 
 CREATE TABLE IF NOT EXISTS link_ost(
-    link_id INT NOT NULL, ost_id INT NOT NULL, PRIMARY KEY (link_id, ost_id), 
-    FOREIGN KEY (link_id) REFERENCES links(id), 
+    ost_id INT NOT NULL, type SMALLINT NOT NULL, url VARCHAR(256), 
+    PRIMARY KEY (ost_id, url), 
     FOREIGN KEY (ost_id) REFERENCES osts(id));
 
 CREATE TABLE IF NOT EXISTS scores(
@@ -80,7 +77,7 @@ CREATE OR REPLACE EVENT update_ost_top_rank
 	ON SCHEDULE EVERY 10 MINUTE
 		DO
 			UPDATE osts INNER JOIN (
-				SELECT id, RANK() OVER (ORDER BY score_acc / NULLIF(score_count, 0) DESC) AS new_top_rank 
+				SELECT id, RANK() OVER (ORDER BY (score_acc + 400) / NULLIF(score_count + 10, 10) DESC) AS new_top_rank 
 			    FROM osts
 			    INNER JOIN ost_scores_total ON ost_id = osts.id
 			) AS rank_table ON rank_table.id = osts.id

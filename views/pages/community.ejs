@@ -1,93 +1,155 @@
 
-<div class="flex gap-x-8 mx-auto lg:py-0 container text-black dark:text-white">
-    <div id="request_list_container" class="mt-20 w-2/3 flex flex-col gap-y-4 items-center lg:py-0 container">
+<div class="flex gap-x-8 mx-auto lg:py-0 container text-black dark:text-white mb-4">
+    <div id="add-entry-container" class="mt-20 w-2/3 flex flex-col gap-y-4 items-center lg:py-0 container">
     </div>
-    <div class="mt-20 w-1/3 flex flex-col gap-y-4 items-center lg:py-0 container">
+    <div id="edit-entry-container" class="mt-20 w-1/3 flex flex-col gap-y-4 items-center lg:py-0 container">
     </div>
 </div>
-<script src="/scripts/moment.min.js"></script>
+<script src="/scripts/time-utils.js"></script>
 <script>
-    var privilege = <%- privilege %>;
-    var request_list_container = document.getElementById("request_list_container");
+    const count = 20;
+    let start = 0;
 
-    var request_template = ""
+    let la = 1;
+    let le = 1;
 
-    var actions_by_id = {}
-
-    function addCommunityActionEntry(start, count) {
-        getCommunityActions(start, count).then(actions => {
-            for (action of actions) {
-                actions_by_id[action.id] = action;
-                console.log(action)
-                switch (action.info.type) {
-                    case "request": {
-                        let relation_type_name = ["Opening", "Ending", "Insert"];
-                        let template_data = {
-                            show_thumbnail: action.info.content.relations[0].medium,
-                            username: action.name,
-                            since: moment(action.creation_date).fromNow(),
-                            song_name: action.info.content.ost.name,
-                            song_show_relation: `${relation_type_name[action.info.content.relations[0].type]} ${action.info.content.relations[0].number}`,
-                            show_name: action.info.content.relations[0].preferred,
-                            action_id: action.id,
-                            action_status: action.info.status,
-                            user_privilege: privilege
-                        }
-                        request_list_container.innerHTML += ejs.render(request_template, template_data)
-                        break;
-                    }
-                }
-            }
-        })
+    function onScroll() {
+        const threshold = 300;
+        if (window.scrollY + window.innerHeight + threshold >= document.body.scrollHeight) {
+            document.removeEventListener("scroll", onScroll);
+            loadContent().then(() => {
+                document.addEventListener("scroll", onScroll);
+            });
+        }
     }
 
-    function acceptCommunitySongRequest(id) {
-        if (actions_by_id[id].info.status) {
-            alert(`Action has already been ${actions_by_id[id].info.status}`);
-            return;
-        }
-        let data = {
-            ost: actions_by_id[id].info.content.ost,
-            show_ost: actions_by_id[id].info.content.relations
-        };
-
-        fetch("/api/ost/add", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((res) => {
-            console.log(res);
-            if (res.status == 200) {
-                actions_by_id[id].info.status = "accepted";
-                editCommunityAction(id, actions_by_id[id].info).then(() => {
-                    document.getElementById(`action-${id}-notification-pending`).classList.add("hidden");
-                    document.getElementById(`action-${id}-notification-accepted`).classList.remove("hidden");
+    function loadEjsTemplateFromFile(uri) {
+        return new Promise((res, rej) => {
+            fetch(uri).then((r) => {
+                r.text().then((t) => {
+                    res(t);
                 })
-            }
-        }).catch((err) => {
-            console.log(err);
+            }).catch((err) => {
+                rej(err);
+            })
         })
     }
+    
+    function loadContent() {
+        return new Promise(async (res, rej) => {
+            if (la + le === 0)
+                return res();
+            
+            await loadEjsTemplateFromFile("/templates/action-ost-add-entry.ejs").then((template) => {
+                graphqlQuery(`
+                    query($start: Int, $count: Int) {
+                        actions(input: {
+                            editOnly: false
+                            start: $start
+                            count: $count
+                        }) {
+                            id
+                            data
+                            status
+                            creation_date
+                            user {
+                                name
+                            }
+                        }
+                    }`, {
+                        start: start,
+                        count: count
+                    }).then((r) => {
+                        let add_entry_container = document.getElementById("add-entry-container");
+                        la = r.data.actions.length;
 
-    function declineCommunitySongRequest(id) {
-        if (actions_by_id[id].info.status) {
-            alert(`Action has already been ${actions_by_id[id].info.status}`);
-            return;
-        }
-        actions_by_id[id].info.status = "declined";
-        editCommunityAction(id, actions_by_id[id].info).then(() => {
-            document.getElementById(`action-${id}-notification-pending`).classList.add("hidden");
-            document.getElementById(`action-${id}-notification-declined`).classList.remove("hidden");
-        })
+                        for (let action of r.data.actions) {
+                            let data = JSON.parse(action.data);
+                            add_entry_container.insertAdjacentHTML("beforeend", ejs.render(template, {
+                                id: action.id,
+                                username: action.user.name,
+                                since: timeSince(new Date(parseInt(action.creation_date))),
+                                song_name: data.name,
+                                action_status: action.status,
+                                show_thumbnail: data.relations[0].show.medium,
+                                song_show_relation: `${data.relations[0].type} ${data.relations[0].number}`,
+                                show_name: data.relations[0].show.main_title
+                            }));
+                        }
+                    })
+            });
+
+            await loadEjsTemplateFromFile("/templates/action-ost-edit-entry.ejs").then((template) => {
+                graphqlQuery(`
+                    query($start: Int, $count: Int) {
+                        actions(input: {
+                            editOnly: true
+                            start: $start
+                            count: $count
+                        }) {
+                            id
+                            data
+                            status
+                            type
+                            creation_date
+                            user {
+                                name
+                            }
+                        }
+                    }`, {
+                        start: start,
+                        count: count
+                    }).then(async (r) => {
+                        let edit_entry_container = document.getElementById("edit-entry-container");
+                        le = r.data.actions.length;
+
+                        for (let action of r.data.actions) {
+                            let data = JSON.parse(action.data);
+                            await graphqlQuery(`
+                            query($id: ID) {
+                                ost(id: $id) {
+                                    name
+                                }
+                            }`, {
+                                id: data.ost_id
+                            }).then(async (ost_data) => {
+                                let edit_text;
+
+                                switch (action.type) {
+                                    case "EditExternalLinks":
+                                        edit_text = "external links";
+                                        break;
+                                    case "EditRelations":
+                                        edit_text = "relations";
+                                        break;
+                                    case "EditSongInformation":
+                                        edit_text = "song information";
+                                        break;
+                                    default:
+                                        edit_text = action.type;
+                                        break;
+                                }
+
+                                edit_entry_container.insertAdjacentHTML("beforeend", ejs.render(template, {
+                                    id: action.id,
+                                    username: action.user.name,
+                                    since: timeSince(new Date(parseInt(action.creation_date))),
+                                    action_status: action.status,
+                                    song_name: ost_data.data.ost?.name,
+                                    edit_text: `Requested to update ${edit_text} on song`
+                                }));
+                            })
+                        }
+
+                        res();
+                    })
+            });
+
+            start += count;
+        });
     }
 
-    fetch("/templates/request.ejs").then((res) => {
-        res.text().then((template) => {
-            request_template = template
-            addCommunityActionEntry(0, 10);
-        })
-    })
-
+    loadContent().then(() => {
+        document.addEventListener("scroll", onScroll);
+    });
 </script>

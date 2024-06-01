@@ -22,7 +22,10 @@ enum LinkType {
 }
 
 enum ActionType {
-    OstAdd
+    OstAdd,
+    EditSongInformation,
+    EditRelations,
+    EditExternalLinks
 }
 
 enum ActionStatus {
@@ -61,11 +64,12 @@ type Link {
 
 type Show {
     id: ID!
-    native: String!
-    preferred: String!
-    english: String!
-    medium: String!
-    large: String!
+    main_title: String!
+    alternative_title: String
+    medium: String
+    large: String
+    vintage: String
+    episode_count: Int
     relations: [Relation!]!
 }
 
@@ -113,6 +117,12 @@ input RatingInput {
     rating: Int
 }
 
+input ActionSearchInput {
+    editOnly: Boolean
+    start: Int
+    count: Int
+}
+
 input ActionInput {
     type: ActionType!
     data: String!
@@ -123,13 +133,13 @@ type Query {
     osts(input: OstSearchInput): [Ost!]!
     show(id: ID): Show
     action(id: ID): Action
+    actions(input: ActionSearchInput): [Action!]!
 }
 
 type Mutation {
-    add_ost(input: OstInput): Ost
-    add_show(id: ID): Show
-    add_relation(input: RelationInput): Relation
     add_community_action(input: ActionInput): Action
     edit_community_action(id: ID, data: String!): ID
+    accept_community_action(id: ID): ID
+    decline_community_action(id: ID): ID
     set_user_rating(input: RatingInput): ID
 }

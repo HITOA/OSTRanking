@@ -1,10 +1,4 @@
-<div class="mt-20 flex flex-col items-center justify-center mx-auto lg:py-0 container">
-    <div class="container text-black dark:text-white m-4 flex flex-row">
-        <a class="nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">1</a>
-        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
-        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
-        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 text-center p-2" href="/">4</a>
-    </div>
+<div class="mt-20 mb-4 flex flex-col items-center justify-center mx-auto lg:py-0 container">
     <div id="song-table" class="container base-container text-black dark:text-white p-0 space-y-0">
         <div class="w-full p-1 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-lighter-main-900">
             <div class="p-1"></div>
@@ -15,84 +9,89 @@
             <div class="p-1">Type</div>
         </div>
     </div>
-    <div class="container text-black dark:text-white m-4 flex flex-row">
-        <a class="ml-auto nav-p-1 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">1</a>
-        <a class="nav-p-2 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">2</a>
-        <a class="nav-p-3 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 mr-0.5 text-center p-2" href="/">3</a>
-        <a class="nav-p-4 bg-main-500 hover:bg-main-400 dark:bg-lighter-main-900 hover:dark:bg-main-600 text-center p-2" href="/">4</a>
-    </div>
 </div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
 
-    const page = urlParams.has("p") ? parseInt(urlParams.get("p")) : 0;
     const count = 50;
-    const start = page * count;
+    let start = 0;
 
-    fetch("/templates/song-table-row.ejs").then((res) => {
-        let ost_search_input = `{
-                        count: ${count}
-                        start: ${start}
-                    }`;
-
-        if (urlParams.has("expression")) {
-            ost_search_input = `{
-                        count: ${count}
-                        start: ${start}
-                        expression: "${urlParams.get("expression")}"
-                    }`;
-        }
-
-
-        res.text().then((template) => {
-            graphqlQuery(`
-                {
-                    osts(input: ${ost_search_input}) {
-                        id
-                        name
-                        alternate_name
-                        rating
-                        relations {
-                            show {
-                                native
-                                preferred
-                                medium
-                            }
-                            type
-                            number
-                        }
-                    }
-                }
-            `).then((r) => {
-                let index = start + 1;
-                let table = document.getElementById("song-table");
-                for (ost of r.data.osts) {
-                    let medium = ost.relations[0]?.show?.medium
-                    table.innerHTML += ejs.render(template, {
-                        id: ost.id,
-                        index: index++,
-                        medium: medium,
-                        native: ost.relations[0]?.show?.native,
-                        preferred: ost.relations[0]?.show?.preferred,
-                        name: ost.name,
-                        alternate_name: ost.alternate_name,
-                        rating: ost.rating ? (ost.rating / 10.0).toFixed(2) : "Not Rated",
-                        type: `${ost.relations[0]?.type} ${ost.relations[0]?.number}`
-                    });
-                }
-            })
-        })
-    })
-
-    for (var i = 0; i < 4; ++i) {
-        let arr = document.getElementsByClassName(`nav-p-${i + 1}`);
-        const o = page == 0 ? 1 : 0;
-        for (var j = 0; j < arr.length; ++j) {
-            arr[j].innerHTML = page + i + o;
-            arr[j].href = `/?p=${page - 1 + i + o}`
-
-            if (-1 + i + o == 0)
-                arr[j].classList.add("border-b-4");
+    function onScroll() {
+        const threshold = 300;
+        if (window.scrollY + window.innerHeight + threshold >= document.body.scrollHeight) {
+            document.removeEventListener("scroll", onScroll);
+            loadContent().then(() => {
+                document.addEventListener("scroll", onScroll);
+            });
         }
     }
+
+    function loadContent() {
+        return new Promise((res, rej) => {
+            fetch("/templates/song-table-row.ejs").then((r) => {
+                let ost_search_input = `{
+                                count: ${count}
+                                start: ${start}
+                            }`;
+
+                if (urlParams.has("expression")) {
+                    ost_search_input = `{
+                                count: ${count}
+                                start: ${start}
+                                expression: "*${urlParams.get("expression")}*"
+                            }`;
+                }
+
+                r.text().then((template) => {
+                    graphqlQuery(`
+                        {
+                            osts(input: ${ost_search_input}) {
+                                id
+                                name
+                                alternate_name
+                                rating
+                                relations {
+                                    show {
+                                        main_title
+                                        alternative_title
+                                        medium
+                                    }
+                                    type
+                                    number
+                                }
+                            }
+                        }
+                    `).then((r) => {
+                        let index = start + 1;
+                        let table = document.getElementById("song-table");
+                        for (ost of r.data.osts) {
+                            let medium = ost.relations[0]?.show?.medium
+                            table.innerHTML += ejs.render(template, {
+                                id: ost.id,
+                                index: index++,
+                                medium: medium,
+                                main_title: ost.relations[0]?.show?.main_title,
+                                alternative_title: ost.relations[0]?.show?.alternative_title ? ost.relations[0]?.show?.alternative_title.split("|;|")[0] : "",
+                                name: ost.name,
+                                alternate_name: ost.alternate_name,
+                                rating: ost.rating ? (ost.rating / 10.0).toFixed(2) : "Not Rated",
+                                type: `${ost.relations[0]?.type} ${ost.relations[0]?.number}`
+                            });
+                        }
+
+                        start += count;
+
+                        if (r.data.osts.length === 0)
+                            return rej();
+                        
+                        res();
+                    })
+                })
+            })
+        })
+    }
+
+    loadContent().then(() => {
+        document.addEventListener("scroll", onScroll);
+    });
 </script>

@@ -7,6 +7,7 @@ router.get("/ost/:id", (req, res) => {
         ost_id: req.params.id,
         action_id: -1,
         is_auth: req.isAuthenticated(),
+        privilege: req.user?.privilege ? req.user?.privilege : 0,
         ...req.info
     });
 });

@@ -1,4 +1,83 @@
-const Anilist = require("anilist-node");
+const ann = require("../models/ann");
+
+function addOst(name, length, alternate_name, short_length, sample_audio_url, published_date, conn) {
+    return new Promise((res, rej) => {
+        conn.query(`INSERT INTO osts (name, length, creation_date, update_date, published_date, short_length, alternate_name, sample_audio_url) VALUES (?, ?, NOW(), NOW(), ?, ?, ?, ?) RETURNING *`, [
+            name,
+            length,
+            published_date,
+            short_length,
+            alternate_name,
+            sample_audio_url
+        ]).then(async (ost_data) => {
+            res(ost_data[0]);
+        }).catch((err) => {
+            rej(err);
+        })
+    })
+}
+
+function addShow(show_id, conn) {
+    return new Promise((res, rej) => {
+        conn.query(`SELECT * FROM shows WHERE id=?`, [
+            show_id
+        ]).then((r) => {
+            if (r.length > 0)
+                return res(r[0]);
+
+            ann.getAnimeData(show_id).then((data) => {
+                conn.query(`INSERT INTO shows (id, main_title, alternative_title, medium, large, vintage, episode_count) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = ? RETURNING *`, [
+                    show_id,
+                    data.main_title,
+                    data.alternative_title,
+                    data.medium,
+                    data.large,
+                    data.vintage,
+                    data.episode_count,
+                    show_id
+                ]).then((r) => {
+                    res(r[0]);
+                }).catch((err) => {
+                    rej(err);
+                });
+            }).catch((msg) => {
+                rej(msg);
+            })
+        }).catch((err) => {
+            rej(err);
+        });
+    })
+}
+
+function addRelation(ost_id, show_id, type, number, conn) {
+    return new Promise((res, rej) => {
+        conn.query(`INSERT INTO show_ost (ost_id, show_id, type, num) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ost_id = ? RETURNING *`, [
+            ost_id,
+            show_id,
+            type,
+            number,
+            ost_id
+        ]).then((r) => {
+            res(r[0]);
+        }).catch((err) => {
+            rej(err);
+        });
+    })
+}
+
+function addLink(ost_id, type, url, conn) {
+    return new Promise((res, rej) => {
+        conn.query(`INSERT INTO link_ost (ost_id, type, url) VALUES (?, ?, ?) RETURNING *`, [
+            ost_id,
+            type,
+            url
+        ]).then((r) => {
+            res(r[0]);
+        }).catch((err) => {
+            rej(err);
+        });
+    })
+}
 
 module.exports = {
     Action: {
@@ -20,7 +99,7 @@ module.exports = {
             })
         },
         type(obj, args, context, info) {
-            return ["OstAdd"][obj.action_type];
+            return ["OstAdd", "EditSongInformation", "EditRelations", "EditExternalLinks"][obj.action_type];
         },
         status(obj, args, context, info) {
             return ["Pending", "Accepted", "Declined"][obj.action_status];
@@ -175,7 +254,7 @@ module.exports = {
         links(obj, args, context, info) {
             return new Promise((res, rej) => {
                 context.app.get("database pool").getConnection().then((conn) => {
-                    conn.query(`SELECT \`type\`, url FROM link_ost, links WHERE link_ost.ost_id = ? AND links.id = link_ost.link_id`, [
+                    conn.query(`SELECT type, url FROM link_ost WHERE ost_id=?`, [
                         obj.id
                     ]).then((r) => {
                         conn.release();
@@ -212,12 +291,17 @@ module.exports = {
             if (!args.input.start)
                 args.input.start = 0;
             if (!args.input.count)
-                args.input.count = 0;
+                args.input.count = 1;
 
             if (args.input.expression) {
                 return new Promise((res, rej) => {
                     context.app.get("database pool").getConnection().then((conn) => {
-                        conn.query(`SELECT id, name, alternate_name, sample_audio_url, \`length\`, short_length, top_rank, popular_rank, creation_date, MATCH(name,alternate_name) AGAINST(? IN BOOLEAN MODE) AS relevance FROM osts ORDER BY relevance DESC LIMIT ?, ?`, [
+                        conn.query(`SELECT osts.id, osts.name, osts.alternate_name, osts.sample_audio_url, osts.length, osts.short_length, osts.top_rank, osts.popular_rank, 
+                        MATCH(osts.name, osts.alternate_name) AGAINST(? IN BOOLEAN MODE) + MATCH(shows.main_title, shows.alternative_title) AGAINST(? IN BOOLEAN MODE) AS relevance 
+                        FROM show_ost, shows, osts WHERE shows.id = show_ost.show_id AND osts.id = show_ost.ost_id
+                        ORDER BY relevance DESC
+                        LIMIT ?, ?`, [
+                            args.input.expression,
                             args.input.expression,
                             args.input.start,
                             args.input.count
@@ -226,10 +310,10 @@ module.exports = {
                             res(r);
                         }).catch((err) => {
                             conn.release();
-                            res([]);
+                            rej(err);
                         });
                     }).catch((err) => {
-                        res([]);
+                        rej(err);
                     })
                 })
             } else {
@@ -305,30 +389,21 @@ module.exports = {
                     res(undefined);
                 })
             });
-        }
-    },
-    Mutation: {
-        add_ost(obj, args, context, info) {
+        },
+        actions(obj, args, context, info) {
             return new Promise((res, rej) => {
-                if ((context.req.user?.privilege & 1) != 1)
-                    throw new Error("Forbidden.");
-                
-                if (!args.input?.name)
-                    throw new Error("Missing name field.");
-                if (!args.input?.length)
-                    throw new Error("Missing length field.");
+                if (!args.input.start)
+                    args.input.start = 0;
+                if (!args.input.count)
+                    args.input.count = 1;
 
                 context.app.get("database pool").getConnection().then((conn) => {
-                    conn.query(`INSERT INTO osts (name, length, creation_date, update_date, published_date, short_length, alternate_name, sample_audio_url) VALUES (?, ?, NOW(), NOW(), ?, ?, ?, ?) RETURNING *`, [
-                        args.input.name,
-                        args.input.length,
-                        null,
-                        args.input.short_length,
-                        args.input.alternate_name,
-                        args.input.sample_audio_url
+                    conn.query(`SELECT * FROM community_action WHERE action_type ${args.input.editOnly ? "!" : ""}= 0 ORDER BY creation_date DESC LIMIT ?, ?`, [
+                        args.input.start,
+                        args.input.count
                     ]).then((r) => {
                         conn.release();
-                        res(r[0]);
+                        res(r);
                     }).catch((err) => {
                         conn.release();
                         res(undefined);
@@ -336,42 +411,16 @@ module.exports = {
                 }).catch((err) => {
                     res(undefined);
                 })
-            })
-        },
-        add_show(obj, args, context, info) {
-            return new Promise((res, rej) => {
-                if ((context.req.user?.privilege & 1) != 1)
-                    throw new Error("Forbidden.");
-                const anilist = new Anilist()
-                anilist.media.anime(parseInt(args.id)).then((data) => {
-                    context.app.get("database pool").getConnection().then((conn) => {
-                        conn.query(`INSERT INTO shows (id, native, preferred, english, medium, large) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = ? RETURNING *`, [
-                            args.id,
-                            data.title.native,
-                            data.title.userPreferred,
-                            data.title.english,
-                            data.coverImage.medium,
-                            data.coverImage.large,
-                            args.id
-                        ]).then((r) => {
-                            conn.release();
-                            res(r[0]);
-                        }).catch((err) => {
-                            conn.release();
-                            res(undefined);
-                        });
-                    }).catch((err) => {
-                        res(undefined);
-                    })
-                })
-            })
-        },
+            });
+        }
+    },
+    Mutation: {
         add_community_action(obj, args, context, info) {
             return new Promise((res, rej) => {
                 if (!context.req.isAuthenticated())
                     throw new Error("Forbidden.");
                 
-                let type = ["OstAdd"].indexOf(args.input.type);
+                let type = ["OstAdd", "EditSongInformation", "EditRelations", "EditExternalLinks"].indexOf(args.input.type);
 
                 context.app.get("database pool").getConnection().then((conn) => {
                     conn.query(`INSERT INTO community_action (user_id, action_type, action_status, info, creation_date) VALUES (?, ?, ?, ?, NOW()) RETURNING *`, [
@@ -393,24 +442,201 @@ module.exports = {
         },
         edit_community_action(obj, args, context, info) {
             return new Promise((res, rej) => {
-                if ((context.req.user?.privilege & 1) != 1)
-                    throw new Error("Forbidden.");
-                
                 context.app.get("database pool").getConnection().then((conn) => {
-                    conn.query(`UPDATE community_action SET info=? WHERE id=?`, [
-                    args.data,
-                    args.id
+                    conn.query(`SELECT * FROM community_action WHERE id = ?`, [
+                        args.id
                     ]).then((r) => {
-                        conn.release();
-                        res(args.id);
+                        if ((context.req.user?.privilege & 1) != 1 && r[0].user_id !== context.req.user.id)
+                            throw new Error("Forbidden.");
+            
+                        conn.query(`UPDATE community_action SET info=? WHERE id=?`, [
+                            args.data,
+                            args.id
+                        ]).then((r) => {
+                            conn.release();
+                            res(args.id);
+                        }).catch((err) => {
+                            conn.release();
+                            res(undefined);
+                        })
                     }).catch((err) => {
                         conn.release();
                         res(undefined);
-                    })
+                    });
                 }).catch((err) => {
                     res(undefined);
                 })
             })
+        },
+        accept_community_action(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if ((context.req.user?.privilege & 1) != 1)
+                    throw new Error("Forbidden.");
+                
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM community_action WHERE id = ?`, [
+                        args.id
+                    ]).then((action) => {
+                        switch (action[0].action_type) {
+                            case 0: { //OstAdd
+                                let action_data = action[0].info;
+                                addOst(action_data.name, action_data.length, action_data.alternate_name, action_data.short_length, 
+                                    action_data.sample_audio_url, action_data.published_date, conn).then(async (ost_data) => {
+                                    action_data.ost_id = ost_data.id;
+                                    for (let relation of action_data.relations) {
+                                        let type = ["Opening", "Ending", "Insert"].indexOf(relation.type);
+                                        await addShow(relation.show.id, conn).then((show_data) => {
+                                            addRelation(ost_data.id, show_data.id, type, relation.number, conn);
+                                        }).catch((err) => {
+                                            conn.release();
+                                            return rej(err);
+                                        });
+                                    }
+                                    if (action_data.links !== undefined && action_data.links !== null) {
+                                        for (let link of action_data.links) {
+                                            let type = ["Youtube", "Spotify", "SoundCloud"].indexOf(link.type);
+                                            await addLink(ost_data.id, type, link.url, conn);
+                                        }
+                                    }
+
+                                    conn.query(`UPDATE community_action SET action_status=?, info=? WHERE id=?`, [
+                                        1,
+                                        action_data,
+                                        args.id
+                                    ]).then((r) => {
+                                        conn.release();
+                                        res(ost_data.id);
+                                    }).catch((err) => {
+                                        conn.release();
+                                        rej(err);
+                                    })
+                                });
+                                break;
+                            }
+                            case 1: { //EditSongInformation
+                                let action_data = action[0].info;
+                                conn.query(`SELECT name, alternate_name, length, short_length FROM osts WHERE id = ?`, [
+                                    action_data.ost_id
+                                ]).then((r) => {
+                                    let new_data = r[0];
+                                    for (const [key, value] of Object.entries(action_data.edit))
+                                        new_data[key] = value;
+                                    conn.query(`UPDATE osts SET name=?, alternate_name=?, length=?, short_length=? WHERE id=?`, [
+                                        new_data.name,
+                                        new_data.alternate_name,
+                                        new_data.length,
+                                        new_data.short_length,
+                                        action_data.ost_id
+                                    ]).then(() => {
+                                        conn.query(`UPDATE community_action SET action_status=? WHERE id=?`, [
+                                            1,
+                                            args.id
+                                        ]).then((r) => {
+                                            conn.release();
+                                            res(action_data.ost_id);
+                                        }).catch((err) => {
+                                            conn.release();
+                                            rej(err);
+                                        })
+                                    }).catch((err) => {
+                                        conn.release();
+                                        rej(err);
+                                    })
+                                }).catch((err) => {
+                                    conn.release();
+                                    rej(err);
+                                })
+                                break;
+                            }
+                            case 2: { //EditRelations
+                                let action_data = action[0].info;
+                                conn.query(`DELETE FROM show_ost WHERE ost_id = ?`, [
+                                    action_data.ost_id
+                                ]).then(async () => {
+                                    for (let relation of action_data.edit) {
+                                        let type = ["Opening", "Ending", "Insert"].indexOf(relation.type);
+                                        await addShow(relation.show.id, conn).then((show_data) => {
+                                            addRelation(action_data.ost_id, show_data.id, type, relation.number, conn);
+                                        }).catch((err) => {
+                                            conn.release();
+                                            return rej(err);
+                                        });
+                                    }
+
+                                    conn.query(`UPDATE community_action SET action_status=? WHERE id=?`, [
+                                        1,
+                                        args.id
+                                    ]).then((r) => {
+                                        conn.release();
+                                        res(action_data.ost_id);
+                                    }).catch((err) => {
+                                        conn.release();
+                                        rej(err);
+                                    })
+                                }).catch((err) => {
+                                    conn.release();
+                                    rej(err);
+                                });
+                                break;
+                            }
+                            case 3: { //EditExternalLinks
+                                let action_data = action[0].info;
+                                conn.query(`DELETE FROM link_ost WHERE ost_id = ?`, [
+                                    action_data.ost_id
+                                ]).then(async () => {
+                                    for (let link of action_data.edit) {
+                                        let type = ["Youtube", "Spotify", "SoundCloud"].indexOf(link.type);
+                                        await addLink(action_data.ost_id, type, link.url, conn);
+                                    }
+
+                                    conn.query(`UPDATE community_action SET action_status=? WHERE id=?`, [
+                                        1,
+                                        args.id
+                                    ]).then((r) => {
+                                        conn.release();
+                                        res(action_data.ost_id);
+                                    }).catch((err) => {
+                                        conn.release();
+                                        rej(err);
+                                    })
+                                }).catch((err) => {
+                                    conn.release();
+                                    rej(err);
+                                });
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                        conn.release();
+                    }).catch((err) => {
+                        conn.release();
+                        rej(err);
+                    });
+                }).catch((err) => {
+                    rej(err);
+                })
+            });
+        },
+        decline_community_action(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                if ((context.req.user?.privilege & 1) != 1)
+                    throw new Error("Forbidden.");
+                
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`DELETE FROM community_action WHERE id = ?`, [
+                        args.id
+                    ]).then(() => {
+                        conn.release();
+                        res();
+                    }).catch((err) => {
+                        conn.release();
+                        rej(err);
+                    });
+                }).catch((err) => {
+                    rej(err);
+                })
+            });
         },
         set_user_rating(obj, args, context, info) {
             return new Promise((res, rej) => {

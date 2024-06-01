@@ -37,6 +37,8 @@
     </div>
 </div>
 <script src="/scripts/time-utils.js"></script>
+<script src="/scripts/fxp.min.js"></script>
+<script src="/scripts/annapi.js"></script>
 <script>
     let relations = {};
     let c = 0;
@@ -61,33 +63,29 @@
         let id = c++;
 
         let relation_container = document.getElementById("relation-container");
-        getAnimeInfoById(show_id).then((show_data) => {
+        ann.getAnimeData(show_id).then((show_data) => {
             loadEjsTemplateFromFile("/templates/editable-relation.ejs").then((r)=>{
-                if (!show_data.data)
-                    return;
-
                 relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
                     id: id,
                     show_id: show_id,
-                    medium: show_data.data.Media.coverImage.medium,
-                    native: show_data.data.Media.title.native,
-                    preferred: show_data.data.Media.title.userPreferred
+                    medium: show_data.medium,
+                    main_title: show_data.main_title,
+                    alternative_title: show_data.alternative_title.split("|;|")[0]
                 }));
 
                 relations[id] = {
                     show: {
                         id: show_id,
-                        large: show_data.data.Media.coverImage.large,
-                        medium: show_data.data.Media.coverImage.medium,
-                        native: show_data.data.Media.title.native,
-                        preferred: show_data.data.Media.title.userPreferred,
-                        english: show_data.data.Media.title.english
+                        large: show_data.large,
+                        medium: show_data.medium,
+                        main_title: show_data.main_title,
+                        alternative_title: show_data.alternative_title
                     },
                     type: "Opening",
                     number: 1
                 };
             });
-        });
+        })
     }
 
     function removeRelation(id) {
