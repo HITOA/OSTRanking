@@ -1,0 +1,87 @@
+<!-- Main Content -->
+<div class="mt-20 mb-4 flex gap-x-8 mx-auto lg:py-0 container text-white">
+    <div class="mt-4 w-1/5 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div class="justify-center bg-lighter-main-950 rounded w-full p-0">
+            <a id="anime-cover-link" href="">
+                <img id="anime-cover" class="border-lg aspect-[3/4] w-full object-cover rounded-xl p-2" src="/imgs/default_thumbnail.png">
+            </a>
+            <div class="flex bg-main-800 rounded px-2 mx-2 mb-2">
+                <h1 id="anime-main-title" class="p-2 font-bold"></h1>
+            </div>
+            <div class="flex bg-main-800 rounded px-2 mx-2 mb-2">
+                <h1 id="anime-alternative-title" class="hidden p-2 font-bold"></h1>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 w-4/5 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div id="soundtracks" class="bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"/></svg>
+                SOUNDTRACKS
+            </h1>
+        </div>
+    </div>
+</div>
+<script>
+    const show_id = <%- show_id %>;
+
+    function loadEjsTemplateFromFile(uri) {
+        return new Promise((res, rej) => {
+            fetch(uri).then((r) => {
+                r.text().then((t) => {
+                    res(t);
+                })
+            }).catch((err) => {
+                rej(err);
+            })
+        })
+    }
+
+    graphqlQuery(`
+    query($id: ID) {
+        show(id: $id) {
+            main_title
+            alternative_title
+            medium
+            large
+            vintage
+            episode_count
+            relations {
+            ost {
+                id
+                name
+                alternate_name
+            }
+            type
+            number
+            }
+        }
+    }`, {
+        id: show_id
+    }).then((r) => {
+        console.log(r);
+        if (r.data.show.large)
+            document.getElementById("anime-cover").src = r.data.show.large;
+        if (r.data.show.main_title)
+            document.getElementById("anime-main-title").innerText = r.data.show.main_title;
+        if (r.data.show.alternative_title) {
+            document.getElementById("anime-alternative-title").innerText = r.data.show.alternative_title?.split("|;|")[0];
+            document.getElementById("anime-alternative-title").classList.remove("hidden");
+        }
+
+        document.getElementById("anime-cover-link").href = `https://www.animenewsnetwork.com/encyclopedia/anime.php?id=${show_id}`;
+
+        loadEjsTemplateFromFile("/templates/show-relations-anime-entry.ejs").then((template) => {
+            for (let relation of r.data.show.relations) {
+                console.log(relation);
+                document.getElementById("soundtracks").insertAdjacentHTML("beforeend", ejs.render(template, {
+                    id: relation.ost.id,
+                    name: relation.ost.name,
+                    alternate_name: relation.ost.alternate_name,
+                    type: `${relation.type} ${relation.number}`,
+                    medium: r.data.show.medium
+                }));
+            }
+        })
+    })
+</script>

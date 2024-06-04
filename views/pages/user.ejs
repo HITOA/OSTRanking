@@ -1,0 +1,105 @@
+<div class="mt-20 mb-4 flex gap-x-8 mx-auto lg:py-0 container text-white">
+    <div class="mt-4 w-1/5 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div class="justify-center bg-lighter-main-950 rounded w-full p-0">
+            <div class="flex bg-main-800 rounded px-2 mx-2 mt-2">
+                <h1 id="user-profile-title" class="p-2 font-bold"></h1>
+            </div>
+            <img id="anime-cover" class="border-lg aspect-square w-full object-cover rounded-xl p-2" src="/imgs/default_thumbnail.png">
+            <div class="flex m-1 mx-2 w-full">
+                <h1 class="w-2/6 p-2 font-bold">Joined</h1>
+                <h1 id="user-creation-date" class="p-2"></h1>
+            </div>
+            <div class="flex m-1 mx-2 w-full">
+                <h1 class="w-2/6 p-2 font-bold">Mean score</h1>
+                <h1 id="user-mean-score" class="p-2"></h1>
+            </div>
+            <div class="flex m-1 mx-2 w-full">
+                <h1 class="w-2/6 p-2 font-bold">OST Rated</h1>
+                <h1 id="user-ost-rated" class="p-2"></h1>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 w-4/5 flex flex-col gap-y-4 items-center lg:py-0 container">
+        <div id="user-song-table" class="container base-container text-white p-0 space-y-0">
+            <div class="w-full p-1 grid grid-cols-main-list text-xl font-medium bg-lighter-main-900">
+                <div class="p-1"></div>
+                <div class="p-1"></div>
+                <div class="p-1">Anime</div>
+                <div class="p-1">Song</div>
+                <div class="p-1">User Rating</div>
+                <div class="p-1">Type</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const user_id = <%- user_id %>;
+
+    function loadEjsTemplateFromFile(uri) {
+        return new Promise((res, rej) => {
+            fetch(uri).then((r) => {
+                r.text().then((t) => {
+                    res(t);
+                })
+            }).catch((err) => {
+                rej(err);
+            })
+        })
+    }
+
+    graphqlQuery(`
+    query($id: ID) {
+        user(id: $id) {
+            name
+            creation_date
+            ratings {
+                score
+                ost {
+                    id
+                    name
+                    alternate_name
+                    relations {
+                    show {
+                        medium
+                        main_title
+                        main_title
+                    }
+                    type
+                    number
+                    }
+                }
+            }
+        }
+    }
+    `, {
+        id: user_id
+    }).then((r) => {
+        document.getElementById("user-profile-title").innerText = `${r.data.user.name}'s profile`;
+        document.getElementById("user-creation-date").innerText = new Date(parseInt(r.data.user.creation_date)).toISOString().split("T")[0];
+
+        let ms = 0;
+        let or = 0;
+
+        loadEjsTemplateFromFile("/templates/user-song-table-entry.ejs").then((template) => {
+            let user_song_table = document.getElementById("user-song-table");
+            for (let rating of r.data.user.ratings) {
+                ms += rating.score;
+                ++or;
+                user_song_table.insertAdjacentHTML("beforeend", ejs.render(template, {
+                    id: rating.ost.id,
+                    index: or,
+                    medium: rating.ost.relations[0].show.medium ? rating.ost.relations[0].show.medium : "/imgs/default_thumbnail.png",
+                    main_title: rating.ost.relations[0]?.show?.main_title,
+                    alternative_title: rating.ost.relations[0]?.show?.alternative_title ? rating.ost.relations[0]?.show?.alternative_title.split("|;|")[0] : "",
+                    name: rating.ost.name,
+                    alternate_name: rating.ost.alternate_name,
+                    rating: (rating.score / 10.0).toFixed(2),
+                    type: `${rating.ost.relations[0]?.type} ${rating.ost.relations[0]?.number}`
+                }));
+            }
+
+            document.getElementById("user-mean-score").innerText = ((ms / or) / 10.0).toFixed(2);
+            document.getElementById("user-ost-rated").innerText = or;
+        })
+    })
+</script>

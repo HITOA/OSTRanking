@@ -80,6 +80,44 @@ function addLink(ost_id, type, url, conn) {
 }
 
 module.exports = {
+    Rating: {
+        ost(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT id, name, alternate_name, \`length\`, short_length, top_rank, popular_rank FROM osts WHERE id = ?`, [
+                        obj.ost_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        }
+    },
+    User: {
+        ratings(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT ost_id, score FROM scores WHERE user_id = ? ORDER BY score DESC`, [
+                        obj.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r)
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        }
+    },
     Action: {
         user(obj, args, context, info ) {
             return new Promise((res, rej) => {
@@ -404,6 +442,23 @@ module.exports = {
                     ]).then((r) => {
                         conn.release();
                         res(r);
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            });
+        },
+        user(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT id, name, privilege, trust, creation_date FROM users WHERE id = ?`, [
+                        args.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0]);
                     }).catch((err) => {
                         conn.release();
                         res(undefined);

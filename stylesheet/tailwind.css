@@ -9,19 +9,19 @@
     }
 
     .base-container {
-        @apply bg-white dark:bg-lighter-main-950 rounded p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
+        @apply bg-lighter-main-950 rounded p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
     }
 
     .base-label {
-        @apply block text-lg font-medium text-black dark:text-white;
+        @apply block text-lg font-medium text-white;
     }
 
     .base-input {
-        @apply bg-main-50/25 dark:bg-main-600 shadow-inner text-base text-black dark:text-white rounded block w-full p-1.5 focus:outline-0;
+        @apply bg-main-600 shadow-inner text-base text-white rounded block w-full p-1.5 focus:outline-0;
     }
 
     .base-btn {
-        @apply text-lg font-medium border dark:border-main-600 rounded block w-full p-1.5 text-black dark:text-white bg-main-50/75 dark:bg-main-700 hover:bg-main-50/50 dark:hover:bg-main-600 disabled:bg-white;
+        @apply text-lg font-medium border border-main-600 rounded block w-full p-1.5 text-white bg-main-700 hover:bg-main-600 disabled:bg-white;
     }
 
     .base-notification {
@@ -42,45 +42,3 @@
         @apply block bg-green-500/10 w-full border border-green-300 p-4 rounded-lg text-green-300;
     }
 }
-
-/*
-@layer base {
-    .transition-top {
-        top: 0px;
-        transition: top 0.2s ease-in-out;
-    }
-
-    .base-container {
-        @apply bg-white dark:bg-main-800 rounded-lg space-y-4 md:space-y-6 p-4 px-8 drop-shadow-[0px_0px_10px_rgba(0,0,0,0.15)];
-    }
-
-    .base-label {
-        @apply block text-lg font-medium text-black dark:text-white;
-    }
-
-    .base-input {
-        @apply bg-main-50/25 dark:bg-main-700 border dark:border-main-600 shadow-inner text-base text-black dark:text-white rounded-lg block w-full p-2.5 focus:outline-0;
-    }
-
-    .base-btn {
-        @apply text-lg font-medium border dark:border-main-600 rounded-lg block w-full p-2.5 text-black dark:text-white bg-main-50/75 dark:bg-main-700 hover:bg-main-50/50 dark:hover:bg-main-600 disabled:bg-white;
-    }
-
-    .base-notification {
-        @apply hidden;
-    }
-}
-
-@layer components {
-    .base-input-wrong {
-        @apply border-red-400 shadow-[0_0px_20px_3px_rgba(1.0,1.0,1.0,0.2)];
-    }
-
-    .base-notification-wrong {
-        @apply block bg-red-500/10 w-full border border-red-300 p-4 rounded-lg text-red-300;
-    }
-
-    .base-notification-right {
-        @apply block bg-green-500/10 w-full border border-green-300 p-4 rounded-lg text-green-300;
-    }
-}*/

@@ -1,38 +1,40 @@
 <!-- Main Content -->
-<div class="gap-x-8 mx-auto lg:py-0 container text-black dark:text-white justify-center items-center">
+<div class="gap-x-8 mx-auto lg:py-0 container text-white justify-center items-center">
     <div class="mt-16 w-full p-1"></div>
     <h1 id="page-warning" class="hidden w-full bg-orange-500/10 border border-orange-300 p-4 rounded-lg text-orange-300 text-center">
     </h1>
 </div>
-<div class="flex gap-x-8 mx-auto lg:py-0 container text-black dark:text-white">
+<div class="flex gap-x-8 mx-auto lg:py-0 container text-white">
     <div class="mt-4 w-1/4 flex flex-col gap-y-4 items-center lg:py-0 container">
-        <div class="flex justify-center bg-white dark:bg-lighter-main-950 rounded w-full p-0">
+        <div class="flex justify-center bg-lighter-main-950 rounded w-full p-0">
+            <% if (is_auth) { %>
             <audio controls class="p-2 m-2">
-                <source src="" type="audio/ogg; codecs=opus"/>
+                <source id="audio-source" src="" type="audio/ogg; codecs=opus"/>
             </audio>
+            <% } %>
         </div>
     </div>
     <div class="mt-4 w-3/4 flex flex-col gap-y-4 items-center lg:py-0 container">
-        <div id="song-information" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
-            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 110c23.2 0 42 18.8 42 42s-18.8 42-42 42-42-18.8-42-42 18.8-42 42-42zm56 254c0 6.6-5.4 12-12 12h-88c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h12v-64h-12c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h64c6.6 0 12 5.4 12 12v100h12c6.6 0 12 5.4 12 12v24z"/></svg>
+        <div id="song-information" class="bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 8C119 8 8 119.1 8 256c0 137 111 248 248 248s248-111 248-248C504 119.1 393 8 256 8zm0 110c23.2 0 42 18.8 42 42s-18.8 42-42 42-42-18.8-42-42 18.8-42 42-42zm56 254c0 6.6-5.4 12-12 12h-88c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h12v-64h-12c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h64c6.6 0 12 5.4 12 12v100h12c6.6 0 12 5.4 12 12v24z"/></svg>
                 SONG INFORMATION &nbsp; <strong id="song-information-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('song-information')" class="ml-auto invisible group-hover:visible">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
                 </button>
                 <% } %>
             </h1>
         </div>
         <% if(action_id == -1) { %>
-        <div class="bg-white dark:bg-lighter-main-950 rounded w-full p-0">
-            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
+        <div class="bg-lighter-main-950 rounded w-full p-0">
+            <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-2" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
                 SONG RATING
             </h1>
             <div class="flex justify-center">
                 <div class="flex bg-main-800 rounded px-2 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 376.4l.1-.1 26.4 14.1 85.2 45.5-16.5-97.6-4.8-28.7 20.7-20.5 70.1-69.3-96.1-14.2-29.3-4.3-12.9-26.6L288.1 86.9l-.1 .3V376.4zm175.1 98.3c2 12-3 24.2-12.9 31.3s-23 8-33.8 2.3L288.1 439.8 159.8 508.3C149 514 135.9 513.1 126 506s-14.9-19.3-12.9-31.3L137.8 329 33.6 225.9c-8.6-8.5-11.7-21.2-7.9-32.7s13.7-19.9 25.7-21.7L195 150.3 259.4 18c5.4-11 16.5-18 28.8-18s23.4 7 28.8 18l64.3 132.3 143.6 21.2c12 1.8 22 10.2 25.7 21.7s.7 24.2-7.9 32.7L438.5 329l24.6 145.7z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 376.4l.1-.1 26.4 14.1 85.2 45.5-16.5-97.6-4.8-28.7 20.7-20.5 70.1-69.3-96.1-14.2-29.3-4.3-12.9-26.6L288.1 86.9l-.1 .3V376.4zm175.1 98.3c2 12-3 24.2-12.9 31.3s-23 8-33.8 2.3L288.1 439.8 159.8 508.3C149 514 135.9 513.1 126 506s-14.9-19.3-12.9-31.3L137.8 329 33.6 225.9c-8.6-8.5-11.7-21.2-7.9-32.7s13.7-19.9 25.7-21.7L195 150.3 259.4 18c5.4-11 16.5-18 28.8-18s23.4 7 28.8 18l64.3 132.3 143.6 21.2c12 1.8 22 10.2 25.7 21.7s.7 24.2-7.9 32.7L438.5 329l24.6 145.7z"/></svg>
                     <h1 class="flex p-2 font-bold text-lg">Score</h1>
                     <h1 id="score-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
                     <select <% if (!is_auth) { %> disabled <% } %> id="score-selection" class="flex bg-main-800 hover:bg-lighter-main-800 rounded px-2 m-2 flex font-bold text-lg border border-main-500">
@@ -50,11 +52,11 @@
                     </select>
                 </div>
                 <div class="flex bg-main-800 rounded px-2 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"/></svg><h1 class="flex p-2 font-bold text-lg">Top rank</h1>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"/></svg><h1 class="flex p-2 font-bold text-lg">Top rank</h1>
                     <h1 id="top-rank-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
                 </div>
                 <div class="flex bg-main-800 rounded px-2 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg><h1 class="flex p-2 font-bold text-lg">Popularity rank</h1>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg><h1 class="flex p-2 font-bold text-lg">Popularity rank</h1>
                     <h1 id="popular-rank-value" class="flex p-1 m-1 font-bold text-lg bg-lighter-main-950 rounded">-</h1>
                 </div>
                 <div class="flex bg-main-800 rounded px-2 m-2">
@@ -64,24 +66,24 @@
             </div>
         </div>
         <% } %>
-        <div id="relations" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
-            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>
+        <div id="relations" class="bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-2" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>
                 RELATIONS &nbsp; <strong id="relations-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('relations')" class="ml-auto invisible group-hover:visible">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
                 </button>
                 <% } %>
             </h1>
         </div>
-        <div id="external-link" class="bg-white dark:bg-lighter-main-950 rounded w-full p-0 group">
-            <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M326.6 185.4c59.7 59.8 58.9 155.7 .4 214.6-.1 .1-.2 .3-.4 .4l-67.2 67.2c-59.3 59.3-155.7 59.3-215 0-59.3-59.3-59.3-155.7 0-215l37.1-37.1c9.8-9.8 26.8-3.3 27.3 10.6 .6 17.7 3.8 35.5 9.7 52.7 2 5.8 .6 12.3-3.8 16.6l-13.1 13.1c-28 28-28.9 73.7-1.2 102 28 28.6 74.1 28.7 102.3 .5l67.2-67.2c28.2-28.2 28.1-73.8 0-101.8-3.7-3.7-7.4-6.6-10.3-8.6a16 16 0 0 1 -6.9-12.6c-.4-10.6 3.3-21.5 11.7-29.8l21.1-21.1c5.5-5.5 14.2-6.2 20.6-1.7a152.5 152.5 0 0 1 20.5 17.2zM467.5 44.4c-59.3-59.3-155.7-59.3-215 0l-67.2 67.2c-.1 .1-.3 .3-.4 .4-58.6 58.9-59.4 154.8 .4 214.6a152.5 152.5 0 0 0 20.5 17.2c6.4 4.5 15.1 3.8 20.6-1.7l21.1-21.1c8.4-8.4 12.1-19.2 11.7-29.8a16 16 0 0 0 -6.9-12.6c-2.9-2-6.6-4.9-10.3-8.6-28.1-28.1-28.2-73.6 0-101.8l67.2-67.2c28.2-28.2 74.3-28.1 102.3 .5 27.8 28.3 26.9 73.9-1.2 102l-13.1 13.1c-4.4 4.4-5.8 10.8-3.8 16.6 5.9 17.2 9 35 9.7 52.7 .5 13.9 17.5 20.4 27.3 10.6l37.1-37.1c59.3-59.3 59.3-155.7 0-215z"/></svg>
+        <div id="external-link" class="bg-lighter-main-950 rounded w-full p-0 group">
+            <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-2" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M326.6 185.4c59.7 59.8 58.9 155.7 .4 214.6-.1 .1-.2 .3-.4 .4l-67.2 67.2c-59.3 59.3-155.7 59.3-215 0-59.3-59.3-59.3-155.7 0-215l37.1-37.1c9.8-9.8 26.8-3.3 27.3 10.6 .6 17.7 3.8 35.5 9.7 52.7 2 5.8 .6 12.3-3.8 16.6l-13.1 13.1c-28 28-28.9 73.7-1.2 102 28 28.6 74.1 28.7 102.3 .5l67.2-67.2c28.2-28.2 28.1-73.8 0-101.8-3.7-3.7-7.4-6.6-10.3-8.6a16 16 0 0 1 -6.9-12.6c-.4-10.6 3.3-21.5 11.7-29.8l21.1-21.1c5.5-5.5 14.2-6.2 20.6-1.7a152.5 152.5 0 0 1 20.5 17.2zM467.5 44.4c-59.3-59.3-155.7-59.3-215 0l-67.2 67.2c-.1 .1-.3 .3-.4 .4-58.6 58.9-59.4 154.8 .4 214.6a152.5 152.5 0 0 0 20.5 17.2c6.4 4.5 15.1 3.8 20.6-1.7l21.1-21.1c8.4-8.4 12.1-19.2 11.7-29.8a16 16 0 0 0 -6.9-12.6c-2.9-2-6.6-4.9-10.3-8.6-28.1-28.1-28.2-73.6 0-101.8l67.2-67.2c28.2-28.2 74.3-28.1 102.3 .5 27.8 28.3 26.9 73.9-1.2 102l-13.1 13.1c-4.4 4.4-5.8 10.8-3.8 16.6 5.9 17.2 9 35 9.7 52.7 .5 13.9 17.5 20.4 27.3 10.6l37.1-37.1c59.3-59.3 59.3-155.7 0-215z"/></svg>
                 EXTERNAL LINK &nbsp; <strong id="external-link-edit-label" class="text-orange-500"></strong>
                 <% if (is_auth) { %>
                 <button onclick="openOstEditModal('external-link')" class="ml-auto invisible group-hover:visible">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
                 </button>
                 <% } %>
             </h1>
@@ -89,7 +91,7 @@
     </div>
 </div>
 <% if (privilege && action_id != -1) { %>
-<div class="gap-x-8 mx-auto lg:py-0 container text-black dark:text-white justify-center items-center">
+<div class="gap-x-8 mx-auto lg:py-0 container text-white justify-center items-center">
     <h1 id="accept-decline-msg" class="mt-4 mx-auto w-96 bg-gray-500/10 border border-gray-300 p-4 rounded-lg text-gray-300 text-center">
          You can <strong onclick="acceptRequest()" class="hover:underline">Accept</strong> or <strong onclick="declineRequest()" class="hover:underline">Decline</strong> this request.
     </h1>
@@ -97,12 +99,12 @@
 <% } %>
 <!-- Edit SongInfo Modal -->
 <div id="ost-edit-song-information-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-main-950/50">
-    <div class="justify-center bg-white dark:bg-lighter-main-950 rounded max-w-screen-lg w-1/3 p-0 dark:text-white">
-        <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+    <div class="justify-center bg-lighter-main-950 rounded max-w-screen-lg w-1/3 p-0 text-white">
+        <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
             EDIT SONG INFORMATION
             <button onclick="closeOstEditModal('song-information')" class="ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
         <div class="m-4">
@@ -126,7 +128,7 @@
             <h1 class="w-3/6 p-2 font-bold">Short length (TV size)</h1>
             <input id="ost-edit-song-information-short-length" class="base-input mr-2" value="" autocomplete="off">
         </div>
-        <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
+        <div class="flex items-center p-1 md:p-2 my-2 border-t rounded-b border-main-600">  
             <button onclick="updateEditedSongInfo()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('song-information')"  class="base-btn mx-2">Cancel</button>
         </div>
@@ -134,12 +136,12 @@
 </div>
 <!-- Edit Relations Modal -->
 <div id="ost-edit-relations-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-main-950/50">
-    <div class="justify-center bg-white dark:bg-lighter-main-950 rounded max-w-screen-lg w-2/4 p-0 dark:text-white">
-        <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+    <div class="justify-center bg-lighter-main-950 rounded max-w-screen-lg w-2/4 p-0 text-white">
+        <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
             EDIT RELATIONS
             <button onclick="closeOstEditModal('relations')" class="ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
         <div class="m-4">
@@ -150,12 +152,12 @@
         <div id="ost-edit-relations-container">
             
         </div>
-        <div class="flex m-1 mx-2 p-1 md:p-2 mt-2 border-t border-main-200 rounded-b dark:border-main-600">
+        <div class="flex m-1 mx-2 p-1 md:p-2 mt-2 border-t rounded-b border-main-600">
             <h1 class="w-3/6 p-2 font-bold">Show ID</h1>
             <input id="ost-edit-relations-show-id" class="base-input mr-2" value="" autocomplete="off">
             <button onclick="addRelation()" class="base-btn mx-2">Add Show</button>
         </div>
-        <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
+        <div class="flex items-center p-1 md:p-2 my-2 border-t rounded-b border-main-600">  
             <button onclick="updateEditedRelations()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('relations')"  class="base-btn mx-2">Cancel</button>
         </div>
@@ -163,12 +165,12 @@
 </div>
 <!-- Edit External Link Modal -->
 <div id="ost-edit-external-link-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-main-950/50">
-    <div class="justify-center bg-white dark:bg-lighter-main-950 rounded max-w-screen-lg w-2/4 p-0 dark:text-white">
-        <h1 class="flex dark:bg-main-700 w-full rounded-t p-2 font-bold text-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
+    <div class="justify-center bg-lighter-main-950 rounded max-w-screen-lg w-2/4 p-0 text-white">
+        <h1 class="flex bg-main-700 w-full rounded-t p-2 font-bold text-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/></svg>
             EXTERNAL LINK
             <button onclick="closeOstEditModal('external-link')" class="ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 dark:fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 fill-white mr-1 ml-auto" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"/></svg>
             </button>
         </h1>
         <div class="m-4">
@@ -181,7 +183,7 @@
         <div class="flex items-center p-1 md:p-2 my-2">
             <button onclick="addExternalLink()" class="base-btn p-0">Add new link</button>
         </div>
-        <div class="flex items-center p-1 md:p-2 my-2 border-t border-main-200 rounded-b dark:border-main-600">  
+        <div class="flex items-center p-1 md:p-2 my-2 border-t rounded-b border-main-600">  
             <button onclick="updateEditedExternalLink()" class="base-btn mx-2">Accept</button>
             <button onclick="closeOstEditModal('external-link')"  class="base-btn mx-2">Cancel</button>
         </div>
@@ -246,7 +248,8 @@
                     type
                     creation_date
                     user {
-                    name
+                        id
+                        name
                     }
                 }
             }
@@ -254,7 +257,7 @@
                 id: action_id
             }).then((r) => {
                 document.getElementById("page-warning").innerHTML = 
-                    `This page is a preview of a request made by <strong>${r.data.action?.user?.name}</strong>. It is temporary and will be deleted once the request is accepted or declined. Only you and other admins/moderators can see it. You can edit this page.`;
+                    `This page is a preview of a request made by <a href="/user/${r.data.action?.user?.id}"><strong>${r.data.action?.user?.name}</strong></a>. It is temporary and will be deleted once the request is accepted or declined. Only you and other admins/moderators can see it.`;
                     document.getElementById("page-warning").classList.remove("hidden");
 
                 if (r.data.action.type === "OstAdd")
@@ -270,6 +273,7 @@
                         alternate_name
                         length
                         short_length
+                        sample_audio_url
                         relations {
                         show {
                             id
@@ -351,6 +355,7 @@
                 rating_count
                 top_rank
                 popular_rank
+                sample_audio_url
                 relations {
                 show {
                     id
@@ -394,9 +399,9 @@
                 relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
                     id: id,
                     show_id: relation.show.id,
-                    medium: relation.show.medium,
+                    medium: relation.show.medium ? relation.show.medium : "/imgs/default_thumbnail.png",
                     main_title: relation.show.main_title,
-                    alternative_title: relation.show.alternative_title.split("|;|")[0]
+                    alternative_title: relation.show.alternative_title?.split("|;|")[0]
                 }));
 
                 document.getElementById(`relation-${id}-type`).value = relation.type;
@@ -611,7 +616,7 @@
                 relation_container.insertAdjacentHTML("beforeend", ejs.render(r, {
                     id: id,
                     show_id: show_id,
-                    medium: show_data.medium,
+                    medium: show_data.medium ? show_data.medium : "/imgs/default_thumbnail.png",
                     main_title: show_data.main_title,
                     alternative_title: show_data.alternative_title.split("|;|")[0]
                 }));
@@ -747,9 +752,10 @@
         for (relation of ost_data.relations) {
             console.log(relation.show);
             relations.innerHTML += ejs.render(res[2].value, {
+                id: relation.show.id,
                 main_title: relation.show.main_title,
-                alternative_title: relation.show.alternative_title.split("|;|")[0],
-                medium: relation.show.medium,
+                alternative_title: relation.show.alternative_title?.split("|;|")[0],
+                medium: relation.show.medium ? relation.show.medium : "/imgs/default_thumbnail.png",
                 type: `${relation.type} ${relation.number}`
             })
         }
@@ -762,6 +768,14 @@
                     url: link.url,
                     type: link.type
                 });
+            }
+        }
+        
+        if (ost_data.sample_audio_url) {
+            let audio_source = document.getElementById("audio-source");
+            if (audio_source) {
+                audio_source.src = `/audio/${ost_data.sample_audio_url}`;
+                audio_source.parentElement.load();
             }
         }
 

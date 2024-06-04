@@ -45,12 +45,20 @@ app.use(require("./controllers/register"));
 app.use(require("./controllers/login"));
 app.use(require("./controllers/request"));
 app.use(require("./controllers/ost"));
+app.use(require("./controllers/show"));
+app.use(require("./controllers/user"));
 app.use(require("./controllers/faq"));
 app.use(require("./controllers/community"));
+app.use(require("./controllers/upload"));
 
 app.all("/api", require("./controllers/api")(app));
 
 app.use(express.static("public"));
+app.use("/audio", (req, res, next) => {
+    if (!req.isAuthenticated())
+        return res.status(403).send();
+    next();
+}, express.static("audios"));
 
 app.get("/ruru", (req, res) => {
     res.type("html");

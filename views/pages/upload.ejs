@@ -1,0 +1,10 @@
+<div class="grid place-content-center h-screen">
+    <form class="base-container" action="/upload/ost/<%- id %>" method="post" enctype="multipart/form-data">
+        <h1 class="text-white text-medium font-bold leading-tight text-2xl">Upload Audio File</h1>
+        <div id="notification" class="hidden base-notification-right my-4 mt-2">
+            Processing File...
+        </div>
+        <input class="base-btn mt-2" type="file" name="audio" />
+        <input class="base-btn p-1 mt-2" type="submit" onclick="document.getElementById('notification').classList.remove('hidden');" value="Upload audio file.">         
+    </form>
+</div>

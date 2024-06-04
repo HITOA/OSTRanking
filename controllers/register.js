@@ -20,6 +20,7 @@ router.get("/register", (req, res) => {
     res.render("layout", {
         title: "OSTRanking - Register",
         page: "./pages/register",
+        current_user_id: req.user?.id,
         ...req.info
     });
 });

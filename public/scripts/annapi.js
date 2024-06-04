@@ -31,14 +31,20 @@ const ann = {
                             }
                             break;
                         case "Picture":
-                            data.medium = info.img[0]["@_src"];
-                            data.large = info.img[info.img.length - 1]["@_src"];
+                            if (info.img.length === undefined) {
+                                data.medium = info.img["@_src"];
+                                data.large = info.img["@_src"];
+                            } else {
+                                data.medium = info.img[0]["@_src"];
+                                data.large = info.img[info.img.length - 1]["@_src"];
+                            }
                             break;
                         case "Number of episodes":
                             data.episode_count = info["#text"];
                             break;
                         case "Vintage":
-                            data.vintage = info["#text"];
+                            if (!data.vintage)
+                                data.vintage = info["#text"];
                             break;
                         default:
                             break;

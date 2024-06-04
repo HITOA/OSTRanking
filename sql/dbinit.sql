@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS shows(
     id INT NOT NULL PRIMARY KEY, 
     main_title NVARCHAR(256), alternative_title NVARCHAR(512), 
-    medium VARCHAR(512), large VARCHAR(512), vintage VARCHAR(64),
+    medium VARCHAR(512), large VARCHAR(512), vintage VARCHAR(128),
     episode_count SMALLINT, FULLTEXT(main_title, alternative_title));
 
 CREATE TABLE IF NOT EXISTS authors(
@@ -73,22 +73,14 @@ CREATE OR REPLACE TRIGGER add_ost_scores_total AFTER INSERT ON scores FOR EACH R
 CREATE OR REPLACE TRIGGER update_ost_scores_total AFTER UPDATE ON scores FOR EACH ROW UPDATE ost_scores_total SET score_acc=score_acc+NEW.score-OLD.score WHERE ost_id = NEW.ost_id;
 CREATE OR REPLACE TRIGGER remove_ost_scores_total AFTER DELETE ON scores FOR EACH ROW UPDATE ost_scores_total SET score_acc=score_acc-OLD.score,score_count=score_count-1 WHERE ost_id = OLD.ost_id;
 
-CREATE OR REPLACE EVENT update_ost_top_rank 
+CREATE OR REPLACE EVENT update_ost_rank 
 	ON SCHEDULE EVERY 10 MINUTE
 		DO
 			UPDATE osts INNER JOIN (
-				SELECT id, RANK() OVER (ORDER BY (score_acc + 400) / NULLIF(score_count + 10, 10) DESC) AS new_top_rank 
+				SELECT id, 
+                RANK() OVER (ORDER BY (score_acc + 400) / (score_count + 10) DESC) AS new_top_rank, 
+                RANK() OVER (ORDER BY NULLIF(score_count, 0) DESC) AS new_popular_rank 
 			    FROM osts
 			    INNER JOIN ost_scores_total ON ost_id = osts.id
 			) AS rank_table ON rank_table.id = osts.id
-			SET top_rank = rank_table.new_top_rank;
-
-CREATE OR REPLACE EVENT update_ost_popular_rank 
-	ON SCHEDULE EVERY 10 MINUTE
-		DO
-			UPDATE osts INNER JOIN (
-				SELECT id, RANK() OVER (ORDER BY NULLIF(score_count, 0) DESC) AS new_popular_rank 
-			    FROM osts
-			    INNER JOIN ost_scores_total ON ost_id = osts.id
-			) AS rank_table ON rank_table.id = osts.id
-			SET popular_rank = rank_table.new_popular_rank;
+			SET top_rank = rank_table.new_top_rank, popular_rank = rank_table.new_popular_rank;

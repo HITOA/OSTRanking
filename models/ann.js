@@ -45,7 +45,8 @@ module.exports = {
                             data.episode_count = info["#text"];
                             break;
                         case "Vintage":
-                            data.vintage = info["#text"];
+                            if (!data.vintage)
+                                data.vintage = info["#text"];
                             break;
                         default:
                             break;

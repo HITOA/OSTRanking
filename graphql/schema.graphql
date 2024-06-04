@@ -34,11 +34,18 @@ enum ActionStatus {
     Declined
 }
 
+type Rating {
+    score: Int
+    ost: Ost!
+}
+
 type User {
     id: ID!
     name: String!
     privilege: Int!
     trust: Int!
+    creation_date: String!
+    ratings: [Rating!]!
 }
 
 type Action {
@@ -134,6 +141,7 @@ type Query {
     show(id: ID): Show
     action(id: ID): Action
     actions(input: ActionSearchInput): [Action!]!
+    user(id: ID): User
 }
 
 type Mutation {

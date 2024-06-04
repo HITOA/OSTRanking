@@ -1,6 +1,6 @@
 <div class="mt-20 mb-4 flex flex-col items-center justify-center mx-auto lg:py-0 container">
-    <div id="song-table" class="container base-container text-black dark:text-white p-0 space-y-0">
-        <div class="w-full p-1 grid grid-cols-main-list text-xl font-medium bg-gray-100  dark:bg-lighter-main-900">
+    <div id="song-table" class="container base-container text-white p-0 space-y-0">
+        <div class="w-full p-1 grid grid-cols-main-list text-xl font-medium bg-lighter-main-900">
             <div class="p-1"></div>
             <div class="p-1"></div>
             <div class="p-1">Anime</div>
@@ -38,7 +38,7 @@
                     ost_search_input = `{
                                 count: ${count}
                                 start: ${start}
-                                expression: "*${urlParams.get("expression")}*"
+                                expression: "${urlParams.get("expression")}"
                             }`;
                 }
 
@@ -69,7 +69,7 @@
                             table.innerHTML += ejs.render(template, {
                                 id: ost.id,
                                 index: index++,
-                                medium: medium,
+                                medium: medium ? medium : "/imgs/default_thumbnail.png",
                                 main_title: ost.relations[0]?.show?.main_title,
                                 alternative_title: ost.relations[0]?.show?.alternative_title ? ost.relations[0]?.show?.alternative_title.split("|;|")[0] : "",
                                 name: ost.name,

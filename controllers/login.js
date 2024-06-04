@@ -8,6 +8,7 @@ router.get("/login", (req, res) => {
     res.render("layout", {
         title: "OSTRanking - Login",
         page: "./pages/login",
+        current_user_id: req.user?.id,
         ...req.info
     });
 });

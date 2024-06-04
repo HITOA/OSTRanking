@@ -1,10 +1,11 @@
 const router = require("express").Router();
 
-router.get("/", (req, res) => {
+router.get("/show/:id", (req, res) => {
     res.render("layout", {
         title: "OSTRanking",
-        page: "./pages/index",
+        page: "./pages/show",
         current_user_id: req.user?.id,
+        show_id: req.params.id,
         ...req.info
     });
 });

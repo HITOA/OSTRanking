@@ -4,6 +4,7 @@ router.get("/community", (req, res) => {
     res.render("layout", {
         title: "OSTRanking - Community",
         page: "./pages/community",
+        current_user_id: req.user?.id,
         privilege: req.user?.privilege ? req.user?.privilege : 0,
         ...req.info
     });
@@ -29,6 +30,7 @@ router.get("/community/preview/:id", (req, res) => {
             res.render("layout", {
                 title: "OSTRanking",
                 page: "./pages/ost",
+                current_user_id: req.user?.id,
                 ost_id: -1,
                 action_id: req.params.id,
                 is_auth: req.isAuthenticated(),

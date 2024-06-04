@@ -7,6 +7,7 @@ router.get("/request", (req, res) => {
     res.render("layout", {
         title: "OSTRanking - Request",
         page: "./pages/request",
+        current_user_id: req.user?.id,
         ...req.info
     });
 });

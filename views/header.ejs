@@ -1,4 +1,4 @@
-<header id="sticky-header" class="z-10 fixed transition-top bg-main-600 dark:bg-lighter-main-950 w-full text-white">
+<header id="sticky-header" class="z-10 fixed transition-top bg-lighter-main-950 w-full text-white">
   <div class="flex flex-wrap justify-stretch items-center mx-auto max-w-screen-2xl">
     <div class="flex m-1 mr-auto lg:mr-0">
       <a class="flex items-center" href="/">
@@ -7,7 +7,7 @@
       <form class="mx-auto" method="GET" action="/">
         <div class="relative w-full">
             <input type="search" name="expression" id="search-dropdown" class="base-input" placeholder="..." required />
-            <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-accent-500 rounded-e hover:bg-accent-700 dark:bg-accent-500 dark:hover:bg-accent-600">
+            <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white rounded-e bg-accent-500 hover:bg-accent-600">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
@@ -18,11 +18,11 @@
     </div>
     <div class="flex lg:order-2 font-medium">
       <% if (!auth) { %>
-      <a class="bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-800 rounded-l text-center p-2" href="/login">Login</a>
-      <a class="bg-accent-500 hover:bg-accent-600 rounded-r text-center p-2 dark:[text-shadow:_0px_0px_5px_rgb(0_0_0_/_70%)]" href="/register">Register</a>
+      <a class="bg-main-700 hover:bg-main-800 rounded-l text-center p-2" href="/login">Login</a>
+      <a class="bg-accent-500 hover:bg-accent-600 rounded-r text-center p-2 [text-shadow:_0px_0px_5px_rgb(0_0_0_/_70%)]" href="/register">Register</a>
       <% } else { %>
-      <a class="bg-main-500 hover:bg-main-400 dark:bg-main-700 hover:dark:bg-main-800 rounded-l text-center p-2" href="/profil"><%- username %></a>
-      <a class="bg-accent-500 hover:bg-accent-600 rounded-r text-center p-2 dark:[text-shadow:_0px_0px_5px_rgb(0_0_0_/_70%)]" href="/logout">Logout</a>
+      <a class="bg-main-700 hover:bg-main-800 rounded-l text-center p-2" href="/user/<%- current_user_id %>"><%- username %></a>
+      <a class="bg-accent-500 hover:bg-accent-600 rounded-r text-center p-2 [text-shadow:_0px_0px_5px_rgb(0_0_0_/_70%)]" href="/logout">Logout</a>
       <% } %>
       <button type="button"class="inline-flex lg:hidden items-center rounded dropdown p-2" id="header-dropdown-button" onclick="openDropDown('header-dropdown')">
         <span class="sr-only">Open main menu</span>
@@ -37,13 +37,13 @@
     <div class="justify-between hidden items-center w-full lg:flex lg:w-auto lg:order-1 lg:mr-auto lg:ml-2 dropdown-content" id="header-dropdown">
       <ul class="flex flex-col divide-y lg:divide-none font-medium lg:flex-row">
         <li>
-          <a class="block py-2 pr-4 pl-3 dark:hover:bg-main-800" href="/">Song</a>
+          <a class="block py-2 pr-4 pl-3 hover:bg-main-800" href="/">Song</a>
         </li>
         <li>
-          <a class="block py-2 pr-4 pl-3 dark:hover:bg-main-800" href="/community">Community</a>
+          <a class="block py-2 pr-4 pl-3 hover:bg-main-800" href="/community">Community</a>
         </li>
         <li>
-          <a class="block py-2 pr-4 pl-3 dark:hover:bg-main-800" href="/faq">FAQ</a>
+          <a class="block py-2 pr-4 pl-3 hover:bg-main-800" href="/faq">FAQ</a>
         </li>
       </ul>
     </div>

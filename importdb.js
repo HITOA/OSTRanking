@@ -2,7 +2,7 @@ require("dotenv").config();
 const ann = require("./models/ann");
 const fs = require("fs");
 
-if (process.argv[0] < 4)
+if (process.argv[0] < 5)
     return;
 
 const dboption = {
@@ -119,7 +119,7 @@ function importEntry(path) {
                             res();
                         })
                     } else {
-                        addOst(song.songName, 130, undefined, undefined, undefined, undefined, conn).then((o) => {
+                        addOst(song.songName, song.songDuration ? song.songDuration : 0, undefined, undefined, undefined, undefined, conn).then((o) => {
                             addRelation(o.id, r.id, type, number, conn).then(() => {
                                 conn.release();
                                 res();
@@ -127,6 +127,8 @@ function importEntry(path) {
                         })
                     }
                 }
+            }).catch(() => {
+                res();
             })
         });
     })
@@ -140,11 +142,13 @@ fs.readdir(process.argv[2], async (err, files) => {
     let i = 0;
 
     for (let file of files) {
-        if (i >= parseInt(process.argv[3]))
+        ++i;
+        if (i <= parseInt(process.argv[3]))
+            continue;
+        if (i >= parseInt(process.argv[4]))
             break;
 
         console.log(`Entry: ${i}`);
         await importEntry(`${process.argv[2]}${file}`);
-        ++i;
     }
 });
