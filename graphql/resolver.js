@@ -335,7 +335,7 @@ module.exports = {
                 return new Promise((res, rej) => {
                     context.app.get("database pool").getConnection().then((conn) => {
                         conn.query(`SELECT osts.id, osts.name, osts.alternate_name, osts.sample_audio_url, osts.length, osts.short_length, osts.top_rank, osts.popular_rank, 
-                        MATCH(osts.name, osts.alternate_name) AGAINST(? IN BOOLEAN MODE) + MATCH(shows.main_title, shows.alternative_title) AGAINST(? IN BOOLEAN MODE) AS relevance 
+                        GREATEST(MATCH(osts.name, osts.alternate_name) AGAINST(?), MATCH(shows.main_title, shows.alternative_title) AGAINST(?)) AS relevance 
                         FROM show_ost, shows, osts WHERE shows.id = show_ost.show_id AND osts.id = show_ost.ost_id
                         ORDER BY relevance DESC
                         LIMIT ?, ?`, [

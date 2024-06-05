@@ -21,7 +21,7 @@
     }
 
     .base-btn {
-        @apply text-lg font-medium border border-main-600 rounded block w-full p-1.5 text-white bg-main-700 hover:bg-main-600 disabled:bg-white;
+        @apply text-lg font-medium border border-main-600 rounded block w-full p-1.5 text-white bg-main-700 hover:bg-main-600;
     }
 
     .base-notification {

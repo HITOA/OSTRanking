@@ -2,7 +2,7 @@ require("dotenv").config();
 const ann = require("./models/ann");
 const fs = require("fs");
 
-if (process.argv[0] < 5)
+if (process.argv.length < 5)
     return;
 
 const dboption = {
@@ -15,6 +15,9 @@ const dboption = {
 };
 
 const pool = require("mariadb").createPool(dboption);
+
+const matching_list = JSON.parse(fs.readFileSync("matching_list.json"));
+const matching_list_song_id = {};
 
 function addOst(name, length, alternate_name, short_length, sample_audio_url, published_date, conn) {
     return new Promise((res, rej) => {
@@ -97,40 +100,40 @@ function addLink(ost_id, type, url, conn) {
 
 let songIdMatch = {};
 
-function importEntry(path) {
+function importEntry(path, conn) {
     return new Promise((res, rej) => {
-        pool.getConnection().then(async (conn) => {
-            let data = JSON.parse(fs.readFileSync(path, "utf-8"));
-            addShow(data[0].annId, conn).then((r) => {
-                for (let song of data) {
-                    let type = 2;
-                    let number = 1;
-                    if (song.songType.startsWith("Opening")) {
-                        type = 0;
-                        number = parseInt(song.songType.split(" ")[1]);
-                    } else if (song.songType.startsWith("Ending")) {
-                        type = 1;
-                        number = parseInt(song.songType.split(" ")[1]);
-                    }
+        let data = JSON.parse(fs.readFileSync(path, "utf-8"));
+        addShow(data[0].annId, conn).then((r) => {
+            for (let song of data) {
+                let p = song.audio.split('/');
+                let n = p[p.length - 1];
+                n = `${n.split('.')[0]}.opus`;
+                let type = 2;
+                let number = 1;
+                if (song.songType.startsWith("Opening")) {
+                    type = 0;
+                    number = parseInt(song.songType.split(" ")[1]);
+                } else if (song.songType.startsWith("Ending")) {
+                    type = 1;
+                    number = parseInt(song.songType.split(" ")[1]);
+                }
 
-                    if (`${song.annSongId}` in songIdMatch) {
-                        addRelation(songIdMatch[`${song.annSongId}`], r.id, type, number, conn).then(() => {
-                            conn.release();
+                if (`${song.annSongId}` in songIdMatch) {
+                    addRelation(songIdMatch[`${song.annSongId}`], r.id, type, number, conn).then(() => {
+                        res();
+                    })
+                } else {
+                    addOst(song.songName, song.songDuration ? song.songDuration : 0, undefined, undefined, matching_list[n], undefined, conn).then((o) => {
+                        songIdMatch[`${song.annSongId}`] = o.id;
+                        addRelation(o.id, r.id, type, number, conn).then(() => {
                             res();
                         })
-                    } else {
-                        addOst(song.songName, song.songDuration ? song.songDuration : 0, undefined, undefined, undefined, undefined, conn).then((o) => {
-                            addRelation(o.id, r.id, type, number, conn).then(() => {
-                                conn.release();
-                                res();
-                            })
-                        })
-                    }
+                    })
                 }
-            }).catch(() => {
-                res();
-            })
-        });
+            }
+        }).catch(() => {
+            res();
+        })
     })
 }
 
@@ -141,14 +144,19 @@ fs.readdir(process.argv[2], async (err, files) => {
 
     let i = 0;
 
-    for (let file of files) {
-        ++i;
-        if (i <= parseInt(process.argv[3]))
-            continue;
-        if (i >= parseInt(process.argv[4]))
-            break;
+    pool.getConnection().then(async (conn) => {
+        for (let file of files) {
+            ++i;
+            if (i <= parseInt(process.argv[3]))
+                continue;
+            if (i >= parseInt(process.argv[4]))
+                break;
 
-        console.log(`Entry: ${i}`);
-        await importEntry(`${process.argv[2]}${file}`);
-    }
+            console.log(`Entry: ${i}`);
+            await importEntry(`${process.argv[2]}${file}`, conn);
+        }
+
+        fs.writeFileSync("./matching-list-song-id.json", JSON.stringify(songIdMatch));
+        conn.release();
+    });
 });

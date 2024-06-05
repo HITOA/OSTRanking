@@ -98,7 +98,7 @@
                 }));
             }
 
-            document.getElementById("user-mean-score").innerText = ((ms / or) / 10.0).toFixed(2);
+            document.getElementById("user-mean-score").innerText = (ms / or) ? ((ms / or) / 10.0).toFixed(2) : 0.0.toFixed(2);
             document.getElementById("user-ost-rated").innerText = or;
         })
     })
