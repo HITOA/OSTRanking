@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS shows(
     episode_count SMALLINT, FULLTEXT(main_title, alternative_title));
 
 CREATE TABLE IF NOT EXISTS artists(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(64));
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(128) CHARACTER SET utf8mb4);
 
 CREATE TABLE IF NOT EXISTS artist_group_member(
     artist_group_id INT NOT NULL, artist_member_id INT NOT NULL,
@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS osts(
 
 CREATE TABLE IF NOT EXISTS artist_ost(
     artist_id INT NOT NULL, ost_id INT NOT NULL, 
-    role_name VARCHAR(32) NOT NULL, PRIMARY KEY (artist_id, ost_id), 
-    FOREIGN KEY (artist_id) REFERENCES artist_id(id), 
+    role_name VARCHAR(32) NOT NULL, PRIMARY KEY (artist_id, ost_id, role_name), 
+    FOREIGN KEY (artist_id) REFERENCES artists(id), 
     FOREIGN KEY (ost_id) REFERENCES osts(id));
 
 CREATE TABLE IF NOT EXISTS show_ost(
