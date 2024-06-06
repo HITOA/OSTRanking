@@ -10,8 +10,14 @@ CREATE TABLE IF NOT EXISTS shows(
     medium VARCHAR(512), large VARCHAR(512), vintage VARCHAR(128),
     episode_count SMALLINT, FULLTEXT(main_title, alternative_title));
 
-CREATE TABLE IF NOT EXISTS authors(
+CREATE TABLE IF NOT EXISTS artists(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(64));
+
+CREATE TABLE IF NOT EXISTS artist_group_member(
+    artist_group_id INT NOT NULL, artist_member_id INT NOT NULL,
+    role_name VARCHAR(64), PRIMARY KEY (artist_group_id, artist_member_id),
+    FOREIGN KEY (artist_group_id) REFERENCES artists(id),
+    FOREIGN KEY (artist_member_id) REFERENCES artists(id));
 
 CREATE TABLE IF NOT EXISTS tags(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(64));
@@ -26,10 +32,10 @@ CREATE TABLE IF NOT EXISTS osts(
     update_date DATETIME NOT NULL, published_date DATE, short_length SMALLINT,
     top_rank INT, popular_rank INT, FULLTEXT(name, alternate_name));
 
-CREATE TABLE IF NOT EXISTS author_ost(
-    author_id INT NOT NULL, ost_id INT NOT NULL, 
-    role VARCHAR(32) NOT NULL, PRIMARY KEY (author_id, ost_id), 
-    FOREIGN KEY (author_id) REFERENCES authors(id), 
+CREATE TABLE IF NOT EXISTS artist_ost(
+    artist_id INT NOT NULL, ost_id INT NOT NULL, 
+    role_name VARCHAR(32) NOT NULL, PRIMARY KEY (artist_id, ost_id), 
+    FOREIGN KEY (artist_id) REFERENCES artist_id(id), 
     FOREIGN KEY (ost_id) REFERENCES osts(id));
 
 CREATE TABLE IF NOT EXISTS show_ost(
