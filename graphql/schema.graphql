@@ -65,9 +65,15 @@ type Relation {
 }
 
 type Work {
-    name: String!
+    role_name: String!
     artist: Artist!
     ost: Ost!
+}
+
+type Member {
+    role_name: String!
+    artist: Artist!
+    group: Artist!
 }
 
 type Link {
@@ -90,6 +96,8 @@ type Artist {
     id: ID!
     name: String!
     works: [Work!]!
+    member_of: [Member!]!
+    members: [Member!]!
 }
 
 type Ost {

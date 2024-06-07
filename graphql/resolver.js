@@ -189,9 +189,6 @@ module.exports = {
         }
     },
     Work: {
-        name(obj, args, context, info) {
-            return obj.role_name;
-        },
         artist(obj, args, context, info) {
             return new Promise((res, rej) => {
                 context.app.get("database pool").getConnection().then((conn) => {
@@ -227,6 +224,42 @@ module.exports = {
             })
         }
     },
+    Member: {
+        artist(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artists WHERE id = ?`, [
+                        obj.artist_member_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        group(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artists WHERE id = ?`, [
+                        obj.artist_group_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+    },
     Link: {
         type(obj, args, context, info) {
             return ["Youtube", "SoundCloud", "Spotify"][obj.type];
@@ -256,6 +289,40 @@ module.exports = {
             return new Promise((res, rej) => {
                 context.app.get("database pool").getConnection().then((conn) => {
                     conn.query(`SELECT * FROM artist_ost WHERE artist_id=?`, [
+                        obj.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r)
+                    }).catch((err) => {
+                        conn.release();
+                        res([]);
+                    });
+                }).catch((err) => {
+                    res([]);
+                })
+            })
+        },
+        member_of(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artist_group_member WHERE artist_member_id=?`, [
+                        obj.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r)
+                    }).catch((err) => {
+                        conn.release();
+                        res([]);
+                    });
+                }).catch((err) => {
+                    res([]);
+                })
+            })
+        },
+        members(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artist_group_member WHERE artist_group_id=?`, [
                         obj.id
                     ]).then((r) => {
                         conn.release();
