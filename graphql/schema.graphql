@@ -64,6 +64,12 @@ type Relation {
     number: Int!
 }
 
+type Work {
+    name: String!
+    artist: Artist!
+    ost: Ost!
+}
+
 type Link {
     type: LinkType!
     url: String!
@@ -80,6 +86,12 @@ type Show {
     relations: [Relation!]!
 }
 
+type Artist {
+    id: ID!
+    name: String!
+    works: [Work!]!
+}
+
 type Ost {
     id: ID!
     name: String!
@@ -94,6 +106,7 @@ type Ost {
     rating_count: Int
     relations: [Relation!]!
     links: [Link!]!
+    works: [Work!]!
 }
 
 input OstSearchInput {

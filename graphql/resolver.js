@@ -188,6 +188,45 @@ module.exports = {
             return obj.num;
         }
     },
+    Work: {
+        name(obj, args, context, info) {
+            return obj.role_name;
+        },
+        artist(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artists WHERE id = ?`, [
+                        obj.artist_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        },
+        ost(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT id, name, alternate_name, \`length\`, short_length, top_rank, popular_rank FROM osts WHERE id = ?`, [
+                        obj.ost_id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r[0])
+                    }).catch((err) => {
+                        conn.release();
+                        res(undefined);
+                    });
+                }).catch((err) => {
+                    res(undefined);
+                })
+            })
+        }
+    },
     Link: {
         type(obj, args, context, info) {
             return ["Youtube", "SoundCloud", "Spotify"][obj.type];
@@ -198,6 +237,25 @@ module.exports = {
             return new Promise((res, rej) => {
                 context.app.get("database pool").getConnection().then((conn) => {
                     conn.query(`SELECT show_id, ost_id, \`type\`, num FROM show_ost WHERE show_id = ?`, [
+                        obj.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r)
+                    }).catch((err) => {
+                        conn.release();
+                        res([]);
+                    });
+                }).catch((err) => {
+                    res([]);
+                })
+            })
+        }
+    },
+    Artist: {
+        works(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artist_ost WHERE artist_id=?`, [
                         obj.id
                     ]).then((r) => {
                         conn.release();
@@ -293,6 +351,23 @@ module.exports = {
             return new Promise((res, rej) => {
                 context.app.get("database pool").getConnection().then((conn) => {
                     conn.query(`SELECT type, url FROM link_ost WHERE ost_id=?`, [
+                        obj.id
+                    ]).then((r) => {
+                        conn.release();
+                        res(r)
+                    }).catch((err) => {
+                        conn.release();
+                        res([]);
+                    });
+                }).catch((err) => {
+                    res([]);
+                })
+            })
+        },
+        works(obj, args, context, info) {
+            return new Promise((res, rej) => {
+                context.app.get("database pool").getConnection().then((conn) => {
+                    conn.query(`SELECT * FROM artist_ost WHERE ost_id=?`, [
                         obj.id
                     ]).then((r) => {
                         conn.release();
